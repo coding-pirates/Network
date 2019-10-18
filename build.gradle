@@ -1,0 +1,14 @@
+dependencies {
+    testCompile "junit:junit:4.11"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["java"]
+        }
+        resources {
+            srcDirs = ["resources"]
+        }
+    }
+}
