@@ -2,8 +2,8 @@ package de.upb.codingpirates.battleships.network.network;
 
 import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.Connection;
-import de.upb.codingpirates.battleships.network.ConnectionManager;
 import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
+import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.schedulers.Schedulers;
@@ -25,10 +25,10 @@ public class ServerNetwork implements Network {
     private ServerSocket socket;
     private Observable<Connection> connections;
     private ExecutorService threadPool;
-    private ConnectionManager connectionManager;
+    private ServerConnectionManager connectionManager;
 
     @Inject
-    public ServerNetwork(@FixedThreadPool(size = 1) ExecutorService executorService, InetSocketAddress address, ConnectionManager connectionManager) throws IOException {
+    public ServerNetwork(@FixedThreadPool(size = 1) ExecutorService executorService, InetSocketAddress address, ServerConnectionManager connectionManager) throws IOException {
         this.threadPool = executorService;
         this.socket = new ServerSocket();
         this.connectionManager = connectionManager;

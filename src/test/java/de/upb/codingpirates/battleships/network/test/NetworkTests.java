@@ -4,10 +4,14 @@ import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import de.upb.codingpirates.battleships.network.*;
+import de.upb.codingpirates.battleships.network.ConnectionHandler;
+import de.upb.codingpirates.battleships.network.NetworkApplication;
+import de.upb.codingpirates.battleships.network.connectionmanager.ClientConnectionManager;
+import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
+import de.upb.codingpirates.battleships.network.message.messages.TestMessage;
 import de.upb.codingpirates.battleships.network.network.module.ClientNetworkModule;
 import de.upb.codingpirates.battleships.network.network.module.ServerNetworkModule;
 import org.apache.logging.log4j.LogManager;
@@ -92,7 +96,7 @@ public class NetworkTests {
         protected void configure() {
             this.install(new ServerNetworkModule());
 
-            this.bind(Handler.class).to(ClientManager.class).in(Singleton.class);
+            this.bind(ConnectionHandler.class).to(ClientManager.class).in(Singleton.class);
             this.bind(de.upb.codingpirates.battleships.server.handler.TestMessageHandler.class);
         }
     }
@@ -102,7 +106,7 @@ public class NetworkTests {
         protected void configure() {
             this.install(new ClientNetworkModule());
 
-            this.bind(Handler.class).toInstance(new ClientConnector());
+            this.bind(ConnectionHandler.class).toInstance(new ClientConnector());
             this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class);
         }
     }
@@ -125,9 +129,9 @@ public class NetworkTests {
         }
     }
 
-    public static class ClientManager implements Handler {
+    public static class ClientManager implements ConnectionHandler {
         @Inject
-        private ConnectionManager connectionManager;
+        private ServerConnectionManager connectionManager;
 
         private final Map<Id, ClientEntity> clients = Maps.newHashMap();
 
@@ -166,7 +170,7 @@ public class NetworkTests {
         }
     }
 
-    public static class ClientConnector implements Handler {
+    public static class ClientConnector implements ConnectionHandler {
         @Inject
         private ClientConnectionManager clientConnector;
 

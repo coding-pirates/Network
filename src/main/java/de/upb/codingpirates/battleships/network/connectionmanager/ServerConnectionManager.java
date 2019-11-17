@@ -1,7 +1,8 @@
-package de.upb.codingpirates.battleships.network;
+package de.upb.codingpirates.battleships.network.connectionmanager;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IdManager;
 import de.upb.codingpirates.battleships.network.message.Message;
@@ -13,13 +14,13 @@ import java.util.Map;
 /**
  * @author Paul Becker
  */
-public class ConnectionManager {
+public class ServerConnectionManager {
 
     private IdManager idManager;
     private final Map<Integer, Connection> connections = Maps.newHashMap();
 
     @Inject
-    public ConnectionManager(IdManager idManager) {
+    public ServerConnectionManager(IdManager idManager) {
         this.idManager = idManager;
     }
 

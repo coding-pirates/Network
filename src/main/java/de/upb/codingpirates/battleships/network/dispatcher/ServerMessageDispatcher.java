@@ -3,8 +3,8 @@ package de.upb.codingpirates.battleships.network.dispatcher;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import de.upb.codingpirates.battleships.network.Connection;
-import de.upb.codingpirates.battleships.network.ConnectionManager;
 import de.upb.codingpirates.battleships.network.annotations.bindings.CachedThreadPool;
+import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.message.Request;
@@ -25,14 +25,14 @@ import java.util.concurrent.ExecutorService;
 public class ServerMessageDispatcher implements MessageDispatcher {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ConnectionManager connectionManager;
+    private ServerConnectionManager connectionManager;
     private ConnectionScope scope;
     private ServerNetwork network;
     private Injector injector;
     private ExecutorService executorService;
 
     @Inject
-    public ServerMessageDispatcher(ServerNetwork network, @CachedThreadPool ExecutorService executorService, Injector injector, ConnectionManager connectionManager, ConnectionScope scope) {
+    public ServerMessageDispatcher(ServerNetwork network, @CachedThreadPool ExecutorService executorService, Injector injector, ServerConnectionManager connectionManager, ConnectionScope scope) {
         LOGGER.debug("Initialize server message dispatcher");
 
         this.connectionManager = connectionManager;

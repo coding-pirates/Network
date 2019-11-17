@@ -1,4 +1,4 @@
 package de.upb.codingpirates.battleships.network;
 
-public interface Handler {
+public interface ConnectionHandler {
 }

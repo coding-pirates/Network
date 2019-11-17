@@ -30,7 +30,7 @@ public class NetworkApplication {
         this.injector.getInstance(MessageDispatcher.class);
     }
 
-    public Handler getHandler() {
-        return this.injector.getInstance(Handler.class);
+    public ConnectionHandler getHandler() {
+        return this.injector.getInstance(ConnectionHandler.class);
     }
 }

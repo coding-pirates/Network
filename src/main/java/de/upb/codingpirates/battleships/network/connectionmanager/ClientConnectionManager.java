@@ -1,6 +1,7 @@
-package de.upb.codingpirates.battleships.network;
+package de.upb.codingpirates.battleships.network.connectionmanager;
 
 import com.google.inject.Inject;
+import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.dispatcher.ClientMessageDispatcher;
 import de.upb.codingpirates.battleships.network.message.Message;
 
