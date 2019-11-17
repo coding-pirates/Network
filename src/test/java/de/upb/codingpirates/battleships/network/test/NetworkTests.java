@@ -58,7 +58,7 @@ public class NetworkTests {
         connector2.sendMessageToServer(new TestMessage());
 
         int i = 0;
-        while (i < 60000) {
+        while (i < 6000000) {
             i++;
         }
 
@@ -66,7 +66,7 @@ public class NetworkTests {
         manager.sendMessageToAll(new TestMessage());
 
         i = 0;
-        while (i < 60000) {
+        while (i < 6000000) {
             i++;
         }
     }

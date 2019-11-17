@@ -1,8 +1,10 @@
 package de.upb.codingpirates.battleships.network.id;
 
 /**
+ * Basic Interface for an {@link Id} generator. Necessary for Guice to get a class depending on distribution.
+ *
  * @author Paul Becker
  */
-public abstract class IdManager<T> {
-    public abstract Id generate();
+public interface IdManager<T> {
+    Id generate();
 }

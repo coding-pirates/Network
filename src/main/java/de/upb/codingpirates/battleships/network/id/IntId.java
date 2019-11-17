@@ -1,6 +1,7 @@
 package de.upb.codingpirates.battleships.network.id;
 
 /**
+ * {@link Integer} based {@link Id}
  * @author Paul Becker
  */
 public class IntId implements Id {

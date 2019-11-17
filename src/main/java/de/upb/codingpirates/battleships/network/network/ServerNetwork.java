@@ -17,6 +17,10 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * The ServerNetwork handles all new Connections from Clients and saves them in the {@link ServerConnectionManager}.
+ * <p></p>
+ * Its also stores the observer for incoming messages.
+ *
  * @author Paul Becker
  */
 public class ServerNetwork implements Network {
@@ -27,6 +31,13 @@ public class ServerNetwork implements Network {
     private ExecutorService threadPool;
     private ServerConnectionManager connectionManager;
 
+    /**
+     * Creates a {@link ServerNetwork}, gets a fixed Threadpool and InetSocketAddress.
+     * <p></p>
+     * Initiates the ServerSocket to work based of the {@link InetSocketAddress} and Creates a Observer Pattern, that waits for new connections and binds them in the {@link ServerConnectionManager}
+     *
+     * @throws IOException
+     */
     @Inject
     public ServerNetwork(@FixedThreadPool(size = 1) ExecutorService executorService, InetSocketAddress address, ServerConnectionManager connectionManager) throws IOException {
         this.threadPool = executorService;
@@ -42,13 +53,18 @@ public class ServerNetwork implements Network {
         try {
             socket.bind(address);
         } catch (IOException e) {
-            LOGGER.error("Exception while trying to bind socket", e);
+            LOGGER.error("Exception while trying to bind server socket", e);
             return;
         }
 
         this.connections = Observable.create(this::acceptLoop).subscribeOn(Schedulers.from(this.threadPool));
     }
 
+    /**
+     * Accept loop that waits for connections with {@link ServerSocket#accept()} and creates new {@link Connection} on success.
+     * <p></p>
+     * Also it "informes the {@link Observable} about new created Connections to listen to.
+     */
     private void acceptLoop(ObservableEmitter<Connection> emitter) {
         while (!isClosed()) {
             try {

@@ -8,6 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Custom annotation for a Provider with a cached ThreadPool
+ *
  * @author Paul Becker
  */
 @BindingAnnotation

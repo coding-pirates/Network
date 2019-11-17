@@ -9,17 +9,22 @@ import de.upb.codingpirates.battleships.network.network.ClientNetwork;
 import de.upb.codingpirates.battleships.network.network.Network;
 
 /**
+ * This Network Module binds classes to their interface, just for the client. Also declares {@link com.google.inject.Provider} for the ServerNetwork.
+ *
  * @author Paul Becker
  */
 public class ClientNetworkModule extends NetworkModule {
     @Override
     protected void configure() {
         super.configure();
-        this.bind(MessageDispatcher.class).to(ClientMessageDispatcher.class);
 
         this.bind(ClientConnectionManager.class).in(Singleton.class);
+        this.bind(MessageDispatcher.class).to(ClientMessageDispatcher.class);
     }
 
+    /**
+     * @return new {@link ClientNetwork}()
+     */
     @Provides
     Network provideClientNetwork() {
         return new ClientNetwork();
