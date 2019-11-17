@@ -10,10 +10,10 @@ import java.io.IOException;
 /**
  * @author Paul Becker
  */
-public class Application {
+public class NetworkApplication {
     private Injector injector;
 
-    public <T extends AbstractModule> Application useModule(Class<T> type) throws IllegalAccessException, InstantiationException, IOException {
+    public <T extends AbstractModule> NetworkApplication useModule(Class<T> type) throws IllegalAccessException, InstantiationException, IOException {
         AbstractModule module = type.newInstance();
         if (module == null) {
             throw new IOException();
@@ -30,4 +30,7 @@ public class Application {
         this.injector.getInstance(MessageDispatcher.class);
     }
 
+    public Handler getHandler() {
+        return this.injector.getInstance(Handler.class);
+    }
 }

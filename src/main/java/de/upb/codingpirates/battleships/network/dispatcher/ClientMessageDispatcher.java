@@ -1,6 +1,5 @@
 package de.upb.codingpirates.battleships.network.dispatcher;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import de.upb.codingpirates.battleships.network.Connection;
@@ -18,7 +17,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -28,7 +26,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private ClientNetwork network;
-    private List<Connection> connections = Lists.newArrayList();
+    private Connection connection;
     private Scheduler scheduler;
     private ConnectionScope scope;
     private Injector injector;
@@ -41,12 +39,13 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         this.injector = injector;
     }
 
-    public void connect(String host, int port) throws IOException {
-        this.network.connect(host, port);
+    public Connection connect(String host, int port) throws IOException {
+        this.connection = this.network.connect(host, port);
 
-        Observable<Connection> observer = Observable.empty();
+        Observable<Connection> observer = Observable.create(this::setConnection);
         observer.subscribeOn(this.scheduler).subscribe(this::readLoop);
         this.network.setObserver(observer);
+        return connection;
     }
 
     private void readLoop(Connection connection) {
@@ -65,15 +64,12 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
     }
 
-    public void dispatch(Request request) {
+    private void dispatch(Request request) {
         try {
             String[] namespace = request.getMessage().getClass().getName().split("\\.");
             String name = namespace[namespace.length - 1];
             Class<?> type;
-            type = Class.forName(
-                    "de.upb.codingpirates.battleship.client.handler."
-                            + name
-                            + "Handler");
+            type = Class.forName("de.upb.codingpirates.battleships.client.handler." + name + "Handler");
             this.scope.seed(Connection.class, request.getConnection());
             this.scope.enter(request.getConnection().getId());
 
@@ -94,5 +90,9 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
     public void error(Throwable throwable) {
         LOGGER.error("Error while reading Messages on Server", throwable);
+    }
+
+    public void setConnection(ObservableEmitter<Connection> emitter) {
+        emitter.onNext(this.connection);
     }
 }

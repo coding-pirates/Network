@@ -15,13 +15,11 @@ import java.net.Socket;
 public class ClientNetwork implements Network {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private Connection connection;
     private Observable<Connection> observer;
 
-    public void connect(String host, int port) throws IOException {
+    public Connection connect(String host, int port) throws IOException {
         LOGGER.debug("trying to connect to {}:{}", host, port);
-        this.connection = new Connection(new IntId(0), new Socket(host, port));
-        LOGGER.debug("Connected to {}", connection.getInetAdress());
+        return new Connection(new IntId(0), new Socket(host, port));
     }
 
     public void setObserver(Observable<Connection> observer) {

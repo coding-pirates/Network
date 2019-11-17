@@ -61,10 +61,10 @@ public class ServerMessageDispatcher implements MessageDispatcher {
                     emitter.onError(e);
                 }
             }
-        }).subscribeOn(Schedulers.from(executorService)).subscribe(this::dispatch, this::error);
+        }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
     }
 
-    public void dispatch(Request request) {
+    private void dispatch(Request request) {
         try {
             String[] namespace = request.getMessage().getClass().getName().split("\\.");
             String name = namespace[namespace.length - 1];

@@ -1,11 +1,10 @@
 package de.upb.codingpirates.battleships.network.test;
 
+import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
-import de.upb.codingpirates.battleships.network.Application;
-import de.upb.codingpirates.battleships.network.ClientConnectionManager;
-import de.upb.codingpirates.battleships.network.ConnectionManager;
-import de.upb.codingpirates.battleships.network.TestMessage;
+import com.google.inject.Singleton;
+import de.upb.codingpirates.battleships.network.*;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Map;
 
 /**
@@ -30,46 +28,62 @@ public class NetworkTests {
     @Test
     public void test() throws IllegalAccessException, IOException, InstantiationException {
         LOGGER.info("Setup Server Network");
-        Server.main(null);
-        LOGGER.info("Finish Server Network setup");
+        NetworkApplication server = Server.main();
 
-        LOGGER.info("Setup Client Network");
-        Client.main(null);
-        LOGGER.info("Finish Server Network setup");
+        LOGGER.info("Setup Client Network 1");
+        NetworkApplication client = Client.main();
+
+        LOGGER.info("Setup Client Network 2");
+        NetworkApplication client2 = Client.main();
 
         LOGGER.info("Create new ClientManager on Server");
-        ClientManager manager = new ClientManager();
-        LOGGER.info("Create new ClientConnector on Client");
-        ClientConnector connector = new ClientConnector();
+        ClientManager manager = (ClientManager) server.getHandler();
+        LOGGER.info("Create new ClientConnector on Client 1");
+        ClientConnector connector = (ClientConnector) client.getHandler();
+        LOGGER.info("Create new ClientConnector on Client 2");
+        ClientConnector connector2 = (ClientConnector) client2.getHandler();
 
-        LOGGER.info("connect Client to Server");
-        connector.connect(InetAddress.getLocalHost().getHostAddress(), 11111);
+        LOGGER.info("connect Client 1 to Server");
+        connector.connect(InetAddress.getLocalHost().getHostAddress(), 11111);//TODO port
+        LOGGER.info("connect Client 2 to Server");
+        connector2.connect(InetAddress.getLocalHost().getHostAddress(), 11111);//TODO port
 
-        LOGGER.info("Send TestMessage to Server");
+        LOGGER.info("Send TestMessage 1 to Server");
         connector.sendMessageToServer(new TestMessage());
+        LOGGER.info("Send TestMessage 2 to Server");
+        connector2.sendMessageToServer(new TestMessage());
 
         int i = 0;
-        while (i < 600000000) {
+        while (i < 60000) {
             i++;
         }
 
         LOGGER.info("Send TestMessage to Client");
-        manager.sendMessageToClient(new ClientEntity(1, "hello"), new TestMessage());
+        manager.sendMessageToAll(new TestMessage());
+
+        i = 0;
+        while (i < 60000) {
+            i++;
+        }
     }
 
     private static class Server {
-        public static void main(String[] args) throws IllegalAccessException, IOException, InstantiationException {
-            LOGGER.info("start server");
+        public static NetworkApplication main() throws IllegalAccessException, IOException, InstantiationException {
+            LOGGER.info("Start server network module");
 
-            new Application().useModule(ServerModule.class).run();
+            NetworkApplication application = new NetworkApplication();
+            application.useModule(ServerModule.class).run();
+            return application;
         }
     }
 
     private static class Client {
-        public static void main(String[] args) throws IllegalAccessException, IOException, InstantiationException {
-            LOGGER.info("start client");
+        public static NetworkApplication main() throws IllegalAccessException, IOException, InstantiationException {
+            LOGGER.info("Start client network module");
 
-            new Application().useModule(ClientModule.class).run();
+            NetworkApplication application = new NetworkApplication();
+            application.useModule(ClientModule.class).run();
+            return application;
         }
     }
 
@@ -78,8 +92,8 @@ public class NetworkTests {
         protected void configure() {
             this.install(new ServerNetworkModule());
 
-            this.bind(ClientManager.class).toInstance(new ClientManager());
-            this.bind(de.upb.codingpirates.battleships.server.handler.TestMessageHandler.class).toInstance(new de.upb.codingpirates.battleships.server.handler.TestMessageHandler());
+            this.bind(Handler.class).to(ClientManager.class).in(Singleton.class);
+            this.bind(de.upb.codingpirates.battleships.server.handler.TestMessageHandler.class);
         }
     }
 
@@ -88,8 +102,8 @@ public class NetworkTests {
         protected void configure() {
             this.install(new ClientNetworkModule());
 
-            this.bind(ClientConnector.class).toInstance(new ClientConnector());
-            this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class).toInstance(new de.upb.codingpirates.battleships.client.handler.TestMessageHandler());
+            this.bind(Handler.class).toInstance(new ClientConnector());
+            this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class);
         }
     }
 
@@ -111,13 +125,12 @@ public class NetworkTests {
         }
     }
 
-    public static class ClientManager {
+    public static class ClientManager implements Handler {
         @Inject
-        private ConnectionManager connectionManager;//TODO not injected
+        private ConnectionManager connectionManager;
 
-        private Map<Id, ClientEntity> clients;
+        private final Map<Id, ClientEntity> clients = Maps.newHashMap();
 
-        @SuppressWarnings("SynchronizeOnNonFinalField")
         public ClientEntity create(Id id, String name) {
             synchronized (clients) {
                 if (clients.containsKey(id)) {
@@ -140,19 +153,31 @@ public class NetworkTests {
                 LOGGER.error("could not send message", e);
             }
         }
+
+        public void sendMessageToAll(Message message) {
+            try {
+                for (Id id : clients.keySet()) {
+                    this.connectionManager.send(id, message);
+                    LOGGER.debug("send message to {}", clients.get(id).name);
+                }
+            } catch (IOException e) {
+                LOGGER.error("could not send message", e);
+            }
+        }
     }
 
-    public static class ClientConnector {
+    public static class ClientConnector implements Handler {
         @Inject
-        private ClientConnectionManager clientConnector;//TODO not injected
+        private ClientConnectionManager clientConnector;
 
         public void connect(String host, int port) throws IOException {
-            Socket socket = new Socket(host, port);
-            this.clientConnector.create(socket);
+            this.clientConnector.create(host, port);
         }
 
         public void sendMessageToServer(Message message) throws IOException {
             this.clientConnector.send(message);
         }
     }
+
+
 }
