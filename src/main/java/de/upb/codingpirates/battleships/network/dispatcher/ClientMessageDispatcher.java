@@ -2,6 +2,7 @@ package de.upb.codingpirates.battleships.network.dispatcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.annotations.bindings.CachedThreadPool;
 import de.upb.codingpirates.battleships.network.message.Message;
@@ -12,7 +13,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
-import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
