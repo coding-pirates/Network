@@ -38,7 +38,7 @@ public class Connection {
         this.socket = socket;
         this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-        this.parser = parser;//TODO set to interdoc parser
+        this.parser = parser;
     }
 
     /**

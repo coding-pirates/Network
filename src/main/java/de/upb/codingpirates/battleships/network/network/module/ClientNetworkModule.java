@@ -1,6 +1,5 @@
 package de.upb.codingpirates.battleships.network.network.module;
 
-import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import de.upb.codingpirates.battleships.network.connectionmanager.ClientConnectionManager;
 import de.upb.codingpirates.battleships.network.dispatcher.ClientMessageDispatcher;
@@ -20,13 +19,6 @@ public class ClientNetworkModule extends NetworkModule {
 
         this.bind(ClientConnectionManager.class).in(Singleton.class);
         this.bind(MessageDispatcher.class).to(ClientMessageDispatcher.class);
-    }
-
-    /**
-     * @return new {@link ClientNetwork}()
-     */
-    @Provides
-    Network provideClientNetwork() {
-        return new ClientNetwork();
+        this.bind(Network.class).to(ClientNetwork.class);
     }
 }
