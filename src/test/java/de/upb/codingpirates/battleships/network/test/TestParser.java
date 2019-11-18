@@ -1,7 +1,7 @@
-package de.upb.codingpirates.battleships.network;
+package de.upb.codingpirates.battleships.network.test;
 
+import de.upb.codingpirates.battleships.network.Parser;
 import de.upb.codingpirates.battleships.network.message.Message;
-import de.upb.codingpirates.battleships.network.message.messages.TestMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

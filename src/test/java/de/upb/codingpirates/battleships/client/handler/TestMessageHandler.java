@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
-import de.upb.codingpirates.battleships.network.message.messages.TestMessage;
 import de.upb.codingpirates.battleships.network.test.NetworkTests;
+import de.upb.codingpirates.battleships.network.test.TestMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

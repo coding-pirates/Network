@@ -24,7 +24,8 @@ public class NetworkApplication {
     Injector injector;
 
     /**
-     * Creates an Guice Injector for the given AbstractModule
+     * Creates an Guice Injector for the given AbstractModule.
+     * The Module should bind a {@link Parser}, all {@link de.upb.codingpirates.battleships.network.message.MessageHandler} and a {@link ConnectionHandler}
      *
      * @param type an Guice Abstract Module
      * @param <T>  Either a ServerModule or ClientModule

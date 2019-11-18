@@ -6,12 +6,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.NetworkApplication;
+import de.upb.codingpirates.battleships.network.Parser;
+import de.upb.codingpirates.battleships.network.Properties;
 import de.upb.codingpirates.battleships.network.connectionmanager.ClientConnectionManager;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
-import de.upb.codingpirates.battleships.network.message.messages.TestMessage;
 import de.upb.codingpirates.battleships.network.network.module.ClientNetworkModule;
 import de.upb.codingpirates.battleships.network.network.module.ServerNetworkModule;
 import org.apache.logging.log4j.LogManager;
@@ -48,9 +49,9 @@ public class NetworkTests {
         ClientConnector connector2 = (ClientConnector) client2.getHandler();
 
         LOGGER.info("connect Client 1 to Server");
-        connector.connect(InetAddress.getLocalHost().getHostAddress(), 11111);//TODO port
+        connector.connect(InetAddress.getLocalHost().getHostAddress(), Properties.PORT);
         LOGGER.info("connect Client 2 to Server");
-        connector2.connect(InetAddress.getLocalHost().getHostAddress(), 11111);//TODO port
+        connector2.connect(InetAddress.getLocalHost().getHostAddress(), Properties.PORT);
 
         LOGGER.info("Send TestMessage 1 to Server");
         connector.sendMessageToServer(new TestMessage());
@@ -98,6 +99,7 @@ public class NetworkTests {
 
             this.bind(ConnectionHandler.class).to(ClientManager.class).in(Singleton.class);
             this.bind(de.upb.codingpirates.battleships.server.handler.TestMessageHandler.class);
+            this.bind(Parser.class).toInstance(new TestParser());
         }
     }
 
@@ -108,6 +110,7 @@ public class NetworkTests {
 
             this.bind(ConnectionHandler.class).toInstance(new ClientConnector());
             this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class);
+            this.bind(Parser.class).toInstance(new TestParser());
         }
     }
 

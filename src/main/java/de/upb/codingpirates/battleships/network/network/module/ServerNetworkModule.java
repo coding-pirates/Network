@@ -3,6 +3,7 @@ package de.upb.codingpirates.battleships.network.network.module;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import de.upb.codingpirates.battleships.network.Properties;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.dispatcher.MessageDispatcher;
 import de.upb.codingpirates.battleships.network.dispatcher.ServerMessageDispatcher;
@@ -37,7 +38,7 @@ public class ServerNetworkModule extends NetworkModule {
     @Provides
     InetSocketAddress provideServerInetSocketAddress() {
         try {
-            return new InetSocketAddress(InetAddress.getLocalHost(), 11111);//TODO port
+            return new InetSocketAddress(InetAddress.getLocalHost(), Properties.PORT);
         } catch (UnknownHostException e) {
             LOGGER.error("Could not get InetSocketAddress", e);
         }

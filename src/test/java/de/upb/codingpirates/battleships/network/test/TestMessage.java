@@ -1,4 +1,4 @@
-package de.upb.codingpirates.battleships.network.message.messages;
+package de.upb.codingpirates.battleships.network.test;
 
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IntId;

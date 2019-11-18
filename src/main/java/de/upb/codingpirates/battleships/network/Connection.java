@@ -30,7 +30,7 @@ public class Connection {
     private @Nonnull
     final BufferedWriter writer;
 
-    public Connection(@Nonnull Id id, @Nonnull Socket socket) throws IOException {
+    public Connection(@Nonnull Id id, @Nonnull Socket socket, @Nonnull Parser parser) throws IOException {
         Preconditions.checkNotNull(id);
         Preconditions.checkNotNull(socket);
 
@@ -38,7 +38,7 @@ public class Connection {
         this.socket = socket;
         this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-        this.parser = new TestParser();//TODO set to interdoc parser
+        this.parser = parser;//TODO set to interdoc parser
     }
 
     /**
