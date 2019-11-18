@@ -7,24 +7,26 @@ import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IdManager;
 import de.upb.codingpirates.battleships.network.message.Message;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Map;
 
 /**
+ * Stores all {@link Connection}'s for client {@link Id}s
+ *
  * @author Paul Becker
  */
 public class ServerConnectionManager {
 
-    private IdManager idManager;
-    private final Map<Integer, Connection> connections = Maps.newHashMap();
-
     @Inject
-    public ServerConnectionManager(IdManager idManager) {
-        this.idManager = idManager;
-    }
+    private @Nonnull
+    IdManager idManager;
+    private @Nonnull
+    final Map<Integer, Connection> connections = Maps.newHashMap();
 
-    public Connection create(Socket socket) throws IOException {
+    public @Nonnull
+    Connection create(Socket socket) throws IOException {
         Connection connection = new Connection(this.idManager.generate(), socket);
 
         synchronized (connections) {
@@ -35,24 +37,16 @@ public class ServerConnectionManager {
     }
 
     @SuppressWarnings("RedundantCast")
-    public Connection getConnection(Id id) {
+    public Connection getConnection(@Nonnull Id id) {
         synchronized (this.connections) {
             return this.connections.get((Integer) id.getRaw());
         }
     }
 
     @SuppressWarnings("RedundantCast")
-    public void send(Id id, Message message) throws IOException {
+    public void send(@Nonnull Id id, @Nonnull Message message) throws IOException {
         synchronized (this.connections) {
             this.connections.get((Integer) id.getRaw()).send(message);
-        }
-    }
-
-    public void sendAll(Message message) throws IOException {
-        synchronized (this.connections) {
-            for (Connection connection : this.connections.values()) {
-                connection.send(message);
-            }
         }
     }
 }

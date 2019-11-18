@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
  *
  * @author Paul Becker
  */
+@SuppressWarnings("WeakerAccess")
 public class NetworkModule extends AbstractModule {
     @Override
     protected void configure() {

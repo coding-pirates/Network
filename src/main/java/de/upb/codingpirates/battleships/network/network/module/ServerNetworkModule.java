@@ -49,8 +49,6 @@ public class ServerNetworkModule extends NetworkModule {
      */
     @Provides
     Network provideServerNetwork(InetSocketAddress address, Injector injector) {
-        ServerNetwork network = injector.getInstance(ServerNetwork.class);
-        network.init(address);
-        return network;
+        return injector.getInstance(ServerNetwork.class);
     }
 }

@@ -1,5 +1,6 @@
 package de.upb.codingpirates.battleships.network.network;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
@@ -10,6 +11,7 @@ import io.reactivex.schedulers.Schedulers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -26,29 +28,29 @@ import java.util.concurrent.ExecutorService;
 public class ServerNetwork implements Network {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ServerSocket socket;
-    private Observable<Connection> connections;
-    private ExecutorService threadPool;
-    private ServerConnectionManager connectionManager;
+    private @Nonnull
+    ServerSocket socket;
+    private @Nonnull
+    Observable<Connection> connections;
+    private @Nonnull
+    ServerConnectionManager connectionManager;
 
     /**
      * Creates a {@link ServerNetwork}, gets a fixed Threadpool and InetSocketAddress.
      * <p></p>
      * Initiates the ServerSocket to work based of the {@link InetSocketAddress} and Creates a Observer Pattern, that waits for new connections and binds them in the {@link ServerConnectionManager}
      *
-     * @throws IOException
      */
     @Inject
-    public ServerNetwork(@FixedThreadPool(size = 1) ExecutorService executorService, InetSocketAddress address, ServerConnectionManager connectionManager) throws IOException {
-        this.threadPool = executorService;
+    public ServerNetwork(@Nonnull @FixedThreadPool(size = 1) ExecutorService executorService, @Nonnull InetSocketAddress address, @Nonnull ServerConnectionManager connectionManager) throws IOException {
+        Preconditions.checkNotNull(executorService);
+        Preconditions.checkNotNull(address);
+        Preconditions.checkNotNull(connectionManager);
+
+        LOGGER.debug("Initiate server network");
+
         this.socket = new ServerSocket();
         this.connectionManager = connectionManager;
-
-        this.init(address);
-    }
-
-    public void init(InetSocketAddress address) {
-        LOGGER.debug("Initiate server network");
 
         try {
             socket.bind(address);
@@ -57,7 +59,7 @@ public class ServerNetwork implements Network {
             return;
         }
 
-        this.connections = Observable.create(this::acceptLoop).subscribeOn(Schedulers.from(this.threadPool));
+        this.connections = Observable.create(this::acceptLoop).subscribeOn(Schedulers.from(executorService));
     }
 
     /**
@@ -79,15 +81,12 @@ public class ServerNetwork implements Network {
         }
     }
 
+    @Nonnull
     public Observable<Connection> getConnections() {
         return connections;
     }
 
     public boolean isClosed() {
         return this.socket.isClosed();
-    }
-
-    public void close() throws IOException {
-        this.socket.close();
     }
 }

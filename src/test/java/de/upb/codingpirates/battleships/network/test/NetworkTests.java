@@ -181,6 +181,10 @@ public class NetworkTests {
         public void sendMessageToServer(Message message) throws IOException {
             this.clientConnector.send(message);
         }
+
+        public void disconnect() throws IOException {
+            this.clientConnector.disconnect();
+        }
     }
 
 

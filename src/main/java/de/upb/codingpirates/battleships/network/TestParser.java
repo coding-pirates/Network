@@ -5,6 +5,8 @@ import de.upb.codingpirates.battleships.network.message.messages.TestMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author Paul Becker
  */
@@ -12,7 +14,7 @@ public class TestParser implements Parser { //TODO remove
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
-    public Message deserialize(String message) {
+    public Message deserialize(@Nonnull String message) {
         if (message.equals("test"))
             return new TestMessage();
         LOGGER.error("Cant parse Message");
@@ -20,7 +22,7 @@ public class TestParser implements Parser { //TODO remove
     }
 
     @Override
-    public String serialize(Message message) {
+    public String serialize(@Nonnull Message message) {
         return "test";
     }
 }

@@ -1,8 +1,10 @@
 package de.upb.codingpirates.battleships.network;
 
+import com.google.common.base.Preconditions;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 
+import javax.annotation.Nonnull;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -17,31 +19,35 @@ import java.nio.charset.StandardCharsets;
  */
 public class Connection {
 
-    private Id id;
-    private Socket socket;
-    private OutputStream outputStream;
-    private InputStream inputStream;
-    private Parser parser;
-    private BufferedReader reader;
-    private BufferedWriter writer;
+    private @Nonnull
+    final Id id;
+    private @Nonnull
+    final Socket socket;
+    private @Nonnull
+    final Parser parser;
+    private @Nonnull
+    final BufferedReader reader;
+    private @Nonnull
+    final BufferedWriter writer;
 
-    public Connection(Id id, Socket socket) throws IOException {
+    public Connection(@Nonnull Id id, @Nonnull Socket socket) throws IOException {
+        Preconditions.checkNotNull(id);
+        Preconditions.checkNotNull(socket);
+
         this.id = id;
         this.socket = socket;
-        this.outputStream = socket.getOutputStream();
-        this.inputStream = socket.getInputStream();
-        this.writer = new BufferedWriter(new OutputStreamWriter(this.outputStream, StandardCharsets.UTF_8));
-        this.reader = new BufferedReader(new InputStreamReader(this.inputStream, StandardCharsets.UTF_8));
+        this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
+        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
         this.parser = new TestParser();//TODO set to interdoc parser
     }
 
     /**
      * Parses a {@link Message} to string and sends is through the socket.
      *
-     * @param message THe message to parse
+     * @param message The message to parse
      * @throws IOException
      */
-    public void send(Message message) throws IOException {
+    public void send(@Nonnull Message message) throws IOException {
         this.send(this.parser.serialize(message));
     }
 
@@ -84,12 +90,13 @@ public class Connection {
     /**
      * @return The {@link Id} of the Connection
      */
+    @Nonnull
     public Id getId() {
         return id;
     }
 
     public boolean isClosed() {
-        return this.socket == null || this.socket.isClosed();
+        return this.socket.isClosed();
     }
 
     public void close() throws IOException {

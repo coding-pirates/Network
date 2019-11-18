@@ -1,13 +1,22 @@
 package de.upb.codingpirates.battleships.network.id;
 
+import com.google.common.base.Preconditions;
+
+import javax.annotation.Nonnull;
+
 /**
  * {@link Integer} based {@link Id}
  * @author Paul Becker
  */
 public class IntId implements Id {
-    private Integer id;
+    private final Integer id;
 
+    /**
+     * @param id should be greater than 0
+     */
     public IntId(Integer id) {
+        Preconditions.checkArgument(id >= 0);
+
         this.id = id;
     }
 
@@ -19,6 +28,7 @@ public class IntId implements Id {
         return false;
     }
 
+    @Nonnull
     @Override
     public Object getRaw() {
         return id;

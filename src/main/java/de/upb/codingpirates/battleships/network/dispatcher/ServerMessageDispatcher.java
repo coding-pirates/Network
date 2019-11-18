@@ -4,20 +4,13 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
-import de.upb.codingpirates.battleships.network.annotations.bindings.CachedThreadPool;
-import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.network.ServerNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.schedulers.Schedulers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
 
 /**
  * The {@link ServerMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ServerNetwork}. The read loop {@link ServerMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -26,42 +19,27 @@ import java.util.concurrent.ExecutorService;
 public class ServerMessageDispatcher implements MessageDispatcher {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ServerConnectionManager connectionManager;
-    private ConnectionScope scope;
-    private ServerNetwork network;
-    private Injector injector;
-    private ExecutorService executorService;
+    private final ConnectionScope scope;
+    private final Injector injector;
 
     @Inject
-    public ServerMessageDispatcher(ServerNetwork network, @CachedThreadPool ExecutorService executorService, Injector injector, ServerConnectionManager connectionManager, ConnectionScope scope) {
+    public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope) {
         LOGGER.debug("Initialize server message dispatcher");
 
-        this.connectionManager = connectionManager;
         this.scope = scope;
-        this.network = network;
         this.injector = injector;
-        this.executorService = executorService;
 
         if (network == null || network.isClosed()) {
             LOGGER.warn("Server network is not working");
+            return;
         }
 
-        this.network.getConnections().subscribe(this::readLoop);
+        network.getConnections().subscribe(this::readLoop);
     }
 
     private void readLoop(Connection connection) {
         LOGGER.debug("Connection from {}", connection.getInetAdress());
-
-        Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
-            while (!connection.isClosed()) {
-                try {
-                    Message message = connection.read();
-                    emitter.onNext(new Pair<>(connection, message));
-                } catch (IOException e) {
-                    emitter.onError(e);
-                }
-            }
-        }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
+        this.loop(connection, this::dispatch, this::error);
     }
 
     /**
@@ -96,7 +74,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         }
     }
 
-    public void error(Throwable throwable) {
+    private void error(Throwable throwable) {
         LOGGER.error("Error while reading Messages on Server", throwable);
     }
 }

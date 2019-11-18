@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
@@ -27,11 +28,11 @@ import java.util.concurrent.ExecutorService;
 public class ClientMessageDispatcher implements MessageDispatcher {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ClientNetwork network;
+    private final ClientNetwork network;
     private Connection connection;
-    private Scheduler scheduler;
-    private ConnectionScope scope;
-    private Injector injector;
+    private final Scheduler scheduler;
+    private final ConnectionScope scope;
+    private final Injector injector;
 
     @Inject
     public ClientMessageDispatcher(@CachedThreadPool ExecutorService executorService, Injector injector, ConnectionScope scope, ClientNetwork clientNetwork) {
@@ -41,7 +42,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         this.injector = injector;
     }
 
-    public Connection connect(String host, int port) throws IOException {
+    public Connection connect(@Nonnull String host, int port) throws IOException {
         this.connection = this.network.connect(host, port);
 
         Observable<Connection> observer = Observable.create(this::setConnection);
@@ -52,17 +53,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
     private void readLoop(Connection connection) {
         LOGGER.debug("Connection from {}", connection.getInetAdress());
-
-        Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
-            while (!connection.isClosed()) {
-                try {
-                    Message message = connection.read();
-                    emitter.onNext(new Pair<>(connection, message));
-                } catch (IOException e) {
-                    emitter.onError(e);
-                }
-            }
-        }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
+        this.loop(connection, this::dispatch, this::error);
     }
 
     /**
@@ -97,14 +88,14 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         }
     }
 
-    public void error(Throwable throwable) {
+    private void error(Throwable throwable) {
         LOGGER.error("Error while reading Messages on Server", throwable);
     }
 
     /**
      * This sets an Observable to observe only the connection from the server.
      */
-    public void setConnection(ObservableEmitter<Connection> emitter) {
+    private void setConnection(ObservableEmitter<Connection> emitter) {
         emitter.onNext(this.connection);
     }
 }

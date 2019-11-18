@@ -14,9 +14,10 @@ import java.util.Map;
  */
 public class ConnectionScope implements Scope {
 
-    private ThreadLocal<Id> current = new ThreadLocal<>();
-    private ThreadLocal<Map<Id, Map<Key<?>, Object>>> objects = new ThreadLocal<>();
+    private final ThreadLocal<Id> current = new ThreadLocal<>();
+    private final ThreadLocal<Map<Id, Map<Key<?>, Object>>> objects = new ThreadLocal<>();
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
         return () -> {
@@ -25,7 +26,6 @@ public class ConnectionScope implements Scope {
             if (scopedObjects == null)
                 return unscoped.get();
 
-            //noinspection unchecked
             T current = (T) scopedObjects.get(key);
             if (current == null && !scopedObjects.containsKey(key)) {
                 current = unscoped.get();
@@ -50,6 +50,7 @@ public class ConnectionScope implements Scope {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public <T> void seed(Key<T> key, T value) {
         Map<Key<?>, Object> scopedObjects = getScopedObjectsMap(key);
         assert scopedObjects != null;

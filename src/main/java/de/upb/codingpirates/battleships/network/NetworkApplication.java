@@ -7,8 +7,8 @@ import de.upb.codingpirates.battleships.network.dispatcher.MessageDispatcher;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
 
 /**
  * Network application which should be created to start the creation af all needed classes (with Guice).
@@ -31,7 +31,7 @@ public class NetworkApplication {
      * @return itself
      */
     public @Nullable
-    <T extends AbstractModule> NetworkApplication useModule(Class<T> type) throws IllegalAccessException, InstantiationException, IOException {
+    <T extends AbstractModule> NetworkApplication useModule(@Nonnull Class<T> type) throws IllegalAccessException, InstantiationException {
         AbstractModule module = type.newInstance();
         if (module == null) {
             LOGGER.error("Could not use Module {}", type);
