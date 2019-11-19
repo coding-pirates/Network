@@ -1,9 +1,7 @@
 package de.upb.codingpirates.battleships.network.network;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.Connection;
-import de.upb.codingpirates.battleships.network.Parser;
 import de.upb.codingpirates.battleships.network.id.IntId;
 import io.reactivex.Observable;
 import org.apache.logging.log4j.LogManager;
@@ -23,9 +21,6 @@ public class ClientNetwork implements Network {
 
     @SuppressWarnings("FieldCanBeLocal")
     private Observable<Connection> observer;
-    @Inject
-    private @Nonnull
-    Parser parser;
 
     /**
      * Creates a new Socket with the given parameters.
@@ -36,7 +31,7 @@ public class ClientNetwork implements Network {
         Preconditions.checkNotNull(host);
 
         LOGGER.debug("trying to connect to {}:{}", host, port);
-        return new Connection(new IntId(0), new Socket(host, port), parser);
+        return new Connection(new IntId(0), new Socket(host, port));
     }
 
     public void setObserver(Observable<Connection> observer) {

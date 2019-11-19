@@ -1,11 +1,16 @@
 package de.upb.codingpirates.battleships.network.message;
 
-import de.upb.codingpirates.battleships.network.id.Id;
-
 /**
  * Basic interface for all Messages
+ *
+ * @author Interdoc committee & Paul Becker
  */
-public interface Message {
+public class Message {
 
-    Id getId(); //TODO Modify
+    public final int messageId;
+
+    protected Message(int messageId) {
+        this.messageId = messageId;
+    }
+
 }

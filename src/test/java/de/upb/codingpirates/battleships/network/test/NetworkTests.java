@@ -6,13 +6,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.NetworkApplication;
-import de.upb.codingpirates.battleships.network.Parser;
 import de.upb.codingpirates.battleships.network.Properties;
 import de.upb.codingpirates.battleships.network.connectionmanager.ClientConnectionManager;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
+import de.upb.codingpirates.battleships.network.message.Parser;
 import de.upb.codingpirates.battleships.network.network.module.ClientNetworkModule;
 import de.upb.codingpirates.battleships.network.network.module.ServerNetworkModule;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +32,7 @@ public class NetworkTests {
 
     @Test
     public void test() throws IllegalAccessException, IOException, InstantiationException {
+        Parser.addMessage(0, TestMessage.class);
         LOGGER.info("Setup Server Network");
         NetworkApplication server = Server.main();
 
@@ -99,7 +100,6 @@ public class NetworkTests {
 
             this.bind(ConnectionHandler.class).to(ClientManager.class).in(Singleton.class);
             this.bind(de.upb.codingpirates.battleships.server.handler.TestMessageHandler.class);
-            this.bind(Parser.class).toInstance(new TestParser());
         }
     }
 
@@ -110,7 +110,6 @@ public class NetworkTests {
 
             this.bind(ConnectionHandler.class).toInstance(new ClientConnector());
             this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class);
-            this.bind(Parser.class).toInstance(new TestParser());
         }
     }
 

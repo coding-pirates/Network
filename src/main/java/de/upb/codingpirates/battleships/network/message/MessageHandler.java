@@ -2,7 +2,7 @@ package de.upb.codingpirates.battleships.network.message;
 
 /**
  * Basic Interface for all MessageHandler
- *
+ * <p>
  * Name of the Class must begin with the message's name and ends with "Handler".
  * The Handlers must be in the package {@code "de.upb.codingpirates.battleships.'client/server'.handler"}
  *

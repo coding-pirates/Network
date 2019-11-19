@@ -3,6 +3,7 @@ package de.upb.codingpirates.battleships.network;
 import com.google.common.base.Preconditions;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
+import de.upb.codingpirates.battleships.network.message.Parser;
 
 import javax.annotation.Nonnull;
 import java.io.*;
@@ -30,7 +31,7 @@ public class Connection {
     private @Nonnull
     final BufferedWriter writer;
 
-    public Connection(@Nonnull Id id, @Nonnull Socket socket, @Nonnull Parser parser) throws IOException {
+    public Connection(@Nonnull Id id, @Nonnull Socket socket) throws IOException {
         Preconditions.checkNotNull(id);
         Preconditions.checkNotNull(socket);
 
@@ -38,7 +39,7 @@ public class Connection {
         this.socket = socket;
         this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-        this.parser = parser;
+        this.parser = new Parser();
     }
 
     /**

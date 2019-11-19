@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import de.upb.codingpirates.battleships.network.dispatcher.MessageDispatcher;
+import de.upb.codingpirates.battleships.network.message.Parser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
