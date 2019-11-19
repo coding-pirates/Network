@@ -1,6 +1,7 @@
 package de.upb.codingpirates.battleships.network.message.notification;
 
 import de.upb.codingpirates.battleships.logic.util.Client;
+import de.upb.codingpirates.battleships.logic.util.Configuration;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
@@ -24,10 +25,14 @@ public class GameInitNotification extends Message {
     @Nonnull
     private final Collection<Client> clientList;
 
+    @Nonnull
+    private final Configuration configuration;
 
-    public GameInitNotification(@Nonnull Collection<Client> clientList) {
+
+    public GameInitNotification(@Nonnull Collection<Client> clientList, @Nonnull Configuration configuration) {
         super(MESSAGE_ID);
         this.clientList = clientList;
+        this.configuration = configuration;
     }
 
     @Nonnull
@@ -35,4 +40,8 @@ public class GameInitNotification extends Message {
         return clientList;
     }
 
+    @Nonnull
+    public Configuration getConfiguration() {
+        return configuration;
+    }
 }

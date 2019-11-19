@@ -27,8 +27,7 @@ public class PlayerGameStateResponse extends Message {
     /**
      * A collection about shots that
      * in all previous rounds
-     * Have met ship (including derer
-     * in sunk)
+     * Have met ship (including sunken)
      */
     @Nonnull
     private Collection<Shot> hits;
