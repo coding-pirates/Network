@@ -9,8 +9,12 @@ import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.network.ServerNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.schedulers.Schedulers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 /**
  * The {@link ServerMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ServerNetwork}. The read loop {@link ServerMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -39,7 +43,16 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     private void readLoop(Connection connection) {
         LOGGER.debug("Connection from {}", connection.getInetAdress());
-        this.loop(connection, this::dispatch, this::error);
+        Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
+            while (!connection.isClosed()) {
+                try {
+                    Message message = connection.read();
+                    emitter.onNext(new Pair<>(connection, message));
+                } catch (IOException e) {
+                    emitter.onError(e);
+                }
+            }
+        }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
     }
 
     /**

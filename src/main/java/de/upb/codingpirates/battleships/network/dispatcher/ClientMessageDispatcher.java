@@ -53,7 +53,16 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
     private void readLoop(Connection connection) {
         LOGGER.debug("Connection from {}", connection.getInetAdress());
-        this.loop(connection, this::dispatch, this::error);
+        Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
+            while (!connection.isClosed()) {
+                try {
+                    Message message = connection.read();
+                    emitter.onNext(new Pair<>(connection, message));
+                } catch (IOException e) {
+                    emitter.onError(e);
+                }
+            }
+        }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
     }
 
     /**
