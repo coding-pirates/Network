@@ -17,14 +17,12 @@ public abstract class BattleshipException extends Exception {
         this.errorType = errorType;
     }
 
-    public BattleshipException setConnectionId(Id connectionId) {
+    public void setConnectionId(@Nullable Id connectionId) {
         this.connectionId = connectionId;
-        return this;
     }
 
-    public BattleshipException setMessageId(int messageId) {
+    public void setMessageId(int messageId) {
         this.messageId = messageId;
-        return this;
     }
 
     @Nonnull

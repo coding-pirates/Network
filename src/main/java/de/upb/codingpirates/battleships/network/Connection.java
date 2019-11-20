@@ -62,7 +62,8 @@ public class Connection {
         try {
             return this.parser.deserialize(this.readString());
         } catch (ParserException e) {
-            throw (ParserException) e.setConnectionId(this.id);
+            e.setConnectionId(this.id);
+            throw e;
         }
     }
 
