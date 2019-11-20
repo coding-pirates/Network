@@ -73,6 +73,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
      *
      * @param request
      */
+    @SuppressWarnings("unchecked")
     private void dispatch(Pair<Connection, Message> request) {
         try {
             String[] namespace = request.getValue().getClass().getName().split("\\.");

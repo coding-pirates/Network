@@ -11,7 +11,13 @@ package de.upb.codingpirates.battleships.network.message;
  */
 public interface MessageHandler<T extends Message> {
 
-    void handle(Message message);
+    /**
+     * @throws ClassCastException if can {@link #canHandle(Message)} returned true for a class not instance of {@link T}
+     */
+    void handle(T message);
 
+    /**
+     * should check if message is instance of the generic MessageClass {@link T}
+     */
     boolean canHandle(Message message);
 }
