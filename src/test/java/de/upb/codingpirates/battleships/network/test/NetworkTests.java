@@ -9,6 +9,7 @@ import de.upb.codingpirates.battleships.network.NetworkApplication;
 import de.upb.codingpirates.battleships.network.Properties;
 import de.upb.codingpirates.battleships.network.connectionmanager.ClientConnectionManager;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
+import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
@@ -170,6 +171,11 @@ public class NetworkTests {
                 LOGGER.error("could not send message", e);
             }
         }
+
+        @Override
+        public void handleBattleshipException(BattleshipException e) {
+
+        }
     }
 
     public static class ClientConnector implements ConnectionHandler {
@@ -186,6 +192,11 @@ public class NetworkTests {
 
         public void disconnect() throws IOException {
             this.clientConnector.disconnect();
+        }
+
+        @Override
+        public void handleBattleshipException(BattleshipException e) {
+
         }
     }
 

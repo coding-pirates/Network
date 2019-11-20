@@ -1,6 +1,9 @@
 package de.upb.codingpirates.battleships.network.message;
 
 import com.google.gson.*;
+import de.upb.codingpirates.battleships.network.exceptions.parser.BadJsonException;
+import de.upb.codingpirates.battleships.network.exceptions.parser.BadMessageException;
+import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;
 import de.upb.codingpirates.battleships.network.message.notification.*;
 import de.upb.codingpirates.battleships.network.message.request.*;
 import de.upb.codingpirates.battleships.network.message.response.*;
@@ -15,8 +18,6 @@ import java.util.Map;
  * @author Paul Becker & Interdock committee
  */
 public class Parser {
-
-    private final Gson gson = new Gson();
 
     private static final Map<Integer, Class<? extends Message>> messageRelations = new HashMap<Integer, Class<? extends Message>>() {
         {
@@ -63,6 +64,11 @@ public class Parser {
             put(251, LobbyResponse.class);
         }
     };
+    private final Gson gson = new Gson();
+
+    public static void addMessage(int id, Class<? extends Message> message) {
+        messageRelations.putIfAbsent(id, message);
+    }
 
     /**
      * deserialize a JSON string to a Message Object
@@ -70,19 +76,30 @@ public class Parser {
      * @param message The JSON message
      * @return the Message Object
      */
-    public Message deserialize(@Nonnull String message) {
-        JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(message).getAsJsonObject();
-        JsonElement jsonElement = obj.get("messageId");
-
-        if (jsonElement == null) {
-            throw new JsonSyntaxException("No messageId found");
+    public Message deserialize(@Nonnull String message) throws ParserException {
+        JsonElement jsonElement;
+        try {
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(message).getAsJsonObject();
+            jsonElement = obj.get("messageId");
+            if (jsonElement == null) {
+                throw new BadJsonException("No messageId found");
+            }
+        } catch (JsonSyntaxException e) {
+            throw new BadJsonException(e.getMessage());
         }
 
         int msgId = jsonElement.getAsInt();
         Class<? extends Message> messageClass = messageRelations.get(msgId);
+        if (messageClass == null) {
+            throw new BadMessageException("could not find message with id: " + msgId);
+        }
+        try {
+            return gson.fromJson(message, messageClass);
+        } catch (JsonSyntaxException e) {
+            throw new BadMessageException(e.getMessage());
+        }
 
-        return gson.fromJson(message, messageClass);
     }
 
     /**
@@ -92,10 +109,9 @@ public class Parser {
      * @return The JSON string
      */
     public String serialize(@Nonnull Message message) {
-        return gson.toJson(message);
-    }
-
-    public static void addMessage(int id, Class<? extends Message> message) {
-        messageRelations.putIfAbsent(id, message);
+        if (messageRelations.containsKey(message.messageId))
+            return gson.toJson(message);
+        else
+            throw new IllegalArgumentException("the message is not registered. MessageId: " + message.messageId);
     }
 }
