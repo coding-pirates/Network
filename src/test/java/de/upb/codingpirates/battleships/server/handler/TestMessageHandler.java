@@ -29,7 +29,7 @@ public class TestMessageHandler implements MessageHandler<TestMessage> {
     }
 
     @Override
-    public void handle(Message message) {
+    public void handle(TestMessage message) {
         this.manager.create(new IntId(0), "hello");
         LOGGER.info("message received on server successful");
     }

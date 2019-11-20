@@ -28,7 +28,7 @@ public class TestMessageHandler implements MessageHandler<TestMessage> {
     }
 
     @Override
-    public void handle(Message message) {
+    public void handle(TestMessage message) {
         LOGGER.info("message received on client successful");
     }
 }
