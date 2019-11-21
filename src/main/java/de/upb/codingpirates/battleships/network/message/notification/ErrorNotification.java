@@ -1,7 +1,7 @@
 package de.upb.codingpirates.battleships.network.message.notification;
 
 import com.google.gson.annotations.SerializedName;
-import de.upb.codingpirates.battleships.logic.util.ErrorType;
+import de.upb.codingpirates.battleships.logic.ErrorType;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
