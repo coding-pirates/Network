@@ -1,6 +1,6 @@
 package de.upb.codingpirates.battleships.network.message.request;
 
-import de.upb.codingpirates.battleships.logic.util.PlacementInfo;
+import de.upb.codingpirates.battleships.logic.PlacementInfo;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;

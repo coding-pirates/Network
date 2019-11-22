@@ -1,6 +1,6 @@
 package de.upb.codingpirates.battleships.network.message.response;
 
-import de.upb.codingpirates.battleships.logic.util.Game;
+import de.upb.codingpirates.battleships.logic.Game;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
