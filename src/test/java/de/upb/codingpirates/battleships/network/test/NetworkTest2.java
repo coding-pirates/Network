@@ -1,5 +1,6 @@
 package de.upb.codingpirates.battleships.network.test;
 
+import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.Parser;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,7 @@ public class NetworkTest2 {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Test
-    void parser() {
+    void parser() throws ParserException {
         Parser parser = new Parser();
 //        Message message = parser.deserialize("{'positions':{'1':{'position':{'x':1,'y':2},'rotation':'2'}},'messageId':301}");
 //        LOGGER.debug(((PlaceShipsRequest)message).getPositions().get(1).getRotation());
