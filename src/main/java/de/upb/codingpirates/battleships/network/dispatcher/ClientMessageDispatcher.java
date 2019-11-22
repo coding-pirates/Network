@@ -33,10 +33,10 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final ClientNetwork network;
-    private Connection connection;
     private final Scheduler scheduler;
     private final ConnectionScope scope;
     private final Injector injector;
+    private Connection connection;
     @Inject
     private ConnectionHandler connectionHandler;
 

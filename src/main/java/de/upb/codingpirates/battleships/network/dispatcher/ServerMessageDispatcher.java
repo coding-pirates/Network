@@ -22,6 +22,7 @@ import java.io.IOException;
 
 /**
  * The {@link ServerMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ServerNetwork}. The read loop {@link ServerMessageDispatcher#dispatch(Pair)} a request if it receives a message.
+ *
  * @author Paul Becker
  */
 public class ServerMessageDispatcher implements MessageDispatcher {

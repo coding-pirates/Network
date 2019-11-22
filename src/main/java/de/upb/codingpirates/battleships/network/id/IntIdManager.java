@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 /**
  * {@link IntId} generator.
+ *
  * @author Paul Becker
  */
 public class IntIdManager implements IdManager<Integer> {

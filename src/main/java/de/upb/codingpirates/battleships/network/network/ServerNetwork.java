@@ -39,7 +39,6 @@ public class ServerNetwork implements Network {
      * Creates a {@link ServerNetwork}, gets a fixed Threadpool and InetSocketAddress.
      * <p></p>
      * Initiates the ServerSocket to work based of the {@link InetSocketAddress} and Creates a Observer Pattern, that waits for new connections and binds them in the {@link ServerConnectionManager}
-     *
      */
     @Inject
     public ServerNetwork(@Nonnull @FixedThreadPool(size = 1) ExecutorService executorService, @Nonnull InetSocketAddress address, @Nonnull ServerConnectionManager connectionManager) throws IOException {

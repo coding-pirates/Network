@@ -133,10 +133,9 @@ public class NetworkTests {
     }
 
     public static class ClientManager implements ConnectionHandler {
+        private final Map<Id, ClientEntity> clients = Maps.newHashMap();
         @Inject
         private ServerConnectionManager connectionManager;
-
-        private final Map<Id, ClientEntity> clients = Maps.newHashMap();
 
         public ClientEntity create(Id id, String name) {
             synchronized (clients) {

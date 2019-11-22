@@ -1,6 +1,6 @@
 package de.upb.codingpirates.battleships.network.exceptions.parser;
 
-import de.upb.codingpirates.battleships.logic.util.ErrorType;
+import de.upb.codingpirates.battleships.logic.ErrorType;
 import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 
 import javax.annotation.Nonnull;

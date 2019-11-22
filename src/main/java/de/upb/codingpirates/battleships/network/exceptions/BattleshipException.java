@@ -1,6 +1,6 @@
 package de.upb.codingpirates.battleships.network.exceptions;
 
-import de.upb.codingpirates.battleships.logic.util.ErrorType;
+import de.upb.codingpirates.battleships.logic.ErrorType;
 import de.upb.codingpirates.battleships.network.id.Id;
 
 import javax.annotation.Nonnull;
@@ -17,14 +17,6 @@ public abstract class BattleshipException extends Exception {
         this.errorType = errorType;
     }
 
-    public void setConnectionId(@Nullable Id connectionId) {
-        this.connectionId = connectionId;
-    }
-
-    public void setMessageId(int messageId) {
-        this.messageId = messageId;
-    }
-
     @Nonnull
     public ErrorType getErrorType() {
         return errorType;
@@ -35,7 +27,15 @@ public abstract class BattleshipException extends Exception {
         return connectionId;
     }
 
+    public void setConnectionId(@Nullable Id connectionId) {
+        this.connectionId = connectionId;
+    }
+
     public int getMessageId() {
         return messageId;
+    }
+
+    public void setMessageId(int messageId) {
+        this.messageId = messageId;
     }
 }

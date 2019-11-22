@@ -19,11 +19,11 @@ import java.util.Map;
  */
 public class ServerConnectionManager {
 
+    private @Nonnull
+    final Map<Integer, Connection> connections = Maps.newHashMap();
     @Inject
     private @Nonnull
     IdManager idManager;
-    private @Nonnull
-    final Map<Integer, Connection> connections = Maps.newHashMap();
 
     public @Nonnull
     Connection create(Socket socket) throws IOException {

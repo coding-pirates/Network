@@ -55,6 +55,7 @@ public class Connection {
 
     /**
      * Reads from socket and parses a string to {@link Message}.
+     *
      * @return the Message
      * @throws IOException
      */
@@ -69,6 +70,7 @@ public class Connection {
 
     /**
      * Writes to string to the socket
+     *
      * @param message
      * @throws IOException
      */
@@ -80,6 +82,7 @@ public class Connection {
 
     /**
      * Reads a line from socket
+     *
      * @return
      * @throws IOException
      */
