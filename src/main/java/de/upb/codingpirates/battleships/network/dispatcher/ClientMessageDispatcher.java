@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -64,11 +65,13 @@ public class ClientMessageDispatcher implements MessageDispatcher {
                 try {
                     Message message = connection.read();
                     emitter.onNext(new Pair<>(connection, message));
+                }catch (SocketException e){
+                    connection.close();
+                    emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
                 } catch (IOException e) {
                     emitter.onError(e);
                 }
             }
-            emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
         }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
     }
 

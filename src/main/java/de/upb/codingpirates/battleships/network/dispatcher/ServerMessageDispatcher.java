@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.net.SocketException;
 
 /**
  * The {@link ServerMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ServerNetwork}. The read loop {@link ServerMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -47,6 +48,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         network.getConnections().subscribe(this::readLoop);
     }
 
+
     private void readLoop(Connection connection) {
         LOGGER.debug("Connection from {}", connection.getInetAdress());
         Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
@@ -54,11 +56,13 @@ public class ServerMessageDispatcher implements MessageDispatcher {
                 try {
                     Message message = connection.read();
                     emitter.onNext(new Pair<>(connection, message));
+                }catch (SocketException e){
+                    connection.close();
+                    emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
                 } catch (IOException e) {
                     emitter.onError(e);
                 }
             }
-            emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
         }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
     }
 
