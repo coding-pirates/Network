@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutorService;
  * @author Paul Becker
  */
 public class ClientMessageDispatcher implements MessageDispatcher {
-    private static final Logger LOGGER = LogManager.getLogger();
+    //private static final Logger LOGGER = LogManager.getLogger();TODO revert
 
     private final ClientNetwork network;
     private final Scheduler scheduler;
@@ -59,7 +59,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     }
 
     private void readLoop(Connection connection) {
-        LOGGER.debug("Connection from {}", connection.getInetAdress());
+        //LOGGER.debug("Connection from {}", connection.getInetAdress());TODO revert
         Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
             while (!connection.isClosed()) {
                 try {
@@ -95,14 +95,14 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
             MessageHandler handler = (MessageHandler) injector.getInstance(type);
             if (handler == null) {
-                LOGGER.error("Can't find MessageHandler {} for Message {}", type, request.getValue().getClass());
+                //LOGGER.error("Can't find MessageHandler {} for Message {}", type, request.getValue().getClass());TODO revert
             } else {
                 if (handler.canHandle(request.getValue())) {
                     handler.handle(request.getValue(), request.getKey().getId());
                 }
             }
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Can't find MessageHandler for Message", e);
+            //LOGGER.error("Can't find MessageHandler for Message", e);TODO revert
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -114,7 +114,8 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
         else
-            LOGGER.error("Error while reading Messages on Server", throwable);
+            return;
+            //LOGGER.error("Error while reading Messages on Server", throwable);TODO revert
     }
 
     /**

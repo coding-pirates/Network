@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author Paul Becker
  */
 public class ClientConnectionManager {
-    private static final Logger LOGGER = LogManager.getLogger();
+    //private static final Logger LOGGER = LogManager.getLogger();TODO revert
 
     private @Nullable
     Connection connection;
@@ -33,16 +33,16 @@ public class ClientConnectionManager {
     }
 
     public void send(Message message) throws IOException {
-        if (this.connection == null)
-            LOGGER.error("Client connection is not established");
-        else
-            this.connection.send(message);
+        //if (this.connection == null)TODO revert
+        //    LOGGER.error("Client connection is not established");
+        //else
+        //    this.connection.send(message);
     }
 
     public void disconnect() throws IOException {
-        if (this.connection == null)
-            LOGGER.error("Client connection is not established");
-        else
-            this.connection.close();
+        //if (this.connection == null)TODO revert
+        //    LOGGER.error("Client connection is not established");
+        //else
+        //    this.connection.close();
     }
 }

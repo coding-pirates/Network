@@ -17,7 +17,7 @@ import java.net.Socket;
  * @author Paul Becker
  */
 public class ClientNetwork implements Network {
-    private static final Logger LOGGER = LogManager.getLogger();
+    //private static final Logger LOGGER = LogManager.getLogger();TODO revert
 
     @SuppressWarnings("FieldCanBeLocal")
     private Observable<Connection> observer;
@@ -30,7 +30,7 @@ public class ClientNetwork implements Network {
     public Connection connect(@Nonnull String host, int port) throws IOException {
         Preconditions.checkNotNull(host);
 
-        LOGGER.debug("trying to connect to {}:{}", host, port);
+        //LOGGER.debug("trying to connect to {}:{}", host, port);TODO revert
         return new Connection(new IntId(0), new Socket(host, port));
     }
 
