@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
  * @author Paul Becker
  */
 public class NetworkApplication {
-    private static final Logger LOGGER = LogManager.getLogger();
+   // private static final Logger LOGGER = LogManager.getLogger();
 
     @Nullable
     protected Injector injector;
@@ -36,7 +36,7 @@ public class NetworkApplication {
     public <T extends AbstractModule> NetworkApplication useModule(@Nonnull Class<T> type) throws IllegalAccessException, InstantiationException {
         AbstractModule module = type.newInstance();
         if (module == null) {
-            LOGGER.error("Could not use Module {}", type);
+           // LOGGER.error("Could not use Module {}", type);
             return null;
         }
         this.injector = Guice.createInjector(module);
@@ -47,8 +47,8 @@ public class NetworkApplication {
      * Creates a {@link MessageDispatcher} based on the predefined AbstractModule
      */
     public void run() {
-        if (this.injector == null)
-            LOGGER.error("The injector is not set up. Please use a Module first");
+        if (this.injector == null){}
+           // LOGGER.error("The injector is not set up. Please use a Module first");
         else
             this.injector.getInstance(MessageDispatcher.class);
     }
@@ -56,7 +56,7 @@ public class NetworkApplication {
     @Nullable
     public ConnectionHandler getHandler() {
         if (this.injector == null) {
-            LOGGER.error("The injector is not set up. Please use a Module first");
+            //LOGGER.error("The injector is not set up. Please use a Module first");
             return null;
         } else
             return this.injector.getInstance(ConnectionHandler.class);
