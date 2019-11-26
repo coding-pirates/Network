@@ -4,9 +4,13 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
+import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.annotations.bindings.CachedThreadPool;
+import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
+import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
+import de.upb.codingpirates.battleships.network.message.report.ConnectionClosedReport;
 import de.upb.codingpirates.battleships.network.network.ClientNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import io.reactivex.Observable;
@@ -18,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -29,10 +34,12 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final ClientNetwork network;
-    private Connection connection;
     private final Scheduler scheduler;
     private final ConnectionScope scope;
     private final Injector injector;
+    private Connection connection;
+    @Inject
+    private ConnectionHandler connectionHandler;
 
     @Inject
     public ClientMessageDispatcher(@CachedThreadPool ExecutorService executorService, Injector injector, ConnectionScope scope, ClientNetwork clientNetwork) {
@@ -58,6 +65,9 @@ public class ClientMessageDispatcher implements MessageDispatcher {
                 try {
                     Message message = connection.read();
                     emitter.onNext(new Pair<>(connection, message));
+                }catch (SocketException e){
+                    connection.close();
+                    emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
                 } catch (IOException e) {
                     emitter.onError(e);
                 }
@@ -73,6 +83,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
      *
      * @param request
      */
+    @SuppressWarnings("unchecked")
     private void dispatch(Pair<Connection, Message> request) {
         try {
             String[] namespace = request.getValue().getClass().getName().split("\\.");
@@ -87,18 +98,23 @@ public class ClientMessageDispatcher implements MessageDispatcher {
                 LOGGER.error("Can't find MessageHandler {} for Message {}", type, request.getValue().getClass());
             } else {
                 if (handler.canHandle(request.getValue())) {
-                    handler.handle(request.getValue());
+                    handler.handle(request.getValue(), request.getKey().getId());
                 }
             }
         } catch (ClassNotFoundException e) {
             LOGGER.error("Can't find MessageHandler for Message", e);
+        } catch (GameException e) {
+            this.connectionHandler.handleBattleshipException(e);
         } finally {
             this.scope.exit();
         }
     }
 
     private void error(Throwable throwable) {
-        LOGGER.error("Error while reading Messages on Server", throwable);
+        if (throwable instanceof BattleshipException)
+            this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
+        else
+            LOGGER.error("Error while reading Messages on Server", throwable);
     }
 
     /**

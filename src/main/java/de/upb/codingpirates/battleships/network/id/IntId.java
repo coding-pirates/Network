@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 /**
  * {@link Integer} based {@link Id}
+ *
  * @author Paul Becker
  */
 public class IntId implements Id {
@@ -31,6 +32,11 @@ public class IntId implements Id {
     @Nonnull
     @Override
     public Object getRaw() {
+        return id;
+    }
+
+    @Override
+    public Integer getInt() {
         return id;
     }
 }

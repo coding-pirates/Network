@@ -1,6 +1,7 @@
 package de.upb.codingpirates.battleships.network;
 
 import com.google.common.base.Preconditions;
+import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.Parser;
@@ -54,15 +55,22 @@ public class Connection {
 
     /**
      * Reads from socket and parses a string to {@link Message}.
+     *
      * @return the Message
      * @throws IOException
      */
-    public Message read() throws IOException {
-        return this.parser.deserialize(this.readString());
+    public Message read() throws IOException, ParserException {
+        try {
+            return this.parser.deserialize(this.readString());
+        } catch (ParserException e) {
+            e.setConnectionId(this.id);
+            throw e;
+        }
     }
 
     /**
      * Writes to string to the socket
+     *
      * @param message
      * @throws IOException
      */
@@ -74,6 +82,7 @@ public class Connection {
 
     /**
      * Reads a line from socket
+     *
      * @return
      * @throws IOException
      */

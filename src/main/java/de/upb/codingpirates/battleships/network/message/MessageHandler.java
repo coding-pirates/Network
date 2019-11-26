@@ -1,5 +1,8 @@
 package de.upb.codingpirates.battleships.network.message;
 
+import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
+import de.upb.codingpirates.battleships.network.id.Id;
+
 /**
  * Basic Interface for all MessageHandler
  * <p>
@@ -11,7 +14,13 @@ package de.upb.codingpirates.battleships.network.message;
  */
 public interface MessageHandler<T extends Message> {
 
-    void handle(Message message);
+    /**
+     * @throws ClassCastException if can {@link #canHandle(Message)} returned true for a class not instance of {@link T}
+     */
+    void handle(T message, Id connectionId) throws GameException;
 
+    /**
+     * should check if message is instance of the generic MessageClass {@link T}
+     */
     boolean canHandle(Message message);
 }

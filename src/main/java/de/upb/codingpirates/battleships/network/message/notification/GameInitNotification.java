@@ -1,7 +1,7 @@
 package de.upb.codingpirates.battleships.network.message.notification;
 
-import de.upb.codingpirates.battleships.logic.util.Client;
-import de.upb.codingpirates.battleships.logic.util.Configuration;
+import de.upb.codingpirates.battleships.logic.Client;
+import de.upb.codingpirates.battleships.logic.Configuration;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;

@@ -10,4 +10,6 @@ import javax.annotation.Nonnull;
 public interface Id {
     @Nonnull
     Object getRaw();
+
+    Integer getInt();
 }
