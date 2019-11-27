@@ -15,11 +15,11 @@ import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.schedulers.Schedulers;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The {@link ServerMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ServerNetwork}. The read loop {@link ServerMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -27,7 +27,7 @@ import java.net.SocketException;
  * @author Paul Becker
  */
 public class ServerMessageDispatcher implements MessageDispatcher {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = Logger.getLogger(ServerMessageDispatcher.class.getName());
 
     private final ConnectionScope scope;
     private final Injector injector;
@@ -36,13 +36,13 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     @Inject
     public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope) {
-        LOGGER.debug("Initialize server message dispatcher");
+        LOGGER.log(Level.ALL,"Initialize server message dispatcher");
 
         this.scope = scope;
         this.injector = injector;
 
         if (network == null || network.isClosed()) {
-            LOGGER.warn("Server network is not working");
+            LOGGER.log(Level.WARNING,"Server network is not working");
             return;
         }
 
@@ -51,7 +51,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
 
     private void readLoop(Connection connection) {
-        LOGGER.debug("Connection from {}", connection.getInetAdress());
+        LOGGER.info("Connection from "+connection.getInetAdress() );
         Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
             while (!connection.isClosed()) {
                 try {
@@ -87,14 +87,14 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
             MessageHandler handler = (MessageHandler) injector.getInstance(type);
             if (handler == null) {
-                LOGGER.error("Can't find MessageHandler {} for Message {}", type, request.getValue().getClass());
+                LOGGER.info("Can't find MessageHandler "+type+" for Message "+request.getValue().getClass());
             } else {
                 if (handler.canHandle(request.getValue())) {
                     handler.handle(request.getValue(), request.getKey().getId());
                 }
             }
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Can't find MessageHandler for Message", e);
+            LOGGER.log(Level.ALL,"Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -105,7 +105,8 @@ public class ServerMessageDispatcher implements MessageDispatcher {
     private void error(Throwable throwable) {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
-        else
-            LOGGER.error("Error while reading Messages on Server", throwable);
+        else {
+            LOGGER.log(Level.ALL, "Error while reading Messages on Server", throwable);
+        }
     }
 }

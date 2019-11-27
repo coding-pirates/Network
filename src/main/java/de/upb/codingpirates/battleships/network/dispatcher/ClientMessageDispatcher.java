@@ -17,13 +17,13 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The {@link ClientMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ClientNetwork}. The read loop {@link ClientMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutorService;
  * @author Paul Becker
  */
 public class ClientMessageDispatcher implements MessageDispatcher {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = Logger.getLogger(ClientMessageDispatcher.class.getName());
 
     private final ClientNetwork network;
     private final Scheduler scheduler;
@@ -59,7 +59,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     }
 
     private void readLoop(Connection connection) {
-        LOGGER.debug("Connection from {}", connection.getInetAdress());
+        LOGGER.info("Connection from "+connection.getInetAdress() );
         Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
             while (!connection.isClosed()) {
                 try {
@@ -95,14 +95,14 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
             MessageHandler handler = (MessageHandler) injector.getInstance(type);
             if (handler == null) {
-                LOGGER.error("Can't find MessageHandler {} for Message {}", type, request.getValue().getClass());
+                LOGGER.info("Can't find MessageHandler "+type+" for Message "+request.getValue().getClass());
             } else {
                 if (handler.canHandle(request.getValue())) {
                     handler.handle(request.getValue(), request.getKey().getId());
                 }
             }
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Can't find MessageHandler for Message", e);
+            LOGGER.log(Level.ALL,"Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -113,8 +113,9 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     private void error(Throwable throwable) {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
-        else
-            LOGGER.error("Error while reading Messages on Server", throwable);
+        else {
+            LOGGER.log(Level.ALL,"Error while reading Messages on Server", throwable);
+        }
     }
 
     /**

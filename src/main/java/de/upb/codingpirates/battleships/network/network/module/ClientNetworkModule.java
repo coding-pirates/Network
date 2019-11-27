@@ -18,7 +18,7 @@ public class ClientNetworkModule extends NetworkModule {
         super.configure();
 
         this.bind(ClientConnectionManager.class).in(Singleton.class);
-        this.bind(MessageDispatcher.class).to(ClientMessageDispatcher.class);
+        this.bind(MessageDispatcher.class).to(ClientMessageDispatcher.class).in(Singleton.class);
         this.bind(Network.class).to(ClientNetwork.class);
     }
 }

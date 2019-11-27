@@ -8,8 +8,6 @@ import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnecti
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.schedulers.Schedulers;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -17,6 +15,8 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The ServerNetwork handles all new Connections from Clients and saves them in the {@link ServerConnectionManager}.
@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutorService;
  * @author Paul Becker
  */
 public class ServerNetwork implements Network {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = Logger.getLogger(ServerNetwork.class.getName());
 
     private @Nonnull
     ServerSocket socket;
@@ -46,7 +46,7 @@ public class ServerNetwork implements Network {
         Preconditions.checkNotNull(address);
         Preconditions.checkNotNull(connectionManager);
 
-        LOGGER.debug("Initiate server network");
+        LOGGER.info("Initiate server network");
 
         this.socket = new ServerSocket();
         this.connectionManager = connectionManager;
@@ -54,7 +54,7 @@ public class ServerNetwork implements Network {
         try {
             socket.bind(address);
         } catch (IOException e) {
-            LOGGER.error("Exception while trying to bind server socket", e);
+            LOGGER.log(Level.ALL,"Exception while trying to bind server socket", e);
             return;
         }
 
