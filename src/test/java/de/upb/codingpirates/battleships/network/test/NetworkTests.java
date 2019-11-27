@@ -109,7 +109,7 @@ public class NetworkTests {
         protected void configure() {
             this.install(new ClientNetworkModule());
 
-            this.bind(ConnectionHandler.class).toInstance(new ClientConnector());
+            this.bind(ConnectionHandler.class).to(ClientConnector.class).in(Singleton.class);
             this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class);
         }
     }
@@ -134,8 +134,12 @@ public class NetworkTests {
 
     public static class ClientManager implements ConnectionHandler {
         private final Map<Id, ClientEntity> clients = Maps.newHashMap();
+        private final ServerConnectionManager connectionManager;
+
         @Inject
-        private ServerConnectionManager connectionManager;
+        public ClientManager(ServerConnectionManager connectionManager) {
+            this.connectionManager = connectionManager;
+        }
 
         public ClientEntity create(Id id, String name) {
             synchronized (clients) {
@@ -178,8 +182,12 @@ public class NetworkTests {
     }
 
     public static class ClientConnector implements ConnectionHandler {
-        @Inject
         private ClientConnectionManager clientConnector;
+
+        @Inject
+        public ClientConnector(ClientConnectionManager clientConnector) {
+            this.clientConnector = clientConnector;
+        }
 
         public void connect(String host, int port) throws IOException {
             this.clientConnector.create(host, port);

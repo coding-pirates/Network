@@ -17,11 +17,15 @@ import java.io.IOException;
 public class ClientConnectionManager {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private @Nullable
-    Connection connection;
+    @Nullable
+    private Connection connection;
+    @Nonnull
+    private ClientMessageDispatcher messageDispatcher;
+
     @Inject
-    private @Nonnull
-    ClientMessageDispatcher messageDispatcher;
+    public ClientConnectionManager(@Nonnull ClientMessageDispatcher messageDispatcher) {
+        this.messageDispatcher = messageDispatcher;
+    }
 
     public void create(@Nonnull String host, int port) throws IOException {
         this.connection = this.messageDispatcher.connect(host, port);
