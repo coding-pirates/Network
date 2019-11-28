@@ -32,12 +32,11 @@ public class NetworkApplication {
      * @param <T>  Either a ServerModule or ClientModule
      * @return itself
      */
-    @Nullable
+    @Nonnull
     public <T extends AbstractModule> NetworkApplication useModule(@Nonnull Class<T> type) throws IllegalAccessException, InstantiationException {
         AbstractModule module = type.newInstance();
         if (module == null) {
-            LOGGER.error("Could not use Module {}", type);
-            return null;
+            throw new IllegalArgumentException("module is null");
         }
         this.injector = Guice.createInjector(module);
         return this;

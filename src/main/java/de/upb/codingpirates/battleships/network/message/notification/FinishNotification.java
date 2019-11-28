@@ -1,6 +1,5 @@
 package de.upb.codingpirates.battleships.network.message.notification;
 
-import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
@@ -24,10 +23,9 @@ public class FinishNotification extends Message {
     /**
      * The client ID of the winner.
      */
-    @Nonnull
-    private final Id winner;
+    private final int winner;
 
-    public FinishNotification(@Nonnull Map<Integer, Integer> points, @Nonnull Id winner) {
+    public FinishNotification(@Nonnull Map<Integer, Integer> points, int winner) {
         super(MESSAGE_ID);
         this.points = points;
         this.winner = winner;
@@ -39,7 +37,7 @@ public class FinishNotification extends Message {
     }
 
     @Nonnull
-    public Id getWinner() {
+    public int getWinner() {
         return winner;
     }
 }
