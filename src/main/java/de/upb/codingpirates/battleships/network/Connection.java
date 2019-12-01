@@ -110,7 +110,14 @@ public class Connection {
         this.socket.close();
     }
 
-    public void setId(Id id){
+    /**
+     * sets connection id new
+     *
+     * should only used by client
+     *
+     * @param id new connection Id
+     */
+    public void setId(@Nonnull Id id){
         this.id = id;
     }
 }
