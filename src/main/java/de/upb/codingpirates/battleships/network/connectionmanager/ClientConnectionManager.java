@@ -3,6 +3,7 @@ package de.upb.codingpirates.battleships.network.connectionmanager;
 import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.dispatcher.ClientMessageDispatcher;
+import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,5 +45,9 @@ public class ClientConnectionManager {
             LOGGER.error("Client connection is not established");
         else
             this.connection.close();
+    }
+
+    public void setConnectionId(int id){
+        this.connection.setId(new IntId(id));
     }
 }
