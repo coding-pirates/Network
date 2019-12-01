@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @author Paul Becker
  */
 public class ClientConnectionManager {
-    private static final Logger LOGGER = LogManager.getLogManager().getLogger(ClientConnectionManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ClientConnectionManager.class.getName());
 
     private @Nullable
     Connection connection;
