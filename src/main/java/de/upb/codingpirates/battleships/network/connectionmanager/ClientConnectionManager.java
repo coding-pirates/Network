@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.dispatcher.ClientMessageDispatcher;
+import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
@@ -19,11 +20,15 @@ import java.io.IOException;
 public class ClientConnectionManager {
     private static final Logger LOGGER = LogManager.getLogger(ClientConnectionManager.class.getName());
 
-    private @Nullable
-    Connection connection;
+    @Nullable
+    private Connection connection;
+    @Nonnull
+    private ClientMessageDispatcher messageDispatcher;
+
     @Inject
-    private @Nonnull
-    ClientMessageDispatcher messageDispatcher;
+    public ClientConnectionManager(@Nonnull ClientMessageDispatcher messageDispatcher) {
+        this.messageDispatcher = messageDispatcher;
+    }
 
     public void create(@Nonnull String host, int port) throws IOException {
         this.connection = this.messageDispatcher.connect(host, port);
@@ -46,5 +51,14 @@ public class ClientConnectionManager {
             LOGGER.error("Client connection is not established");
         else
             this.connection.close();
+    }
+
+    /**
+     * sets connection id to new id
+     *
+     * @param id new Id
+     */
+    public void setConnectionId(int id){
+        this.connection.setId(new IntId(id));
     }
 }

@@ -30,12 +30,12 @@ import java.util.concurrent.ExecutorService;
 public class ServerNetwork implements Network {
     private static final Logger LOGGER = LogManager.getLogger(ServerNetwork.class.getName());
 
-    private @Nonnull
-    ServerSocket socket;
-    private @Nonnull
-    Observable<Connection> connections;
-    private @Nonnull
-    ServerConnectionManager connectionManager;
+    @Nonnull
+    private ServerSocket socket;
+    @Nonnull
+    private Observable<Connection> connections;
+    @Nonnull
+    private ServerConnectionManager connectionManager;
 
     /**
      * Creates a {@link ServerNetwork}, gets a fixed Threadpool and InetSocketAddress.

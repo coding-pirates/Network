@@ -39,4 +39,9 @@ public class IntId implements Id {
     public Integer getInt() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }

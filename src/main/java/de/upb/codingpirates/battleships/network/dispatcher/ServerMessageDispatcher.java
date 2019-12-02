@@ -2,10 +2,6 @@ package de.upb.codingpirates.battleships.network.dispatcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
@@ -22,6 +18,8 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The {@link ServerMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ServerNetwork}. The read loop {@link ServerMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -29,22 +27,22 @@ import java.net.SocketException;
  * @author Paul Becker
  */
 public class ServerMessageDispatcher implements MessageDispatcher {
-    private static final Logger LOGGER = LogManager.getLogger(ServerMessageDispatcher.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ServerMessageDispatcher.class.getName());
 
     private final ConnectionScope scope;
     private final Injector injector;
-    @Inject
-    private ConnectionHandler connectionHandler;
+    private final ConnectionHandler connectionHandler;
 
     @Inject
-    public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope) {
-        LOGGER.info("Initialize server message dispatcher");
+    public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope, ConnectionHandler connectionHandler) {
+        LOGGER.log(Level.ALL,"Initialize server message dispatcher");
 
         this.scope = scope;
         this.injector = injector;
+        this.connectionHandler = connectionHandler;
 
         if (network == null || network.isClosed()) {
-            LOGGER.error("Server network is not working");
+            LOGGER.log(Level.WARNING,"Server network is not working");
             return;
         }
 
@@ -89,14 +87,14 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
             MessageHandler handler = (MessageHandler) injector.getInstance(type);
             if (handler == null) {
-                LOGGER.info("Can't find MessageHandler {} for Message {}",type,request.getValue().getClass());
+                LOGGER.info("Can't find MessageHandler "+type+" for Message "+request.getValue().getClass());
             } else {
                 if (handler.canHandle(request.getValue())) {
                     handler.handle(request.getValue(), request.getKey().getId());
                 }
             }
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Can't find MessageHandler for Message", e);
+            LOGGER.log(Level.ALL,"Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -108,7 +106,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
         else {
-            LOGGER.error("Error while reading Messages on Server", throwable);
+            LOGGER.log(Level.ALL, "Error while reading Messages on Server", throwable);
         }
     }
 }

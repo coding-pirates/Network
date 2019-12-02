@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 public class Connection {
 
     private @Nonnull
-    final Id id;
+    Id id;
     private @Nonnull
     final Socket socket;
     private @Nonnull
@@ -111,5 +111,16 @@ public class Connection {
 
     public void close() throws IOException {
         this.socket.close();
+    }
+
+    /**
+     * sets connection id new
+     *
+     * should only used by client
+     *
+     * @param id new connection Id
+     */
+    public void setId(@Nonnull Id id){
+        this.id = id;
     }
 }
