@@ -51,6 +51,11 @@ public class ClientConnectionManager {
             this.connection.close();
     }
 
+    /**
+     * sets connection id to new id
+     *
+     * @param id new Id
+     */
     public void setConnectionId(int id){
         this.connection.setId(new IntId(id));
     }
