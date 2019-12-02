@@ -3,12 +3,15 @@ package de.upb.codingpirates.battleships.network;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.upb.codingpirates.battleships.network.dispatcher.MessageDispatcher;
 import de.upb.codingpirates.battleships.network.message.Parser;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.logging.Logger;
 
 /**
  * Network application which should be created to start the creation af all needed classes (with Guice).
@@ -18,7 +21,7 @@ import java.util.logging.Logger;
  * @author Paul Becker
  */
 public class NetworkApplication {
-    private static final Logger LOGGER = Logger.getLogger(NetworkApplication.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(NetworkApplication.class.getName());
 
     @Nullable
     protected Injector injector;
@@ -35,7 +38,7 @@ public class NetworkApplication {
     public <T extends AbstractModule> NetworkApplication useModule(@Nonnull Class<T> type) throws IllegalAccessException, InstantiationException {
         AbstractModule module = type.newInstance();
         if (module == null) {
-            LOGGER.severe("Could not use Module "+type);
+            LOGGER.warn("Could not use Module {}",type);
             return null;
         }
         this.injector = Guice.createInjector(module);
@@ -47,7 +50,7 @@ public class NetworkApplication {
      */
     public void run() {
         if (this.injector == null)
-            LOGGER.severe("The injector is not set up. Please use a Module first");
+            LOGGER.warn("The injector is not set up. Please use a Module first");
         else
             this.injector.getInstance(MessageDispatcher.class);
     }
@@ -55,7 +58,7 @@ public class NetworkApplication {
     @Nullable
     public ConnectionHandler getHandler() {
         if (this.injector == null) {
-            LOGGER.severe("The injector is not set up. Please use a Module first");
+            LOGGER.warn("The injector is not set up. Please use a Module first");
             return null;
         } else
             return this.injector.getInstance(ConnectionHandler.class);

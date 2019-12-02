@@ -2,6 +2,10 @@ package de.upb.codingpirates.battleships.network.network;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
@@ -15,8 +19,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The ServerNetwork handles all new Connections from Clients and saves them in the {@link ServerConnectionManager}.
@@ -26,7 +28,7 @@ import java.util.logging.Logger;
  * @author Paul Becker
  */
 public class ServerNetwork implements Network {
-    private static final Logger LOGGER = Logger.getLogger(ServerNetwork.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ServerNetwork.class.getName());
 
     private @Nonnull
     ServerSocket socket;
@@ -54,7 +56,7 @@ public class ServerNetwork implements Network {
         try {
             socket.bind(address);
         } catch (IOException e) {
-            LOGGER.log(Level.ALL,"Exception while trying to bind server socket", e);
+            LOGGER.error("Exception while trying to bind server socket", e);
             return;
         }
 
