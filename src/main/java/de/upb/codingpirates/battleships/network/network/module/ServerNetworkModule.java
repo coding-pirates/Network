@@ -3,10 +3,6 @@ package de.upb.codingpirates.battleships.network.network.module;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import de.upb.codingpirates.battleships.network.Properties;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.dispatcher.MessageDispatcher;
@@ -17,6 +13,8 @@ import de.upb.codingpirates.battleships.network.network.ServerNetwork;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This Network Module binds classes to their interface, just for the server. Also declares {@link com.google.inject.Provider} for the {@link ServerNetwork} and a {@link InetSocketAddress} for the local ip
@@ -24,7 +22,7 @@ import java.net.UnknownHostException;
  * @author Paul Becker
  */
 public class ServerNetworkModule extends NetworkModule {
-    private static final Logger LOGGER = LogManager.getLogger(ServerNetworkModule.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ServerNetworkModule.class.getName());
 
     @Override
     protected void configure() {
@@ -42,7 +40,7 @@ public class ServerNetworkModule extends NetworkModule {
         try {
             return new InetSocketAddress(InetAddress.getLocalHost(), Properties.PORT);
         } catch (UnknownHostException e) {
-            LOGGER.info("Could not get InetSocketAddress", e);
+            LOGGER.log(Level.ALL,"Could not get InetSocketAddress", e);
         }
         return null;
     }

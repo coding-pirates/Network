@@ -2,10 +2,6 @@ package de.upb.codingpirates.battleships.network.dispatcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
@@ -26,6 +22,8 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The {@link ClientMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ClientNetwork}. The read loop {@link ClientMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -33,7 +31,7 @@ import java.util.concurrent.ExecutorService;
  * @author Paul Becker
  */
 public class ClientMessageDispatcher implements MessageDispatcher {
-    private static final Logger LOGGER = LogManager.getLogger(ClientMessageDispatcher.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ClientMessageDispatcher.class.getName());
 
     private final ClientNetwork network;
     private final Scheduler scheduler;
@@ -104,7 +102,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
                 }
             }
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Can't find MessageHandler for Message", e);
+            LOGGER.log(Level.ALL,"Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -116,7 +114,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
         else {
-            LOGGER.error("Error while reading Messages on Server", throwable);
+            LOGGER.log(Level.ALL,"Error while reading Messages on Server", throwable);
         }
     }
 

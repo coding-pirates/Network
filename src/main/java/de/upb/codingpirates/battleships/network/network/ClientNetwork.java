@@ -1,10 +1,6 @@
 package de.upb.codingpirates.battleships.network.network;
 
 import com.google.common.base.Preconditions;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.id.IntId;
 import io.reactivex.Observable;
@@ -12,6 +8,7 @@ import io.reactivex.Observable;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * The ClientNetwork only stores the observer for incoming messages.
@@ -19,7 +16,7 @@ import java.net.Socket;
  * @author Paul Becker
  */
 public class ClientNetwork implements Network {
-    private static final Logger LOGGER = LogManager.getLogger(ClientNetwork.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ClientNetwork.class.getName());
 
     @SuppressWarnings("FieldCanBeLocal")
     private Observable<Connection> observer;
