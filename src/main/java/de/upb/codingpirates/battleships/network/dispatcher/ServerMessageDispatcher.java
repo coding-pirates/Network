@@ -31,15 +31,15 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     private final ConnectionScope scope;
     private final Injector injector;
-    @Inject
-    private ConnectionHandler connectionHandler;
+    private final ConnectionHandler connectionHandler;
 
     @Inject
-    public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope) {
+    public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope, ConnectionHandler connectionHandler) {
         LOGGER.log(Level.ALL,"Initialize server message dispatcher");
 
         this.scope = scope;
         this.injector = injector;
+        this.connectionHandler = connectionHandler;
 
         if (network == null || network.isClosed()) {
             LOGGER.log(Level.WARNING,"Server network is not working");
