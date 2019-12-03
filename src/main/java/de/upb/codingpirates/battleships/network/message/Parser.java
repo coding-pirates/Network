@@ -1,6 +1,7 @@
 package de.upb.codingpirates.battleships.network.message;
 
 import com.google.gson.*;
+import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.exceptions.parser.BadJsonException;
 import de.upb.codingpirates.battleships.network.exceptions.parser.BadMessageException;
 import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;
@@ -11,6 +12,8 @@ import de.upb.codingpirates.battleships.network.message.response.*;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Parser to {@link Parser#serialize(Message)} and {@link Parser#deserialize(String)} the messages for and from the sockets.
@@ -18,6 +21,7 @@ import java.util.Map;
  * @author Paul Becker & Interdock committee
  */
 public class Parser {
+    private static final Logger LOGGER = Logger.getLogger(Connection.class.getName());
 
     private static final Map<Integer, Class<? extends Message>> messageRelations = new HashMap<Integer, Class<? extends Message>>() {
         {
@@ -87,7 +91,10 @@ public class Parser {
                 throw new BadJsonException("No messageId found");
             }
         } catch (JsonSyntaxException e) {
-            throw new BadJsonException(e.getMessage());
+            LOGGER.log(Level.FINE,"error",e);//TODO revert after MalformedJsonException has been found
+            LOGGER.log(Level.FINE, message);
+            throw e;
+//            throw new BadJsonException(e.getMessage());
         }
 
         int msgId = jsonElement.getAsInt();
