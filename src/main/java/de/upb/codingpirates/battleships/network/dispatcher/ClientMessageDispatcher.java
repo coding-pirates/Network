@@ -10,9 +10,9 @@ import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
-import de.upb.codingpirates.battleships.network.message.report.ConnectionClosedReport;
 import de.upb.codingpirates.battleships.network.network.ClientNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
+import de.upb.codingpirates.battleships.network.util.ClientReaderMethod;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Scheduler;
@@ -20,7 +20,6 @@ import io.reactivex.schedulers.Schedulers;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +39,8 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     private Connection connection;
     @Inject
     private ConnectionHandler connectionHandler;
+    @Inject
+    private ClientReaderMethod readLoop;
 
     @Inject
     public ClientMessageDispatcher(@CachedThreadPool ExecutorService executorService, Injector injector, ConnectionScope scope, ClientNetwork clientNetwork) {
@@ -60,19 +61,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
     private void readLoop(Connection connection) {
         LOGGER.info("Connection from "+connection.getInetAdress() );
-        Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
-            while (!connection.isClosed()) {
-                try {
-                    Message message = connection.read();
-                    emitter.onNext(new Pair<>(connection, message));
-                }catch (SocketException e){
-                    connection.close();
-                    emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
-                } catch (IOException e) {
-                    emitter.onError(e);
-                }
-            }
-        }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
+        readLoop.get(connection,this::dispatch,this::error);
     }
 
     /**
