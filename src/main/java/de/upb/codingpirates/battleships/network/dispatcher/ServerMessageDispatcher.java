@@ -7,6 +7,7 @@ import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
+import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.message.report.ConnectionClosedReport;
@@ -14,6 +15,7 @@ import de.upb.codingpirates.battleships.network.network.ServerNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import java.io.IOException;
@@ -52,19 +54,26 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     private void readLoop(Connection connection) {
         LOGGER.info("Connection from "+connection.getInetAdress() );
+        get(connection,this::dispatch,this::error);
+    }
+
+    public void get(Connection connection, Consumer<Pair<Connection, Message>> dispatch, Consumer<Throwable> error) {
         Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
             while (!connection.isClosed()) {
                 try {
                     Message message = connection.read();
                     emitter.onNext(new Pair<>(connection, message));
-                }catch (SocketException e){
+                    break;
+                } catch (SocketException e) {
                     connection.close();
                     emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
-                } catch (IOException e) {
+                } catch (IOException | ParserException e) {
                     emitter.onError(e);
                 }
+
             }
-        }).subscribeOn(Schedulers.io()).subscribe(this::dispatch, this::error);
+            emitter.onComplete();
+        }).subscribeOn(Schedulers.io()).doOnDispose(()->get(connection,dispatch,error)).doOnComplete(()->get(connection,dispatch,error)).subscribe(dispatch, error);
     }
 
     /**
