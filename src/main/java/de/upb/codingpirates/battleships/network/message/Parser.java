@@ -79,6 +79,7 @@ public class Parser {
     public Message deserialize(@Nonnull String message) throws ParserException {
         JsonElement jsonElement;
         try {
+            message = message.replaceAll("\\r\\n", "");
             JsonParser parser = new JsonParser();
             JsonObject obj = parser.parse(message).getAsJsonObject();
             jsonElement = obj.get("messageId");
