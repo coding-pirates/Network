@@ -1,5 +1,6 @@
 package de.upb.codingpirates.battleships.network;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -45,18 +46,13 @@ public class NetworkApplication {
      * Creates a {@link MessageDispatcher} based on the predefined AbstractModule
      */
     public void run() {
-        if (this.injector == null)
-            LOGGER.severe("The injector is not set up. Please use a Module first");
-        else
-            this.injector.getInstance(MessageDispatcher.class);
+        Preconditions.checkNotNull(this.injector);
+        this.injector.getInstance(MessageDispatcher.class);
     }
 
     @Nullable
     public ConnectionHandler getHandler() {
-        if (this.injector == null) {
-            LOGGER.severe("The injector is not set up. Please use a Module first");
-            return null;
-        } else
-            return this.injector.getInstance(ConnectionHandler.class);
+        Preconditions.checkNotNull(this.injector);
+        return this.injector.getInstance(ConnectionHandler.class);
     }
 }
