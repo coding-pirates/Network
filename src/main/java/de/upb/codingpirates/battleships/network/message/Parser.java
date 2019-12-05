@@ -91,7 +91,7 @@ public class Parser {
                 throw new BadJsonException("No messageId found");
             }
         } catch (JsonSyntaxException e) {
-            LOGGER.log(Level.FINE,"error",e);//TODO revert after MalformedJsonException has been found
+            LOGGER.log(Level.FINE, "error", e);//TODO revert after MalformedJsonException has been found
             LOGGER.log(Level.FINE, message);
             throw e;
 //            throw new BadJsonException(e.getMessage());

@@ -9,6 +9,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
  */
 public class ShotsResponse extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 352;
 
     public ShotsResponse() {

@@ -10,6 +10,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -20,7 +21,7 @@ import java.util.Map;
 public class ServerConnectionManager {
 
     @Nonnull
-    private final Map<Integer, Connection> connections = Maps.newHashMap();
+    private final Map<Integer, Connection> connections = Collections.synchronizedMap(Maps.newHashMap());
     @Inject
     private IdManager idManager;
 
@@ -37,9 +38,7 @@ public class ServerConnectionManager {
 
     @SuppressWarnings("RedundantCast")
     public Connection getConnection(@Nonnull Id id) {
-        synchronized (this.connections) {
-            return this.connections.get((Integer) id.getRaw());
-        }
+        return this.connections.get((Integer) id.getRaw());
     }
 
     @SuppressWarnings("RedundantCast")

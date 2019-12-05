@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class ClientNetwork implements Network {
     private static final Logger LOGGER = Logger.getLogger(ClientNetwork.class.getName());
 
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private Observable<Connection> observer;
 
     /**
@@ -29,7 +29,7 @@ public class ClientNetwork implements Network {
     public Connection connect(@Nonnull String host, int port) throws IOException {
         Preconditions.checkNotNull(host);
 
-        LOGGER.info("trying to connect to "+host+":"+port);
+        LOGGER.info("trying to connect to " + host + ":" + port);
         return new Connection(new IntId(0), new Socket(host, port));
     }
 

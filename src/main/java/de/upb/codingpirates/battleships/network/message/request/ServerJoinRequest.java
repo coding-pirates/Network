@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
  */
 public class ServerJoinRequest extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 101;
 
     /**

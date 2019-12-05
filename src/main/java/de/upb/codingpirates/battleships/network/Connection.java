@@ -22,8 +22,6 @@ import java.nio.charset.StandardCharsets;
 public class Connection {
 
     private @Nonnull
-    Id id;
-    private @Nonnull
     final Socket socket;
     private @Nonnull
     final Parser parser;
@@ -31,6 +29,8 @@ public class Connection {
     final BufferedReader reader;
     private @Nonnull
     final BufferedWriter writer;
+    private @Nonnull
+    Id id;
 
     public Connection(@Nonnull Id id, @Nonnull Socket socket) throws IOException {
         Preconditions.checkNotNull(id);
@@ -47,7 +47,7 @@ public class Connection {
      * Parses a {@link Message} to string and sends is through the socket.
      *
      * @param message The message to parse
-     * @throws IOException
+     * @throws IOException If an I/O error occurs
      */
     public void send(@Nonnull Message message) throws IOException {
         this.send(this.parser.serialize(message));
@@ -57,7 +57,7 @@ public class Connection {
      * Reads from socket and parses a string to {@link Message}.
      *
      * @return the Message
-     * @throws IOException
+     * @throws IOException If an I/O error occurs
      */
     public Message read() throws IOException, ParserException {
         try {
@@ -71,8 +71,8 @@ public class Connection {
     /**
      * Writes to string to the socket
      *
-     * @param message
-     * @throws IOException
+     * @param message String message to be send
+     * @throws IOException If an I/O error occurs
      */
     private void send(String message) throws IOException {
         this.writer.write(message);
@@ -83,8 +83,8 @@ public class Connection {
     /**
      * Reads a line from socket
      *
-     * @return
-     * @throws IOException
+     * @return String message read from the Socket
+     * @throws IOException If an I/O error occurs
      */
     private String readString() throws IOException {
         return this.reader.readLine();
@@ -105,22 +105,26 @@ public class Connection {
         return id;
     }
 
+    /**
+     * sets connection id new
+     * <p>
+     * should only used by client
+     *
+     * @param id new connection Id
+     */
+    public void setId(@Nonnull Id id) {
+        this.id = id;
+    }
+
+    public boolean isOpen() {
+        return !this.socket.isClosed();
+    }
+
     public boolean isClosed() {
         return this.socket.isClosed();
     }
 
     public void close() throws IOException {
         this.socket.close();
-    }
-
-    /**
-     * sets connection id new
-     *
-     * should only used by client
-     *
-     * @param id new connection Id
-     */
-    public void setId(@Nonnull Id id){
-        this.id = id;
     }
 }

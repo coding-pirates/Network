@@ -21,7 +21,7 @@ public class ConnectionScope implements Scope {
     @Override
     public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
         return () -> {
-            Map<Key<?>, Object> scopedObjects = getScopedObjectsMap(key);
+            Map<Key<?>, Object> scopedObjects = getScopedObjectsMap();
 
             if (scopedObjects == null)
                 return unscoped.get();
@@ -52,7 +52,7 @@ public class ConnectionScope implements Scope {
 
     @SuppressWarnings("WeakerAccess")
     public <T> void seed(Key<T> key, T value) {
-        Map<Key<?>, Object> scopedObjects = getScopedObjectsMap(key);
+        Map<Key<?>, Object> scopedObjects = getScopedObjectsMap();
         assert scopedObjects != null;
         scopedObjects.putIfAbsent(key, value);
     }
@@ -61,7 +61,7 @@ public class ConnectionScope implements Scope {
         this.seed(Key.get(clazz), value);
     }
 
-    private <T> Map<Key<?>, Object> getScopedObjectsMap(Key<T> key) {
+    private <T> Map<Key<?>, Object> getScopedObjectsMap() {
         Id currentKey = current.get();
         Map<Id, Map<Key<?>, Object>> objectsByKey = objects.get();
         if (objectsByKey == null) {
@@ -69,7 +69,7 @@ public class ConnectionScope implements Scope {
             objectsByKey = objects.get();
         }
 
-        if (currentKey == null && objectsByKey != null) {
+        if (currentKey != null && objectsByKey != null) {
             objectsByKey.putIfAbsent(currentKey, Maps.newHashMap());
 
             return objectsByKey.get(currentKey);

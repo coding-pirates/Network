@@ -9,6 +9,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
  */
 public class ContinueNotification extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 362;
 
     public ContinueNotification() {

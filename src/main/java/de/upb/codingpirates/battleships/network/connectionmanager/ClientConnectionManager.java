@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -18,11 +17,10 @@ import java.util.logging.Logger;
  */
 public class ClientConnectionManager {
     private static final Logger LOGGER = Logger.getLogger(ClientConnectionManager.class.getName());
-
+    @Nonnull
+    private final ClientMessageDispatcher messageDispatcher;
     @Nullable
     private Connection connection;
-    @Nonnull
-    private ClientMessageDispatcher messageDispatcher;
 
     @Inject
     public ClientConnectionManager(@Nonnull ClientMessageDispatcher messageDispatcher) {
@@ -40,14 +38,14 @@ public class ClientConnectionManager {
 
     public void send(Message message) throws IOException {
         if (this.connection == null)
-            LOGGER.log(Level.SEVERE,"Client connection is not established");
+            LOGGER.log(Level.SEVERE, "Client connection is not established");
         else
             this.connection.send(message);
     }
 
     public void disconnect() throws IOException {
         if (this.connection == null)
-            LOGGER.log(Level.SEVERE,"Client connection is not established");
+            LOGGER.log(Level.SEVERE, "Client connection is not established");
         else
             this.connection.close();
     }
@@ -57,7 +55,8 @@ public class ClientConnectionManager {
      *
      * @param id new Id
      */
-    public void setConnectionId(int id){
+    public void setConnectionId(int id) {
+        assert this.connection != null;
         this.connection.setId(new IntId(id));
     }
 }

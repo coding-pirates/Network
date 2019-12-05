@@ -51,8 +51,10 @@ public class NetworkTests {
         ClientConnector connector2 = (ClientConnector) client2.getHandler();
 
         LOGGER.info("connect Client 1 to Server");
+        assert connector != null;
         connector.connect(InetAddress.getLocalHost().getHostAddress(), Properties.PORT);
         LOGGER.info("connect Client 2 to Server");
+        assert connector2 != null;
         connector2.connect(InetAddress.getLocalHost().getHostAddress(), Properties.PORT);
 
         LOGGER.info("Send TestMessage 1 to Server");
@@ -66,6 +68,7 @@ public class NetworkTests {
         }
 
         LOGGER.info("Send TestMessage to Client");
+        assert manager != null;
         manager.sendMessageToAll(new TestMessage());
 
         i = 0;
@@ -75,7 +78,7 @@ public class NetworkTests {
     }
 
     private static class Server {
-        public static NetworkApplication main() throws IllegalAccessException, IOException, InstantiationException {
+        public static NetworkApplication main() throws IllegalAccessException, InstantiationException {
             LOGGER.info("Start server network module");
 
             NetworkApplication application = new NetworkApplication();
@@ -85,7 +88,7 @@ public class NetworkTests {
     }
 
     private static class Client {
-        public static NetworkApplication main() throws IllegalAccessException, IOException, InstantiationException {
+        public static NetworkApplication main() throws IllegalAccessException, InstantiationException {
             LOGGER.info("Start client network module");
 
             NetworkApplication application = new NetworkApplication();
@@ -160,7 +163,7 @@ public class NetworkTests {
             try {
                 this.connectionManager.send(new IntId(client.getId()), message);
             } catch (IOException e) {
-                LOGGER.error("could not send message", e);
+                LOGGER.log(Level.SEVERE, "could not send message", e);
             }
         }
 
@@ -171,7 +174,7 @@ public class NetworkTests {
                     LOGGER.debug("send message to {}", clients.get(id).name);
                 }
             } catch (IOException e) {
-                LOGGER.error("could not send message", e);
+                LOGGER.log(Level.SEVERE, "could not send message", e);
             }
         }
 

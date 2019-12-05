@@ -2,6 +2,7 @@ package de.upb.codingpirates.battleships.network.dispatcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import de.upb.codingpirates.battleships.logic.util.Dist;
 import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
@@ -37,27 +38,29 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     @Inject
     public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope, ConnectionHandler connectionHandler) {
-        LOGGER.log(Level.ALL,"Initialize server message dispatcher");
+        LOGGER.log(Level.ALL, "Initialize server message dispatcher");
 
         this.scope = scope;
         this.injector = injector;
         this.connectionHandler = connectionHandler;
 
         if (network == null || network.isClosed()) {
-            LOGGER.log(Level.WARNING,"Server network is not working");
+            LOGGER.log(Level.WARNING, "Server network is not working");
             return;
         }
 
+        //noinspection ResultOfMethodCallIgnored
         network.getConnections().subscribe(this::readLoop);
     }
 
 
     private void readLoop(Connection connection) {
-        LOGGER.info("Connection from "+connection.getInetAdress() );
-        get(connection,this::dispatch,this::error);
+        LOGGER.info("Connection from " + connection.getInetAdress());
+        get(connection, this::dispatch, this::error);
     }
 
-    public void get(Connection connection, Consumer<Pair<Connection, Message>> dispatch, Consumer<Throwable> error) {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void get(Connection connection, Consumer<Pair<Connection, Message>> dispatch, Consumer<Throwable> error) {
         Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
             while (!connection.isClosed()) {
                 try {
@@ -73,7 +76,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
             }
             emitter.onComplete();
-        }).subscribeOn(Schedulers.io()).doOnDispose(()->get(connection,dispatch,error)).doOnComplete(()->get(connection,dispatch,error)).subscribe(dispatch, error);
+        }).subscribeOn(Schedulers.io()).doOnDispose(() -> get(connection, dispatch, error)).doOnComplete(() -> get(connection, dispatch, error)).subscribe(dispatch, error);
     }
 
     /**
@@ -82,28 +85,13 @@ public class ServerMessageDispatcher implements MessageDispatcher {
      * <p>
      * It tries to get a {@link MessageHandler} based on the name of the message and tries to let the MessageHandler handle the message. Otherwise logs th failure.
      *
-     * @param request
+     * @param request a {@link Pair} of a Message and its Connection
      */
-    @SuppressWarnings("unchecked")
     private void dispatch(Pair<Connection, Message> request) {
         try {
-            String[] namespace = request.getValue().getClass().getName().split("\\.");
-            String name = namespace[namespace.length - 1];
-            Class<?> type;
-            type = Class.forName("de.upb.codingpirates.battleships.server.handler." + name + "Handler");
-            this.scope.seed(Connection.class, request.getKey());
-            this.scope.enter(request.getKey().getId());
-
-            MessageHandler handler = (MessageHandler) injector.getInstance(type);
-            if (handler == null) {
-                LOGGER.info("Can't find MessageHandler "+type+" for Message "+request.getValue().getClass());
-            } else {
-                if (handler.canHandle(request.getValue())) {
-                    handler.handle(request.getValue(), request.getKey().getId());
-                }
-            }
+            handleMessage(request, Dist.SERVER, this.scope, this.injector, LOGGER);
         } catch (ClassNotFoundException e) {
-            LOGGER.log(Level.ALL,"Can't find MessageHandler for Message", e);
+            LOGGER.log(Level.ALL, "Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {

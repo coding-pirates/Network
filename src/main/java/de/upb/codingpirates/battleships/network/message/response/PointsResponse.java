@@ -11,6 +11,7 @@ import java.util.Map;
  *
  * @author Interdoc committee & Paul Becker
  */
+@SuppressWarnings("unused")
 public class PointsResponse extends Message {
 
     public static final int MESSAGE_ID = 353;

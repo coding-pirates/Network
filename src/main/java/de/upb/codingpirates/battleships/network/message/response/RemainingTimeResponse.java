@@ -7,13 +7,13 @@ import de.upb.codingpirates.battleships.network.message.Message;
  *
  * @author Interdoc committee & Paul Becker
  */
+@SuppressWarnings("unused")
 public class RemainingTimeResponse extends Message {
 
     public static final int MESSAGE_ID = 354;
 
     /**
-     * Die in der aktuellen Runde
-     * noch verbleibende Bedenkzeit
+     * The time remaining in the current round
      */
     private final long time;
 

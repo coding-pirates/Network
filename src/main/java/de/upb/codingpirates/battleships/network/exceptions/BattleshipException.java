@@ -7,12 +7,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class BattleshipException extends Exception {
+    private final ErrorType errorType;
     @Nullable
     private Id connectionId;
-    private ErrorType errorType;
     private int messageId;
 
-    public BattleshipException(@Nonnull String message, @Nonnull ErrorType errorType) {
+    protected BattleshipException(@Nonnull String message, @Nonnull ErrorType errorType) {
         super(message);
         this.errorType = errorType;
     }

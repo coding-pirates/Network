@@ -11,13 +11,13 @@ import javax.annotation.Nonnull;
  */
 public class ServerJoinResponse extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 151;
 
     /**
      * Unique assigned by the server
      * ID for the client
      */
-    @Nonnull
     private final int clientId;
 
     public ServerJoinResponse(@Nonnull Integer clientId) {
@@ -25,7 +25,6 @@ public class ServerJoinResponse extends Message {
         this.clientId = clientId;
     }
 
-    @Nonnull
     public int getClientId() {
         return clientId;
     }

@@ -35,6 +35,7 @@ public class IntId implements Id {
         return id;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public Integer getInt() {
         return id;

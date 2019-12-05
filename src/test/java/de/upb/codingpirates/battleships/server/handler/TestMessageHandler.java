@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 public class TestMessageHandler implements MessageHandler<TestMessage> {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private NetworkTests.ClientManager manager;
+    private final NetworkTests.ClientManager manager;
 
     @Inject
     public TestMessageHandler(ConnectionHandler manager) {

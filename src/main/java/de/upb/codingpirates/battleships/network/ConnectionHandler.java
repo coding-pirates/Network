@@ -17,5 +17,6 @@ public interface ConnectionHandler {
      *
      * @param e a BattleshipException which can be sent to the other distribution to show there failures
      */
+    @SuppressWarnings("JavadocReference")
     void handleBattleshipException(BattleshipException e);
 }

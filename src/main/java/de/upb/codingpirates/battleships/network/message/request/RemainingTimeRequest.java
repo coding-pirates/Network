@@ -10,6 +10,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
  */
 public class RemainingTimeRequest extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 304;
 
     public RemainingTimeRequest() {

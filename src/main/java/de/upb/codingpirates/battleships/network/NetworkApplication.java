@@ -1,6 +1,5 @@
 package de.upb.codingpirates.battleships.network;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -9,7 +8,6 @@ import de.upb.codingpirates.battleships.network.message.Parser;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.logging.Logger;
 
 /**
  * Network application which should be created to start the creation af all needed classes (with Guice).
@@ -19,7 +17,6 @@ import java.util.logging.Logger;
  * @author Paul Becker
  */
 public class NetworkApplication {
-    private static final Logger LOGGER = Logger.getLogger(NetworkApplication.class.getName());
 
     @Nullable
     protected Injector injector;
@@ -46,13 +43,13 @@ public class NetworkApplication {
      * Creates a {@link MessageDispatcher} based on the predefined AbstractModule
      */
     public void run() {
-        Preconditions.checkNotNull(this.injector);
+        assert injector != null;
         this.injector.getInstance(MessageDispatcher.class);
     }
 
     @Nullable
     public ConnectionHandler getHandler() {
-        Preconditions.checkNotNull(this.injector);
+        assert this.injector != null;
         return this.injector.getInstance(ConnectionHandler.class);
     }
 }

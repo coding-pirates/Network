@@ -15,6 +15,7 @@ import java.util.Map;
  *
  * @author Interdoc committee & Paul Becker
  */
+@SuppressWarnings("unused")
 public class PlayerGameStateResponse extends Message {
 
     public static final int MESSAGE_ID = 355;
@@ -23,14 +24,14 @@ public class PlayerGameStateResponse extends Message {
      * Contains the status of the game
      */
     @Nonnull
-    private GameState state;
+    private final GameState state;
     /**
      * A collection about shots that
      * in all previous rounds
      * Have met ship (including sunken)
      */
     @Nonnull
-    private Collection<Shot> hits;
+    private final Collection<Shot> hits;
     /**
      * A collection of all shots,
      * in all previous rounds
@@ -38,20 +39,20 @@ public class PlayerGameStateResponse extends Message {
      * to have
      */
     @Nonnull
-    private Collection<Shot> sunk;
+    private final Collection<Shot> sunk;
     /**
      * An overview of all of the player
      * placed ships: A map
      * from ship IDs to position info
      */
     @Nonnull
-    private Map<Integer, PlacementInfo> ships;
+    private final Map<Integer, PlacementInfo> ships;
     /**
      * A collection of clients,
      * who currently participate in the game
      */
     @Nonnull
-    private Collection<Client> players;
+    private final Collection<Client> players;
 
     public PlayerGameStateResponse(@Nonnull GameState state, @Nonnull Collection<Shot> hits, @Nonnull Collection<Shot> sunk, @Nonnull Map<Integer, PlacementInfo> ships, @Nonnull Collection<Client> player) {
         super(MESSAGE_ID);

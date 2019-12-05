@@ -13,10 +13,11 @@ import org.apache.logging.log4j.Logger;
 /**
  * @author Paul Becker
  */
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class TestMessageHandler implements MessageHandler<TestMessage> {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private NetworkTests.ClientConnector connector;
+    private final NetworkTests.ClientConnector connector;
 
     @Inject
     public TestMessageHandler(ConnectionHandler manager) {

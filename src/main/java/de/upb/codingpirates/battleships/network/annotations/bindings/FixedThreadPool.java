@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
  *
  * @author Paul Becker
  */
+@SuppressWarnings("unused")
 @BindingAnnotation
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

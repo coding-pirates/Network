@@ -10,6 +10,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
 public class SpectatorGameStateRequest extends Message {
 
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 306;
 
     public SpectatorGameStateRequest() {

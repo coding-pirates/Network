@@ -14,6 +14,7 @@ import java.util.Collection;
  */
 public class LobbyResponse extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 251;
 
     /**

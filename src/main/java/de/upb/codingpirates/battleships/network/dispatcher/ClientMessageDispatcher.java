@@ -2,6 +2,7 @@ package de.upb.codingpirates.battleships.network.dispatcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import de.upb.codingpirates.battleships.logic.util.Dist;
 import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
@@ -54,14 +55,15 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         this.connection = this.network.connect(host, port);
 
         Observable<Connection> observer = Observable.create(this::setConnection);
+        //noinspection ResultOfMethodCallIgnored
         observer.subscribeOn(this.scheduler).subscribe(this::readLoop);
         this.network.setObserver(observer);
         return connection;
     }
 
     private void readLoop(Connection connection) {
-        LOGGER.info("Connection from "+connection.getInetAdress() );
-        readLoop.get(connection,this::dispatch,this::error);
+        LOGGER.info("Connection from " + connection.getInetAdress());
+        readLoop.get(connection, this::dispatch, this::error);
     }
 
     /**
@@ -70,28 +72,13 @@ public class ClientMessageDispatcher implements MessageDispatcher {
      * <p>
      * It tries to get a {@link MessageHandler} based on the name of the message and tries to let the MessageHandler handle the message. Otherwise logs th failure.
      *
-     * @param request
+     * @param request a {@link Pair} of a Message and its Connection
      */
-    @SuppressWarnings("unchecked")
     private void dispatch(Pair<Connection, Message> request) {
         try {
-            String[] namespace = request.getValue().getClass().getName().split("\\.");
-            String name = namespace[namespace.length - 1];
-            Class<?> type;
-            type = Class.forName("de.upb.codingpirates.battleships.client.handler." + name + "Handler");
-            this.scope.seed(Connection.class, request.getKey());
-            this.scope.enter(request.getKey().getId());
-
-            MessageHandler handler = (MessageHandler) injector.getInstance(type);
-            if (handler == null) {
-                LOGGER.info("Can't find MessageHandler "+type+" for Message "+request.getValue().getClass());
-            } else {
-                if (handler.canHandle(request.getValue())) {
-                    handler.handle(request.getValue(), request.getKey().getId());
-                }
-            }
+            handleMessage(request, Dist.CLIENT, this.scope, this.injector, LOGGER);
         } catch (ClassNotFoundException e) {
-            LOGGER.log(Level.ALL,"Can't find MessageHandler for Message", e);
+            LOGGER.log(Level.ALL, "Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -103,7 +90,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
         else {
-            LOGGER.log(Level.ALL,"Error while reading Messages on Server", throwable);
+            LOGGER.log(Level.ALL, "Error while reading Messages on Server", throwable);
         }
     }
 

@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
  */
 public class ErrorNotification extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 999;
 
     /**

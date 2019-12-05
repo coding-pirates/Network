@@ -10,6 +10,7 @@ import java.util.Map;
  *
  * @author Interdoc committee & Paul Becker
  */
+@SuppressWarnings("unused")
 public class FinishNotification extends Message {
 
     public static final int MESSAGE_ID = 364;
@@ -36,7 +37,6 @@ public class FinishNotification extends Message {
         return points;
     }
 
-    @Nonnull
     public int getWinner() {
         return winner;
     }

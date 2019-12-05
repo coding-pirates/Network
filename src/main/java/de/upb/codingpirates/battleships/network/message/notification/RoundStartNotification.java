@@ -10,6 +10,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
 public class RoundStartNotification extends Message {
 
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 365;
 
     public RoundStartNotification() {

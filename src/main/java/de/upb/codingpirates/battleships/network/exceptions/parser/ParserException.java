@@ -5,8 +5,9 @@ import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 
 import javax.annotation.Nonnull;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class ParserException extends BattleshipException {
-    public ParserException(@Nonnull String message, @Nonnull ErrorType errorType) {
+    protected ParserException(@Nonnull String message, @Nonnull ErrorType errorType) {
         super(message, errorType);
     }
 }

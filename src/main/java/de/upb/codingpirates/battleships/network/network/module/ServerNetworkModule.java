@@ -40,7 +40,7 @@ public class ServerNetworkModule extends NetworkModule {
         try {
             return new InetSocketAddress(InetAddress.getLocalHost(), Properties.PORT);
         } catch (UnknownHostException e) {
-            LOGGER.log(Level.ALL,"Could not get InetSocketAddress", e);
+            LOGGER.log(Level.ALL, "Could not get InetSocketAddress", e);
         }
         return null;
     }

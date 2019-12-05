@@ -36,7 +36,7 @@ public class ServerNetwork implements Network {
     private ServerConnectionManager connectionManager;
 
     /**
-     * Creates a {@link ServerNetwork}, gets a fixed Threadpool and InetSocketAddress.
+     * Creates a {@link ServerNetwork}, gets a fixed ThreadPool and InetSocketAddress.
      * <p></p>
      * Initiates the ServerSocket to work based of the {@link InetSocketAddress} and Creates a Observer Pattern, that waits for new connections and binds them in the {@link ServerConnectionManager}
      */
@@ -54,17 +54,16 @@ public class ServerNetwork implements Network {
         try {
             socket.bind(address);
         } catch (IOException e) {
-            LOGGER.log(Level.ALL,"Exception while trying to bind server socket", e);
-            return;
+            LOGGER.log(Level.ALL, "Exception while trying to bind server socket", e);
+            throw new IllegalStateException("Could not bind SocketAddress");
         }
-
         this.connections = Observable.create(this::acceptLoop).subscribeOn(Schedulers.from(executorService));
     }
 
     /**
      * Accept loop that waits for connections with {@link ServerSocket#accept()} and creates new {@link Connection} on success.
      * <p></p>
-     * Also it "informes the {@link Observable} about new created Connections to listen to.
+     * Also it "informs the {@link Observable} about new created Connections to listen to.
      */
     private void acceptLoop(ObservableEmitter<Connection> emitter) {
         while (!isClosed()) {

@@ -9,6 +9,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
  */
 public class LobbyRequest extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 201;
 
     public LobbyRequest() {

@@ -17,7 +17,7 @@ public class PlaceShipsRequest extends Message {
 
     /**
      * A map that ships with all
-     * Ship ID and PlacmentInfo
+     * Ship ID and PlacementInfo
      * (Position and rotation)
      * contains
      */

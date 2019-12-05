@@ -10,6 +10,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
  */
 public class GameStartNotification extends Message {
 
+    @SuppressWarnings("WeakerAccess")
     public static final int MESSAGE_ID = 363;
 
     public GameStartNotification() {

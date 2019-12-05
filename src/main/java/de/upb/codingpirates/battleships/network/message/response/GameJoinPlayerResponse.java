@@ -8,6 +8,7 @@ import de.upb.codingpirates.battleships.network.message.Message;
  *
  * @author Interdoc committee & Paul Becker
  */
+@SuppressWarnings("unused")
 public class GameJoinPlayerResponse extends Message {
 
     public static final int MESSAGE_ID = 252;

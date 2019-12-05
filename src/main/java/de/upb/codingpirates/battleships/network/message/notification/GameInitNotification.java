@@ -13,6 +13,7 @@ import java.util.Collection;
  *
  * @author Interdoc committee & Paul Becker
  */
+@SuppressWarnings("unused")
 public class GameInitNotification extends Message {
 
     public static final int MESSAGE_ID = 366;
