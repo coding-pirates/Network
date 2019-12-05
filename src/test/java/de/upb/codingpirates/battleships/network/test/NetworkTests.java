@@ -16,6 +16,8 @@ import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.Parser;
 import de.upb.codingpirates.battleships.network.network.module.ClientNetworkModule;
 import de.upb.codingpirates.battleships.network.network.module.ServerNetworkModule;
+import de.upb.codingpirates.battleships.network.util.ClientReaderMethod;
+import de.upb.codingpirates.battleships.network.util.DefaultReaderMethod;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -114,6 +116,7 @@ public class NetworkTests {
 
             this.bind(ConnectionHandler.class).to(ClientConnector.class).in(Singleton.class);
             this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class);
+            this.bind(ClientReaderMethod.class).to(DefaultReaderMethod.class);
         }
     }
 
