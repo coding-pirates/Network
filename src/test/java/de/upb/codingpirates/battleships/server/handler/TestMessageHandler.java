@@ -8,14 +8,14 @@ import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.test.NetworkTests;
 import de.upb.codingpirates.battleships.network.test.TestMessage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import java.util.logging.Logger;
 
 /**
  * @author Paul Becker
  */
 public class TestMessageHandler implements MessageHandler<TestMessage> {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = Logger.getLogger(TestMessageHandler.class.getName());
 
     private final NetworkTests.ClientManager manager;
 
