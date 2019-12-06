@@ -69,7 +69,7 @@ public class ConnectionScope implements Scope {
             objectsByKey = objects.get();
         }
 
-        if (currentKey != null && objectsByKey != null) {
+        if (currentKey == null && objectsByKey != null) {
             objectsByKey.putIfAbsent(currentKey, Maps.newHashMap());
 
             return objectsByKey.get(currentKey);
