@@ -16,20 +16,20 @@ import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.Parser;
 import de.upb.codingpirates.battleships.network.network.module.ClientNetworkModule;
 import de.upb.codingpirates.battleships.network.network.module.ServerNetworkModule;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Paul Becker
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class NetworkTests {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = Logger.getLogger(NetworkTests.class.getName());
 
     @Test
     public void test() throws IllegalAccessException, IOException, InstantiationException {
@@ -171,7 +171,7 @@ public class NetworkTests {
             try {
                 for (Id id : clients.keySet()) {
                     this.connectionManager.send(id, message);
-                    LOGGER.debug("send message to {}", clients.get(id).name);
+                    LOGGER.info("send message to "+ clients.get(id).name);
                 }
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "could not send message", e);
