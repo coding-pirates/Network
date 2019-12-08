@@ -8,8 +8,7 @@ import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
-
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Necessary for Guice to get a class depending on distribution.
@@ -29,7 +28,7 @@ public interface MessageDispatcher {
 
         MessageHandler handler = (MessageHandler) injector.getInstance(type);
         if (handler == null) {
-            LOGGER.info("Can't find MessageHandler " + type + " for Message " + request.getValue().getClass());
+            LOGGER.info("Can't find MessageHandler {} for Message {}",type, request.getValue().getClass());
         } else {
             if (handler.canHandle(request.getValue())) {
                 handler.handle(request.getValue(), request.getKey().getId());

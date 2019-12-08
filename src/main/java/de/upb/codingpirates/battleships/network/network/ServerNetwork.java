@@ -8,6 +8,8 @@ import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnecti
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.schedulers.Schedulers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -15,8 +17,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The ServerNetwork handles all new Connections from Clients and saves them in the {@link ServerConnectionManager}.
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * @author Paul Becker
  */
 public class ServerNetwork implements Network {
-    private static final Logger LOGGER = Logger.getLogger(ServerNetwork.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Nonnull
     private ServerSocket socket;
@@ -54,7 +54,7 @@ public class ServerNetwork implements Network {
         try {
             socket.bind(address);
         } catch (IOException e) {
-            LOGGER.log(Level.ALL, "Exception while trying to bind server socket", e);
+            LOGGER.info("Exception while trying to bind server socket", e);
             throw new IllegalStateException("Could not bind SocketAddress");
         }
         this.connections = Observable.create(this::acceptLoop).subscribeOn(Schedulers.from(executorService));

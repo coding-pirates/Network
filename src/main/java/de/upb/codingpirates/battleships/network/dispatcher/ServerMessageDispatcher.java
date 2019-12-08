@@ -18,11 +18,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The {@link ServerMessageDispatcher} registers a read loop for the {@link Observable} of the {@link ServerNetwork}. The read loop {@link ServerMessageDispatcher#dispatch(Pair)} a request if it receives a message.
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  * @author Paul Becker
  */
 public class ServerMessageDispatcher implements MessageDispatcher {
-    private static final Logger LOGGER = Logger.getLogger(ServerMessageDispatcher.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private final ConnectionScope scope;
     private final Injector injector;
@@ -38,14 +38,14 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     @Inject
     public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope, ConnectionHandler connectionHandler) {
-        LOGGER.log(Level.ALL, "Initialize server message dispatcher");
+        LOGGER.info("Initialize server message dispatcher");
 
         this.scope = scope;
         this.injector = injector;
         this.connectionHandler = connectionHandler;
 
         if (network == null || network.isClosed()) {
-            LOGGER.log(Level.WARNING, "Server network is not working");
+            LOGGER.warn("Server network is not working");
             return;
         }
 
@@ -91,7 +91,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         try {
             handleMessage(request, Dist.SERVER, this.scope, this.injector, LOGGER);
         } catch (ClassNotFoundException e) {
-            LOGGER.log(Level.ALL, "Can't find MessageHandler for Message", e);
+            LOGGER.info("Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -103,7 +103,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
         else {
-            LOGGER.log(Level.ALL, "Error while reading Messages on Server", throwable);
+            LOGGER.info("Error while reading Messages on Server", throwable);
         }
     }
 }
