@@ -65,11 +65,11 @@ public class ServerMessageDispatcher implements MessageDispatcher {
             while (!connection.isClosed()) {
                 try {
                     Message message = connection.read();
-                    emitter.onNext(new Pair<>(connection, message));
+                    emitter.onNext(Pair.of(connection, message));
                     break;
                 } catch (SocketException e) {
                     connection.close();
-                    emitter.onNext(new Pair<>(connection, new ConnectionClosedReport()));
+                    emitter.onNext(Pair.of(connection, new ConnectionClosedReport()));
                 } catch (IOException | ParserException e) {
                     emitter.onError(e);
                 }
