@@ -11,7 +11,6 @@ import de.upb.codingpirates.battleships.network.connectionmanager.ClientConnecti
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 import de.upb.codingpirates.battleships.network.id.Id;
-import de.upb.codingpirates.battleships.network.id.IntId;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.Parser;
 import de.upb.codingpirates.battleships.network.network.module.ClientNetworkModule;
@@ -156,7 +155,7 @@ public class NetworkTests {
                 }
             }
 
-            ClientEntity clientEntity = new ClientEntity((Integer) id.getRaw(), name);
+            ClientEntity clientEntity = new ClientEntity(id.getInt(), name);
 
             synchronized (clients) {
                 clients.putIfAbsent(id, clientEntity);
@@ -166,7 +165,7 @@ public class NetworkTests {
 
         public void sendMessageToClient(ClientEntity client, Message message) {
             try {
-                this.connectionManager.send(new IntId(client.getId()), message);
+                this.connectionManager.send(new Id(client.getId()), message);
             } catch (IOException e) {
                 LOGGER.error("could not send message", e);
             }

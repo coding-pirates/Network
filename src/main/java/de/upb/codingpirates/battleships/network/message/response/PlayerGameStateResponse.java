@@ -91,4 +91,15 @@ public class PlayerGameStateResponse extends Message {
         return players;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof PlayerGameStateResponse){
+            PlayerGameStateResponse message = (PlayerGameStateResponse) obj;
+            return state == message.state && hits.equals(message.hits) && sunk.equals(message.sunk) && ships.equals(message.ships) && players.equals(message.players);
+        }
+        return false;
+    }
+
 }

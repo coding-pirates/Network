@@ -29,4 +29,13 @@ public class ServerJoinResponse extends Message {
         return clientId;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof ServerJoinResponse){
+            return clientId == ((ServerJoinResponse)obj).clientId;
+        }
+        return false;
+    }
 }

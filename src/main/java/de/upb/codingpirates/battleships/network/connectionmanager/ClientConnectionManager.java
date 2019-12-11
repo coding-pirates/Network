@@ -3,7 +3,7 @@ package de.upb.codingpirates.battleships.network.connectionmanager;
 import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.dispatcher.ClientMessageDispatcher;
-import de.upb.codingpirates.battleships.network.id.IntId;
+import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.util.NetworkMarker;
 import org.apache.logging.log4j.LogManager;
@@ -58,6 +58,6 @@ public class ClientConnectionManager {
      */
     public void setConnectionId(int id) {
         assert this.connection != null;
-        this.connection.setId(new IntId(id));
+        this.connection.setId(new Id(id));
     }
 }

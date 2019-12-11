@@ -3,11 +3,18 @@ package de.upb.codingpirates.battleships.network.id;
 import javax.annotation.Nonnull;
 
 /**
- * Basic Interface for an {@link Id} generator. Necessary for Guice to get a class depending on distribution.
+ * {@link Id} generator.
  *
  * @author Paul Becker
  */
-public interface IdManager<T> {
+public class IdManager {
+    private Integer counter = 0;
+
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     @Nonnull
-    Id generate();
+    public Id generate() {
+        synchronized (this.counter) {
+            return new Id(counter++);
+        }
+    }
 }
