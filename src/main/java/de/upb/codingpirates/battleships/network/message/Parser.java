@@ -1,7 +1,6 @@
 package de.upb.codingpirates.battleships.network.message;
 
 import com.google.gson.*;
-import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.exceptions.parser.BadJsonException;
 import de.upb.codingpirates.battleships.network.exceptions.parser.BadMessageException;
 import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;

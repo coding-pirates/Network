@@ -28,7 +28,7 @@ public interface MessageDispatcher {
 
         MessageHandler handler = (MessageHandler) injector.getInstance(type);
         if (handler == null) {
-            LOGGER.info("Can't find MessageHandler {} for Message {}",type, request.getValue().getClass());
+            LOGGER.info("Can't find MessageHandler {} for Message {}", type, request.getValue().getClass());
         } else {
             if (handler.canHandle(request.getValue())) {
                 handler.handle(request.getValue(), request.getKey().getId());

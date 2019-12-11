@@ -29,9 +29,7 @@ public class ServerConnectionManager {
     Connection create(Socket socket) throws IOException {
         Connection connection = new Connection(this.idManager.generate(), socket);
 
-        synchronized (connections) {
-            this.connections.put((Integer) connection.getId().getRaw(), connection);
-        }
+        this.connections.put((Integer) connection.getId().getRaw(), connection);
 
         return connection;
     }
@@ -43,8 +41,6 @@ public class ServerConnectionManager {
 
     @SuppressWarnings("RedundantCast")
     public void send(@Nonnull Id id, @Nonnull Message message) throws IOException {
-        synchronized (this.connections) {
-            this.connections.get((Integer) id.getRaw()).send(message);
-        }
+        this.connections.get((Integer) id.getRaw()).send(message);
     }
 }

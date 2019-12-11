@@ -174,7 +174,7 @@ public class NetworkTests {
             try {
                 for (Id id : clients.keySet()) {
                     this.connectionManager.send(id, message);
-                    LOGGER.info("send message to "+ clients.get(id).name);
+                    LOGGER.info("send message to " + clients.get(id).name);
                 }
             } catch (IOException e) {
                 LOGGER.error("could not send message", e);
