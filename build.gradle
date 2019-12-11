@@ -3,12 +3,18 @@ apply plugin: "java"
 dependencies {
     implementation project(":logic")
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.2'
     implementation group: 'com.google.guava', name: 'guava', version: '28.1-android'
+
     implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.1'
+
     implementation group: 'org.roboguice', name: 'roboguice', version: '4.0.0'
+
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
+
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.2'
 }
 
 targetCompatibility = '1.8'
