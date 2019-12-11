@@ -84,7 +84,7 @@ public class NetworkTests {
             LOGGER.info("Start server network module");
 
             NetworkApplication application = new NetworkApplication();
-            application.useModule(ServerModule.class).run();
+            application.useModule(new ServerModule()).run();
             return application;
         }
     }
@@ -94,10 +94,12 @@ public class NetworkTests {
             LOGGER.info("Start client network module");
 
             NetworkApplication application = new NetworkApplication();
-            application.useModule(ClientModule.class).run();
+            application.useModule(new ClientModule()).run();
             return application;
         }
     }
+
+
 
     public static class ServerModule extends AbstractModule {
         @Override
