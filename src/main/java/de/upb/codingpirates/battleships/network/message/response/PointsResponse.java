@@ -33,5 +33,13 @@ public class PointsResponse extends Message {
         return points;
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof PointsResponse){
+            return points.equals(((PointsResponse)obj).points);
+        }
+        return false;
+    }
 }

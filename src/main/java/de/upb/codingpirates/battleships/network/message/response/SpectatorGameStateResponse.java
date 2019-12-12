@@ -75,4 +75,14 @@ public class SpectatorGameStateResponse extends Message {
         return state;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof SpectatorGameStateResponse){
+            SpectatorGameStateResponse message = (SpectatorGameStateResponse) obj;
+            return state == message.state && shots.equals(message.shots) && ships.equals(message.ships) && players.equals(message.players);
+        }
+        return false;
+    }
 }

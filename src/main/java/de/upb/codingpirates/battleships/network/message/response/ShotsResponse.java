@@ -15,4 +15,14 @@ public class ShotsResponse extends Message {
     public ShotsResponse() {
         super(MESSAGE_ID);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof ShotsResponse){
+            return true;
+        }
+        return false;
+    }
 }

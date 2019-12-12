@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
+import de.upb.codingpirates.battleships.network.util.NetworkMarker;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.schedulers.Schedulers;
@@ -46,7 +47,7 @@ public class ServerNetwork implements Network {
         Preconditions.checkNotNull(address);
         Preconditions.checkNotNull(connectionManager);
 
-        LOGGER.info("Initiate server network");
+        LOGGER.info(NetworkMarker.NETWORK,"Initiate server network");
 
         this.socket = new ServerSocket();
         this.connectionManager = connectionManager;
@@ -54,7 +55,7 @@ public class ServerNetwork implements Network {
         try {
             socket.bind(address);
         } catch (IOException e) {
-            LOGGER.info("Exception while trying to bind server socket", e);
+            LOGGER.error(NetworkMarker.NETWORK,"Exception while trying to bind server socket", e);
             throw new IllegalStateException("Could not bind SocketAddress");
         }
         this.connections = Observable.create(this::acceptLoop).subscribeOn(Schedulers.from(executorService));

@@ -30,12 +30,8 @@ public class NetworkApplication {
      * @return itself
      */
     @Nonnull
-    public <T extends AbstractModule> NetworkApplication useModule(@Nonnull Class<T> type) throws IllegalAccessException, InstantiationException {
-        AbstractModule module = type.newInstance();
-        if (module == null) {
-            throw new IllegalArgumentException("module is null");
-        }
-        this.injector = Guice.createInjector(module);
+    public <T extends AbstractModule> NetworkApplication useModule(@Nonnull T type) {
+        this.injector = Guice.createInjector(type);
         return this;
     }
 

@@ -29,22 +29,16 @@ public class ServerConnectionManager {
     Connection create(Socket socket) throws IOException {
         Connection connection = new Connection(this.idManager.generate(), socket);
 
-        synchronized (connections) {
-            this.connections.put((Integer) connection.getId().getRaw(), connection);
-        }
+        this.connections.put( connection.getId().getInt(), connection);
 
         return connection;
     }
 
-    @SuppressWarnings("RedundantCast")
     public Connection getConnection(@Nonnull Id id) {
-        return this.connections.get((Integer) id.getRaw());
+        return this.connections.get(id.getInt());
     }
 
-    @SuppressWarnings("RedundantCast")
     public void send(@Nonnull Id id, @Nonnull Message message) throws IOException {
-        synchronized (this.connections) {
-            this.connections.get((Integer) id.getRaw()).send(message);
-        }
+        this.connections.get(id.getInt()).send(message);
     }
 }
