@@ -27,5 +27,4 @@ public class LeaveNotification extends Message {
     public int getPlayerId() {
         return playerId;
     }
-
 }

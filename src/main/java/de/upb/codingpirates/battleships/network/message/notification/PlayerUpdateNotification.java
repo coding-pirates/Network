@@ -62,5 +62,4 @@ public class PlayerUpdateNotification extends Message {
     public Collection<Shot> getSunk() {
         return sunk;
     }
-
 }

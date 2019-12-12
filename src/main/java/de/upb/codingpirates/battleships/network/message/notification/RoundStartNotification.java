@@ -16,6 +16,4 @@ public class RoundStartNotification extends Message {
     public RoundStartNotification() {
         super(MESSAGE_ID);
     }
-
-
 }

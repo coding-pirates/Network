@@ -15,5 +15,4 @@ public class ContinueNotification extends Message {
     public ContinueNotification() {
         super(MESSAGE_ID);
     }
-
 }

@@ -16,5 +16,4 @@ public class GameStartNotification extends Message {
     public GameStartNotification() {
         super(MESSAGE_ID);
     }
-
 }

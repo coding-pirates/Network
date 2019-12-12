@@ -74,6 +74,4 @@ public class SpectatorUpdateNotification extends Message {
     public Collection<Shot> getMissed() {
         return missed;
     }
-
-
 }

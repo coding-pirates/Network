@@ -16,6 +16,4 @@ public class PauseNotification extends Message {
     public PauseNotification() {
         super(MESSAGE_ID);
     }
-
-
 }

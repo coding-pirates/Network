@@ -1,22 +1,26 @@
 package de.upb.codingpirates.battleships.network.network;
 
-import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
-import de.upb.codingpirates.battleships.network.Connection;
-import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
-import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.schedulers.Schedulers;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
+
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+
+import com.google.common.base.Preconditions;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.schedulers.Schedulers;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import de.upb.codingpirates.battleships.network.Connection;
+import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
+import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
 
 /**
  * The ServerNetwork handles all new Connections from Clients and saves them in the {@link ServerConnectionManager}.

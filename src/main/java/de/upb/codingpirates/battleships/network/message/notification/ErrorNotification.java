@@ -56,6 +56,4 @@ public class ErrorNotification extends Message {
     public String getReason() {
         return reason;
     }
-
-
 }
