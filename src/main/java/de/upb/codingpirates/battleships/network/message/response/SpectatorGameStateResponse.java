@@ -1,19 +1,19 @@
 package de.upb.codingpirates.battleships.network.message.response;
 
-import de.upb.codingpirates.battleships.logic.Client;
-import de.upb.codingpirates.battleships.logic.GameState;
-import de.upb.codingpirates.battleships.logic.PlacementInfo;
-import de.upb.codingpirates.battleships.logic.Shot;
+import de.upb.codingpirates.battleships.logic.*;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 /**
  * Sent by the server to the observer to give him the full score.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee
+ * @author Paul Becker
+ * @author Andre Blanke
  */
 @SuppressWarnings("unused")
 public class SpectatorGameStateResponse extends Message {
@@ -75,4 +75,44 @@ public class SpectatorGameStateResponse extends Message {
         return state;
     }
 
+    /**
+     * @author Andre Blanke
+     */
+    public static final class Builder {
+
+        @Nonnull
+        private Collection<Client> players = Collections.emptyList();
+
+        @Nonnull
+        private Collection<Shot> shots = Collections.emptyList();
+
+        @Nonnull
+        private Map<Integer, Map<Integer, PlacementInfo>> ships = Collections.emptyMap();
+
+        private GameState gameState;
+
+        public SpectatorGameStateResponse build() {
+            return new SpectatorGameStateResponse(players, shots, ships, gameState);
+        }
+
+        public Builder players(@Nonnull final Collection<Client> players) {
+            this.players = players;
+            return this;
+        }
+
+        public Builder shots(@Nonnull final Collection<Shot> shots) {
+            this.shots = shots;
+            return this;
+        }
+
+        public Builder ships(@Nonnull final Map<Integer, Map<Integer, PlacementInfo>> ships) {
+            this.ships = ships;
+            return this;
+        }
+
+        public Builder gameState(final GameState gameState) {
+            this.gameState = gameState;
+            return this;
+        }
+    }
 }

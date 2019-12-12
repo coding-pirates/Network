@@ -1,21 +1,24 @@
 package de.upb.codingpirates.battleships.network.message.response;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import de.upb.codingpirates.battleships.logic.Client;
 import de.upb.codingpirates.battleships.logic.GameState;
 import de.upb.codingpirates.battleships.logic.PlacementInfo;
 import de.upb.codingpirates.battleships.logic.Shot;
 import de.upb.codingpirates.battleships.network.message.Message;
 
-import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Map;
-
 /**
  * Sent by the server to the player to show him his current score.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee
+ * @author Paul Becker
+ * @author Andre Blanke
  */
-@SuppressWarnings("unused")
 public class PlayerGameStateResponse extends Message {
 
     public static final int MESSAGE_ID = 355;
@@ -56,26 +59,29 @@ public class PlayerGameStateResponse extends Message {
 
     public PlayerGameStateResponse(@Nonnull GameState state, @Nonnull Collection<Shot> hits, @Nonnull Collection<Shot> sunk, @Nonnull Map<Integer, PlacementInfo> ships, @Nonnull Collection<Client> player) {
         super(MESSAGE_ID);
-        this.state = state;
-        this.hits = hits;
-        this.sunk = sunk;
-        this.ships = ships;
+        this.state   = state;
+        this.hits    = hits;
+        this.sunk    = sunk;
+        this.ships   = ships;
         this.players = player;
     }
 
     @Nonnull
+    @SuppressWarnings("unused")
     public GameState getState() {
         return state;
     }
 
 
     @Nonnull
+    @SuppressWarnings("unused")
     public Collection<Shot> getHits() {
         return hits;
     }
 
 
     @Nonnull
+    @SuppressWarnings("unused")
     public Collection<Shot> getSunk() {
         return sunk;
     }
@@ -91,4 +97,52 @@ public class PlayerGameStateResponse extends Message {
         return players;
     }
 
+    /**
+     * @author Andre Blanke
+     */
+    public static final class Builder {
+
+        private GameState gameState;
+
+        @Nonnull
+        private Collection<Shot> hits = Collections.emptyList();
+
+        @Nonnull
+        private Collection<Shot> sunk = Collections.emptyList();
+
+        @Nonnull
+        private Map<Integer, PlacementInfo> ships = Collections.emptyMap();
+
+        @Nonnull
+        private Collection<Client> players = Collections.emptyList();
+
+        public PlayerGameStateResponse build() {
+            return new PlayerGameStateResponse(gameState, hits, sunk, ships, players);
+        }
+
+        public Builder gameState(@Nonnull final GameState gameState) {
+            this.gameState = gameState;
+            return this;
+        }
+
+        public Builder hits(@Nonnull final Collection<Shot> hits) {
+            this.hits = hits;
+            return this;
+        }
+
+        public Builder sunk(@Nonnull final Collection<Shot> sunk) {
+            this.sunk = sunk;
+            return this;
+        }
+
+        public Builder ships(@Nonnull final Map<Integer, PlacementInfo> ships) {
+            this.ships = ships;
+            return this;
+        }
+
+        public Builder players(@Nonnull final Collection<Client> players) {
+            this.players = players;
+            return this;
+        }
+    }
 }
