@@ -3,11 +3,12 @@ package de.upb.codingpirates.battleships.network;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import de.upb.codingpirates.battleships.network.dispatcher.MessageDispatcher;
-import de.upb.codingpirates.battleships.network.message.Parser;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import de.upb.codingpirates.battleships.network.dispatcher.MessageDispatcher;
+import de.upb.codingpirates.battleships.network.message.Parser;
 
 /**
  * Network application which should be created to start the creation af all needed classes (with Guice).
@@ -30,7 +31,8 @@ public class NetworkApplication {
      * @return itself
      */
     @Nonnull
-    public <T extends AbstractModule> NetworkApplication useModule(@Nonnull Class<T> type) throws IllegalAccessException, InstantiationException {
+    public <T extends AbstractModule> NetworkApplication useModule(@Nonnull Class<T> type)
+            throws IllegalAccessException, InstantiationException {
         AbstractModule module = type.newInstance();
         if (module == null) {
             throw new IllegalArgumentException("module is null");

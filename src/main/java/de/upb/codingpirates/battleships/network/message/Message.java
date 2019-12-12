@@ -7,10 +7,13 @@ package de.upb.codingpirates.battleships.network.message;
  */
 public class Message {
 
-    public final int messageId;
+    private final int messageId;
 
-    protected Message(int messageId) {
+    protected Message(final int messageId) {
         this.messageId = messageId;
     }
 
+    public int getMessageId() {
+        return messageId;
+    }
 }

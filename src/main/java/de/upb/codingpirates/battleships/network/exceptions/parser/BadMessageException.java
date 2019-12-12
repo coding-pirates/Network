@@ -4,9 +4,7 @@ import de.upb.codingpirates.battleships.logic.ErrorType;
 
 public class BadMessageException extends ParserException {
 
-    public BadMessageException(String message) {
+    public BadMessageException(final String message) {
         super(message, ErrorType.BAD_MESSAGE);
     }
-
-
 }

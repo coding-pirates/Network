@@ -9,7 +9,7 @@ public abstract class ExceptionMessageHandler<T extends Message> implements Mess
         try {
             handleMessage(message, connectionId);
         } catch (GameException e) {
-            e.setMessageId(message.messageId);
+            e.setMessageId(message.getMessageId());
             e.setConnectionId(connectionId);
             throw e;
         }

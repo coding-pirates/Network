@@ -1,14 +1,16 @@
 package de.upb.codingpirates.battleships.client.handler;
 
 import com.google.inject.Inject;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.test.NetworkTests;
 import de.upb.codingpirates.battleships.network.test.TestMessage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * @author Paul Becker
