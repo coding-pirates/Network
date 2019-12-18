@@ -1,12 +1,14 @@
 package de.upb.codingpirates.battleships.network.message.response;
 
-import de.upb.codingpirates.battleships.logic.*;
-import de.upb.codingpirates.battleships.network.message.Message;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+
+import de.upb.codingpirates.battleships.logic.*;
+import de.upb.codingpirates.battleships.network.message.Message;
 
 /**
  * Sent by the server to the observer to give him the full score.
@@ -55,6 +57,17 @@ public class SpectatorGameStateResponse extends Message {
         this.state = state;
     }
 
+    @Override
+    public boolean equals(final Object object) {
+        if (object == this)
+            return true;
+        if (object instanceof SpectatorGameStateResponse){
+            SpectatorGameStateResponse message = (SpectatorGameStateResponse) obj;
+            return state == message.state && shots.equals(message.shots) && ships.equals(message.ships) && players.equals(message.players);
+        }
+        return false;
+    }
+
     @Nonnull
     public Collection<Client> getPlayers() {
         return players;
@@ -81,13 +94,12 @@ public class SpectatorGameStateResponse extends Message {
     public static final class Builder {
 
         @Nonnull
-        private Collection<Client> players = Collections.emptyList();
+        private Collection<Client> players = new ArrayList<>();
 
         @Nonnull
-        private Collection<Shot> shots = Collections.emptyList();
-
+        private Collection<Shot> shots = new ArrayList<>();
         @Nonnull
-        private Map<Integer, Map<Integer, PlacementInfo>> ships = Collections.emptyMap();
+        private Map<Integer, Map<Integer, PlacementInfo>> ships = new HashMap<>();
 
         private GameState gameState;
 

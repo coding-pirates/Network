@@ -44,4 +44,11 @@ public class ServerJoinRequest extends Message {
         return clientType;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof ServerJoinRequest){
+            return name.equals(((ServerJoinRequest) obj).name) && clientType == ((ServerJoinRequest)obj).clientType;
+        }
+        return false;
+    }
 }

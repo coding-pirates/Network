@@ -26,4 +26,13 @@ public class RemainingTimeResponse extends Message {
         return time;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof RemainingTimeResponse){
+            return time == ((RemainingTimeResponse)obj).time;
+        }
+        return false;
+    }
 }

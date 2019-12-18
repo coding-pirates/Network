@@ -14,6 +14,7 @@ import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.network.ClientNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import de.upb.codingpirates.battleships.network.util.ClientReaderMethod;
+import de.upb.codingpirates.battleships.network.util.NetworkMarker;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Scheduler;
@@ -62,7 +63,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     }
 
     private void readLoop(Connection connection) {
-        LOGGER.info("Connection from " + connection.getInetAdress());
+        LOGGER.info(NetworkMarker.CONNECTION,"Connection from " + connection.getInetAdress());
         readLoop.get(connection, this::dispatch, this::error);
     }
 
@@ -78,7 +79,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         try {
             handleMessage(request, Dist.CLIENT, this.scope, this.injector, LOGGER);
         } catch (ClassNotFoundException e) {
-            LOGGER.info("Can't find MessageHandler for Message", e);
+            LOGGER.error(NetworkMarker.MESSAGE, "Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -90,7 +91,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
         else {
-            LOGGER.info("Error while reading Messages on Server", throwable);
+            LOGGER.error(NetworkMarker.MESSAGE,"Error while reading Messages on Server", throwable);
         }
     }
 

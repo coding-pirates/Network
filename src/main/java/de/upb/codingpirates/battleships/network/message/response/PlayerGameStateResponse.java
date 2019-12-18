@@ -1,7 +1,8 @@
 package de.upb.codingpirates.battleships.network.message.response;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -66,6 +67,17 @@ public class PlayerGameStateResponse extends Message {
         this.players = player;
     }
 
+    @Override
+    public boolean equals(final Object object) {
+        if (object == this)
+            return true;
+        if (object instanceof PlayerGameStateResponse){
+            PlayerGameStateResponse message = (PlayerGameStateResponse) obj;
+            return state == message.state && hits.equals(message.hits) && sunk.equals(message.sunk) && ships.equals(message.ships) && players.equals(message.players);
+        }
+        return false;
+    }
+
     @Nonnull
     @SuppressWarnings("unused")
     public GameState getState() {
@@ -105,16 +117,16 @@ public class PlayerGameStateResponse extends Message {
         private GameState gameState;
 
         @Nonnull
-        private Collection<Shot> hits = Collections.emptyList();
+        private Collection<Shot> hits = new ArrayList<>();
 
         @Nonnull
-        private Collection<Shot> sunk = Collections.emptyList();
+        private Collection<Shot> sunk = new ArrayList<>();
 
         @Nonnull
-        private Map<Integer, PlacementInfo> ships = Collections.emptyMap();
+        private Map<Integer, PlacementInfo> ships = new HashMap<>();
 
         @Nonnull
-        private Collection<Client> players = Collections.emptyList();
+        private Collection<Client> players = new ArrayList<>();
 
         public PlayerGameStateResponse build() {
             return new PlayerGameStateResponse(gameState, hits, sunk, ships, players);

@@ -28,4 +28,13 @@ public class GameJoinSpectatorResponse extends Message {
         return gameId;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof GameJoinSpectatorResponse){
+            return gameId == ((GameJoinSpectatorResponse)obj).gameId;
+        }
+        return false;
+    }
 }

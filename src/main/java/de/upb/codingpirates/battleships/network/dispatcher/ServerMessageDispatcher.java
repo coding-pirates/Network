@@ -14,6 +14,7 @@ import de.upb.codingpirates.battleships.network.message.MessageHandler;
 import de.upb.codingpirates.battleships.network.message.report.ConnectionClosedReport;
 import de.upb.codingpirates.battleships.network.network.ServerNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
+import de.upb.codingpirates.battleships.network.util.NetworkMarker;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.functions.Consumer;
@@ -38,15 +39,15 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     @Inject
     public ServerMessageDispatcher(ServerNetwork network, Injector injector, ConnectionScope scope, ConnectionHandler connectionHandler) {
-        LOGGER.info("Initialize server message dispatcher");
+        LOGGER.info(NetworkMarker.NETWORK,"Initialize server message dispatcher");
 
         this.scope = scope;
         this.injector = injector;
         this.connectionHandler = connectionHandler;
 
         if (network == null || network.isClosed()) {
-            LOGGER.warn("Server network is not working");
-            return;
+            LOGGER.error(NetworkMarker.NETWORK,"Server network is not working");
+            throw new IllegalStateException("Server network is null or closed");
         }
 
         //noinspection ResultOfMethodCallIgnored
@@ -55,7 +56,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
 
     private void readLoop(Connection connection) {
-        LOGGER.info("Connection from " + connection.getInetAdress());
+        LOGGER.info(NetworkMarker.NETWORK,"Connection from " + connection.getInetAdress());
         get(connection, this::dispatch, this::error);
     }
 
@@ -91,7 +92,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         try {
             handleMessage(request, Dist.SERVER, this.scope, this.injector, LOGGER);
         } catch (ClassNotFoundException e) {
-            LOGGER.info("Can't find MessageHandler for Message", e);
+            LOGGER.error(NetworkMarker.MESSAGE, "Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
         } finally {
@@ -103,7 +104,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
         else {
-            LOGGER.info("Error while reading Messages on Server", throwable);
+            LOGGER.error(NetworkMarker.MESSAGE, "Error while reading Messages on Server", throwable);
         }
     }
 }

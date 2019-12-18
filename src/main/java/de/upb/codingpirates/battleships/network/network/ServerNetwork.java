@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
 import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
+import de.upb.codingpirates.battleships.network.util.NetworkMarker;
 
 /**
  * The ServerNetwork handles all new Connections from Clients and saves them in the {@link ServerConnectionManager}.
@@ -50,7 +51,7 @@ public class ServerNetwork implements Network {
         Preconditions.checkNotNull(address);
         Preconditions.checkNotNull(connectionManager);
 
-        LOGGER.info("Initiate server network");
+        LOGGER.info(NetworkMarker.NETWORK,"Initiate server network");
 
         this.socket = new ServerSocket();
         this.connectionManager = connectionManager;
@@ -58,7 +59,7 @@ public class ServerNetwork implements Network {
         try {
             socket.bind(address);
         } catch (IOException e) {
-            LOGGER.info("Exception while trying to bind server socket", e);
+            LOGGER.error(NetworkMarker.NETWORK,"Exception while trying to bind server socket", e);
             throw new IllegalStateException("Could not bind SocketAddress");
         }
         this.connections = Observable.create(this::acceptLoop).subscribeOn(Schedulers.from(executorService));
