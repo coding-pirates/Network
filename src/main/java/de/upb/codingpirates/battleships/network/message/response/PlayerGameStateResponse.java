@@ -72,7 +72,7 @@ public class PlayerGameStateResponse extends Message {
         if (object == this)
             return true;
         if (object instanceof PlayerGameStateResponse){
-            PlayerGameStateResponse message = (PlayerGameStateResponse) obj;
+            PlayerGameStateResponse message = (PlayerGameStateResponse) object;
             return state == message.state && hits.equals(message.hits) && sunk.equals(message.sunk) && ships.equals(message.ships) && players.equals(message.players);
         }
         return false;

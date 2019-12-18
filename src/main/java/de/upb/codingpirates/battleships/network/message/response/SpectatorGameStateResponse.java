@@ -62,7 +62,7 @@ public class SpectatorGameStateResponse extends Message {
         if (object == this)
             return true;
         if (object instanceof SpectatorGameStateResponse){
-            SpectatorGameStateResponse message = (SpectatorGameStateResponse) obj;
+            SpectatorGameStateResponse message = (SpectatorGameStateResponse) object;
             return state == message.state && shots.equals(message.shots) && ships.equals(message.ships) && players.equals(message.players);
         }
         return false;
