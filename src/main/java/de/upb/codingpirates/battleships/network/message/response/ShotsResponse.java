@@ -20,9 +20,6 @@ public class ShotsResponse extends Message {
     public boolean equals(Object obj) {
         if(obj == this)
             return true;
-        if(obj instanceof ShotsResponse){
-            return true;
-        }
-        return false;
+        return obj instanceof ShotsResponse;
     }
 }
