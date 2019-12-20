@@ -2,10 +2,10 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{HH:mm:ss}] - [%p][%marker] %c{3.} - %msg%n"/>
+            <PatternLayout pattern="[%d{HH:mm:ss}] - [%p][%t][%marker] %c{3.} - %msg%n"/>
         </Console>
         <File name="File" fileName="run/logs/server.log">
-            <PatternLayout pattern="[%d{DATE}] - [%p][%marker] %c{3.} - %msg%n"/>
+            <PatternLayout pattern="[%d{DATE}] - [%p][%t][%marker] %c{3.} - %msg%n"/>
         </File>
     </Appenders>
     <Loggers>
