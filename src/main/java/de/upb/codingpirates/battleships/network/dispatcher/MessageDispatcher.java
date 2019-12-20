@@ -6,7 +6,7 @@ import de.upb.codingpirates.battleships.logic.util.Pair;
 import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
 import de.upb.codingpirates.battleships.network.message.Message;
-import de.upb.codingpirates.battleships.network.message.MessageHandler;
+import de.upb.codingpirates.battleships.network.message.handler.MessageHandler;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import org.apache.logging.log4j.Logger;
 

@@ -5,17 +5,23 @@ import de.upb.codingpirates.battleships.network.message.Message;
 /**
  * Can be sent from the client to the server to get the current point list.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 public class PointsRequest extends Message {
 
-
-    @SuppressWarnings("WeakerAccess")
+    /**
+     * Message id of {@link PointsRequest}
+     */
     public static final int MESSAGE_ID = 303;
 
-    public PointsRequest() {
+    PointsRequest() {
         super(MESSAGE_ID);
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        return obj instanceof PointsRequest;
+    }
 }

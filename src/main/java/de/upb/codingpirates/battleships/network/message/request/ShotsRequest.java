@@ -9,10 +9,13 @@ import java.util.Collection;
 /**
  * Sent by the client to the server to place the shots of a round.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 public class ShotsRequest extends Message {
 
+    /**
+     * Message id of {@link ShotsRequest}
+     */
     public static final int MESSAGE_ID = 302;
 
     /**
@@ -23,14 +26,27 @@ public class ShotsRequest extends Message {
     @Nonnull
     private final Collection<Shot> shots;
 
-    public ShotsRequest(@Nonnull Collection<Shot> shots) {
+    ShotsRequest(@Nonnull Collection<Shot> shots) {
         super(MESSAGE_ID);
         this.shots = shots;
     }
 
+    /**
+     * @return {@link #shots}
+     */
     @Nonnull
     public Collection<Shot> getShots() {
         return shots;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof ShotsRequest){
+            return shots.equals(((ShotsRequest)obj).shots);
+        }
+        return false;
     }
 
 }

@@ -14,23 +14,23 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * A new Object of {@link Connection} is created on connection from server to client and client to server.
- * <p></p>
- * This Class handles the direct read & write access for the sockets.
+ * <br>
+ * This Class handles the direct read and write access for the sockets.
  *
  * @author Paul Becker
  */
 public class Connection {
 
-    private @Nonnull
-    final Socket socket;
-    private @Nonnull
-    final Parser parser;
-    private @Nonnull
-    final BufferedReader reader;
-    private @Nonnull
-    final BufferedWriter writer;
-    private @Nonnull
-    Id id;
+    @Nonnull
+    private final Socket socket;
+    @Nonnull
+    private final Parser parser;
+    @Nonnull
+    private final BufferedReader reader;
+    @Nonnull
+    private final BufferedWriter writer;
+    @Nonnull
+    private Id id;
 
     public Connection(@Nonnull Id id, @Nonnull Socket socket) throws IOException {
         Preconditions.checkNotNull(id);
@@ -58,6 +58,7 @@ public class Connection {
      *
      * @return the Message
      * @throws IOException If an I/O error occurs
+     * @throws ParserException if a parser error occurs
      */
     public Message read() throws IOException, ParserException {
         try {

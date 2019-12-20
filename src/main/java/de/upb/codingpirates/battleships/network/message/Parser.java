@@ -1,18 +1,17 @@
 package de.upb.codingpirates.battleships.network.message;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Maps;
 import com.google.gson.*;
-
 import de.upb.codingpirates.battleships.network.exceptions.parser.BadJsonException;
 import de.upb.codingpirates.battleships.network.exceptions.parser.BadMessageException;
 import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;
 import de.upb.codingpirates.battleships.network.message.notification.*;
 import de.upb.codingpirates.battleships.network.message.request.*;
 import de.upb.codingpirates.battleships.network.message.response.*;
+
+import javax.annotation.Nonnull;
+import java.util.Map;
 
 /**
  * Parser to {@link Parser#serialize(Message)} and {@link Parser#deserialize(String)} the messages for and from the
@@ -24,26 +23,22 @@ import de.upb.codingpirates.battleships.network.message.response.*;
  */
 public final class Parser {
 
-    private static final Map<Integer, Class<? extends Message>> messageRelations = new HashMap<>();
+    private static final Map<Integer, Class<? extends Message>> messageRelations = Maps.newHashMap();
 
     static {
-        messageRelations.put(361, PauseNotification.class);
-        messageRelations.put(362, ContinueNotification.class);
-        messageRelations.put(363, GameStartNotification.class);
-        messageRelations.put(364, FinishNotification.class);
-        messageRelations.put(365, RoundStartNotification.class);
-        messageRelations.put(366, GameInitNotification.class);
-        messageRelations.put(367, LeaveNotification.class);
-        messageRelations.put(368, SpectatorUpdateNotification.class);
-        messageRelations.put(369, PlayerUpdateNotification.class);
+        messageRelations.put(101, ServerJoinRequest.class);
+        messageRelations.put(151, ServerJoinResponse.class);
 
-        messageRelations.put(999, ErrorNotification.class);
+
+        messageRelations.put(201, LobbyRequest.class);
+        messageRelations.put(251, LobbyResponse.class);
 
         messageRelations.put(202, GameJoinPlayerRequest.class);
         messageRelations.put(252, GameJoinPlayerResponse.class);
 
         messageRelations.put(203, GameJoinSpectatorRequest.class);
         messageRelations.put(253, GameJoinSpectatorResponse.class);
+
 
         messageRelations.put(301, PlaceShipsRequest.class);
         messageRelations.put(351, PlaceShipsResponse.class);
@@ -63,15 +58,32 @@ public final class Parser {
         messageRelations.put(306, SpectatorGameStateRequest.class);
         messageRelations.put(356, SpectatorGameStateResponse.class);
 
-        messageRelations.put(101, ServerJoinRequest.class);
-        messageRelations.put(151, ServerJoinResponse.class);
 
-        messageRelations.put(201, LobbyRequest.class);
-        messageRelations.put(251, LobbyResponse.class);
+        messageRelations.put(361, PauseNotification.class);
+
+        messageRelations.put(362, ContinueNotification.class);
+
+        messageRelations.put(363, GameStartNotification.class);
+
+        messageRelations.put(364, FinishNotification.class);
+
+        messageRelations.put(365, RoundStartNotification.class);
+
+        messageRelations.put(366, GameInitNotification.class);
+
+        messageRelations.put(367, LeaveNotification.class);
+
+        messageRelations.put(368, SpectatorUpdateNotification.class);
+
+        messageRelations.put(369, PlayerUpdateNotification.class);
+
+
+        messageRelations.put(999, ErrorNotification.class);
     }
 
     private final Gson gson = new Gson();
 
+    @VisibleForTesting
     public static void addMessage(final int id, final Class<? extends Message> message) {
         messageRelations.putIfAbsent(id, message);
     }
@@ -80,35 +92,33 @@ public final class Parser {
      * Deserializes a JSON string to a {@link Message} object.
      *
      * @param message The JSON representation of a {@link Message} object which is to be deserialized.
-     *
+     * @throws ParserException if a Parser error occurs
      * @return The deserialized {@link Message} object.
      */
     public Message deserialize(@Nonnull String message) throws ParserException {
-        final JsonElement messageIdElement;
+        // Check for end of line and trailing \x00 and remove them
+        message = message.replaceAll("\\r\\n[\\x00]*", "");
+        JsonElement jsonElement;
 
         try {
-            message = message.replaceAll("\\r\\n", "");
-
-            final JsonObject object = new JsonParser().parse(message).getAsJsonObject();
-
-            messageIdElement = object.get("messageId");
-            if (messageIdElement == null)
-                throw new BadJsonException("No messageId found.");
-        } catch (final JsonSyntaxException exception) {
-            throw new BadJsonException(exception.getMessage());
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(message).getAsJsonObject();
+            jsonElement = obj.get("messageId");
+        } catch (JsonSyntaxException e) {
+            throw new BadJsonException(e.getMessage());
         }
 
-        final int messageId = messageIdElement.getAsInt();
-
-        final Class<? extends Message> messageClass = messageRelations.get(messageId);
-        if (messageClass == null)
-            throw new BadMessageException(String.format("Could not find Message with id '%d'.", messageId));
-
-        try {
-            return gson.fromJson(message, messageClass);
-        } catch (final JsonSyntaxException exception) {
-            throw new BadMessageException(exception.getMessage());
+        if (jsonElement == null) {
+            throw new BadJsonException("No messageId found");
         }
+
+        int msgId = jsonElement.getAsInt();
+        if (!messageRelations.containsKey(msgId))
+            throw new BadMessageException("Could not find Messagewith id " + msgId);
+        Class<? extends Message> messageClass = messageRelations.get(msgId);
+
+        return gson.fromJson(message, messageClass);
+
     }
 
     /**

@@ -9,11 +9,13 @@ import java.util.Map;
 /**
  * Reply to PointsRequest, which contains the complete points list.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
-@SuppressWarnings("unused")
 public class PointsResponse extends Message {
 
+    /**
+     * Message id of {@link PointsResponse}
+     */
     public static final int MESSAGE_ID = 353;
 
     /**
@@ -23,11 +25,14 @@ public class PointsResponse extends Message {
     @Nonnull
     private final Map<Integer, Integer> points;
 
-    public PointsResponse(@Nonnull Map<Integer, Integer> points) {
+    PointsResponse(@Nonnull Map<Integer, Integer> points) {
         super(MESSAGE_ID);
         this.points = points;
     }
 
+    /**
+     * @return {@link #points}
+     */
     @Nonnull
     public Map<Integer, Integer> getPoints() {
         return points;
@@ -42,4 +47,5 @@ public class PointsResponse extends Message {
         }
         return false;
     }
+
 }

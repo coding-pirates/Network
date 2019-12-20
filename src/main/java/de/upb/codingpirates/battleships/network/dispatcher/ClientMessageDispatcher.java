@@ -10,7 +10,7 @@ import de.upb.codingpirates.battleships.network.annotations.bindings.CachedThrea
 import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
 import de.upb.codingpirates.battleships.network.message.Message;
-import de.upb.codingpirates.battleships.network.message.MessageHandler;
+import de.upb.codingpirates.battleships.network.message.handler.MessageHandler;
 import de.upb.codingpirates.battleships.network.network.ClientNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import de.upb.codingpirates.battleships.network.util.ClientReaderMethod;
@@ -69,8 +69,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
     /**
      * Called if the {@link Observable} gets a message.
-     * <p></p>
-     * <p>
+     * <br>
      * It tries to get a {@link MessageHandler} based on the name of the message and tries to let the MessageHandler handle the message. Otherwise logs th failure.
      *
      * @param request a {@link Pair} of a Message and its Connection
@@ -97,6 +96,7 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
     /**
      * This sets an Observable to observe only the connection from the server.
+     * @param emitter observable emitter
      */
     private void setConnection(ObservableEmitter<Connection> emitter) {
         emitter.onNext(this.connection);

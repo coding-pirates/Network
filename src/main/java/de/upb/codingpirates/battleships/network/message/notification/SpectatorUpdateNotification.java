@@ -11,11 +11,14 @@ import java.util.Map;
  * Sent by the server after each round to all observers, to those who made it
  * To announce shots and new points.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 @SuppressWarnings("unused")
 public class SpectatorUpdateNotification extends Message {
 
+    /**
+     * Message id of {@link SpectatorUpdateNotification}
+     */
     public static final int MESSAGE_ID = 368;
 
     /**
@@ -47,7 +50,7 @@ public class SpectatorUpdateNotification extends Message {
     @Nonnull
     private final Collection<Shot> missed;
 
-    public SpectatorUpdateNotification(@Nonnull Collection<Shot> hits, @Nonnull Map<Integer, Integer> points, @Nonnull Collection<Shot> sunk, @Nonnull Collection<Shot> missed) {
+    SpectatorUpdateNotification(@Nonnull Collection<Shot> hits, @Nonnull Map<Integer, Integer> points, @Nonnull Collection<Shot> sunk, @Nonnull Collection<Shot> missed) {
         super(MESSAGE_ID);
         this.hits = hits;
         this.points = points;
@@ -55,23 +58,45 @@ public class SpectatorUpdateNotification extends Message {
         this.missed = missed;
     }
 
+    /**
+     * @return {@link #hits}
+     */
     @Nonnull
     public Collection<Shot> getHits() {
         return hits;
     }
 
+    /**
+     * @return {@link #points}
+     */
     @Nonnull
     public Map<Integer, Integer> getPoints() {
         return points;
     }
 
+    /**
+     * @return {@link #sunk}
+     */
     @Nonnull
     public Collection<Shot> getSunk() {
         return sunk;
     }
 
+    /**
+     * @return {@link #missed}
+     */
     @Nonnull
     public Collection<Shot> getMissed() {
         return missed;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof SpectatorUpdateNotification){
+            return hits.equals(((SpectatorUpdateNotification)obj).hits) && points.equals(((SpectatorUpdateNotification)obj).points) && missed.equals(((SpectatorUpdateNotification)obj).missed) && sunk.equals(((SpectatorUpdateNotification)obj).sunk);
+        }
+        return false;
     }
 }

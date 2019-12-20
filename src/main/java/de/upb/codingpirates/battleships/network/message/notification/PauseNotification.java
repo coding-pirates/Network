@@ -5,15 +5,23 @@ import de.upb.codingpirates.battleships.network.message.Message;
 /**
  * Sent by the server to all clients when the host pauses the game.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 public class PauseNotification extends Message {
 
-
-    @SuppressWarnings("WeakerAccess")
+    /**
+     * Message id of {@link PauseNotification}
+     */
     public static final int MESSAGE_ID = 361;
 
-    public PauseNotification() {
+    PauseNotification() {
         super(MESSAGE_ID);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        return obj instanceof PauseNotification;
     }
 }

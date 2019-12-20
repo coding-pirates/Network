@@ -46,6 +46,8 @@ public class ServerNetworkModule extends NetworkModule {
     }
 
     /**
+     * @param address {@link InetSocketAddress} of the server
+     * @param injector guice injector
      * @return {@link ServerNetwork}
      */
     @Provides

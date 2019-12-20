@@ -3,16 +3,19 @@ package de.upb.codingpirates.battleships.network.message.notification;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.Map;
 
 /**
  * Defines the end of a game and contains the final results.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
-@SuppressWarnings("unused")
 public class FinishNotification extends Message {
 
+    /**
+     * Message id of {@link FinishNotification}
+     */
     public static final int MESSAGE_ID = 364;
 
     /**
@@ -21,23 +24,42 @@ public class FinishNotification extends Message {
      */
     @Nonnull
     private final Map<Integer, Integer> points;
-    /**
-     * The client ID of the winner.
-     */
-    private final int winner;
 
-    public FinishNotification(@Nonnull Map<Integer, Integer> points, int winner) {
+    /**
+     * The client ID's of the winners.
+     */
+    @Nonnull
+    private final Collection<Integer> winner;
+
+    FinishNotification(@Nonnull Map<Integer, Integer> points, @Nonnull Collection<Integer> winner) {
         super(MESSAGE_ID);
         this.points = points;
         this.winner = winner;
     }
 
+    /**
+     * @return {@link #points}
+     */
     @Nonnull
     public Map<Integer, Integer> getPoints() {
         return points;
     }
 
-    public int getWinner() {
+    /**
+     * @return {@link #winner}
+     */
+    @Nonnull
+    public Collection<Integer> getWinner() {
         return winner;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof FinishNotification){
+            return points.equals(((FinishNotification)obj).points) && winner.equals(((FinishNotification)obj).winner);
+        }
+        return false;
     }
 }

@@ -7,27 +7,22 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
- * Is the answer of the server on a LobbyRequest and contains all currently existing games
- * of the server.
- *
- * @author Interdoc committee, Paul Becker
+ * Reply to TournamentGamesRequest, which contains the games of the tournament.
  */
-public class LobbyResponse extends Message {
+public class TournamentGamesResponse extends Message {
 
     /**
-     * Message id of {@link LobbyResponse}
+     * Message id of {@link TournamentGamesResponse}
      */
-    public static final int MESSAGE_ID = 251;
+    public static final int MESSAGE_ID = 453;
 
     /**
-     * A collection, the game
-     * Objects of all past, current
-     * and planned games
+     * The games of the tournament
      */
     @Nonnull
-    private final Collection<Game> games;
+    private Collection<Game> games;
 
-    LobbyResponse(@Nonnull Collection<Game> games) {
+    TournamentGamesResponse(@Nonnull Collection<Game> games) {
         super(MESSAGE_ID);
         this.games = games;
     }
@@ -44,9 +39,10 @@ public class LobbyResponse extends Message {
     public boolean equals(Object obj) {
         if(obj == this)
             return true;
-        if (obj instanceof LobbyResponse){
-            return games.equals(((LobbyResponse)obj).games);
+        if(obj instanceof TournamentGamesResponse){
+            return games.equals(((TournamentGamesResponse)obj).games);
         }
         return false;
     }
+
 }

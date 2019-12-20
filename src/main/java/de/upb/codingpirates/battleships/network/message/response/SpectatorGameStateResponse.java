@@ -1,14 +1,16 @@
 package de.upb.codingpirates.battleships.network.message.response;
 
+import de.upb.codingpirates.battleships.logic.Client;
+import de.upb.codingpirates.battleships.logic.GameState;
+import de.upb.codingpirates.battleships.logic.PlacementInfo;
+import de.upb.codingpirates.battleships.logic.Shot;
+import de.upb.codingpirates.battleships.network.message.Message;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import de.upb.codingpirates.battleships.logic.*;
-import de.upb.codingpirates.battleships.network.message.Message;
 
 /**
  * Sent by the server to the observer to give him the full score.
@@ -17,9 +19,11 @@ import de.upb.codingpirates.battleships.network.message.Message;
  * @author Paul Becker
  * @author Andre Blanke
  */
-@SuppressWarnings("unused")
 public class SpectatorGameStateResponse extends Message {
 
+    /**
+     * Message id of {@link SpectatorGameStateResponse}
+     */
     public static final int MESSAGE_ID = 356;
 
     /**
@@ -49,7 +53,7 @@ public class SpectatorGameStateResponse extends Message {
     @Nonnull
     private final GameState state;
 
-    public SpectatorGameStateResponse(@Nonnull Collection<Client> players, @Nonnull Collection<Shot> shots, @Nonnull Map<Integer, Map<Integer, PlacementInfo>> ships, @Nonnull GameState state) {
+    SpectatorGameStateResponse(@Nonnull Collection<Client> players, @Nonnull Collection<Shot> shots, @Nonnull Map<Integer, Map<Integer, PlacementInfo>> ships, @Nonnull GameState state) {
         super(MESSAGE_ID);
         this.players = players;
         this.shots = shots;
@@ -68,21 +72,33 @@ public class SpectatorGameStateResponse extends Message {
         return false;
     }
 
+    /**
+     * @return {@link #players}
+     */
     @Nonnull
     public Collection<Client> getPlayers() {
         return players;
     }
 
+    /**
+     * @return {@link #shots}
+     */
     @Nonnull
     public Collection<Shot> getShots() {
         return shots;
     }
 
+    /**
+     * @return {@link #ships}
+     */
     @Nonnull
     public Map<Integer, Map<Integer, PlacementInfo>> getShips() {
         return ships;
     }
 
+    /**
+     * @return {@link #state}
+     */
     @Nonnull
     public GameState getState() {
         return state;

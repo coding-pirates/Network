@@ -9,11 +9,13 @@ import javax.annotation.Nonnull;
 /**
  * Sent from the client to the server to log in to a server.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 public class ServerJoinRequest extends Message {
 
-    @SuppressWarnings("WeakerAccess")
+    /**
+     * Message id of {@link ServerJoinRequest}
+     */
     public static final int MESSAGE_ID = 101;
 
     /**
@@ -28,17 +30,23 @@ public class ServerJoinRequest extends Message {
     @SerializedName("clientKind")
     private final ClientType clientType;
 
-    public ServerJoinRequest(@Nonnull String name, @Nonnull ClientType clientType) {
+    ServerJoinRequest(@Nonnull String name, @Nonnull ClientType clientType) {
         super(MESSAGE_ID);
         this.name = name;
         this.clientType = clientType;
     }
 
+    /**
+     * @return {@link #name}
+     */
     @Nonnull
     public String getName() {
         return name;
     }
 
+    /**
+     * @return {@link #clientType}
+     */
     @Nonnull
     public ClientType getClientType() {
         return clientType;

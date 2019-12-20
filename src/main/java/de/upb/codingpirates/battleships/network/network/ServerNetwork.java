@@ -1,31 +1,27 @@
 package de.upb.codingpirates.battleships.network.network;
 
+import com.google.common.base.Preconditions;
+import de.upb.codingpirates.battleships.network.Connection;
+import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
+import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
+import de.upb.codingpirates.battleships.network.util.NetworkMarker;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.schedulers.Schedulers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 
-import javax.annotation.Nonnull;
-import javax.inject.Inject;
-
-import com.google.common.base.Preconditions;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.schedulers.Schedulers;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import de.upb.codingpirates.battleships.network.Connection;
-import de.upb.codingpirates.battleships.network.annotations.bindings.FixedThreadPool;
-import de.upb.codingpirates.battleships.network.connectionmanager.ServerConnectionManager;
-import de.upb.codingpirates.battleships.network.util.NetworkMarker;
-
 /**
  * The ServerNetwork handles all new Connections from Clients and saves them in the {@link ServerConnectionManager}.
- * <p></p>
+ * <br>
  * Its also stores the observer for incoming messages.
  *
  * @author Paul Becker
@@ -42,8 +38,13 @@ public class ServerNetwork implements Network {
 
     /**
      * Creates a {@link ServerNetwork}, gets a fixed ThreadPool and InetSocketAddress.
-     * <p></p>
+     * <br>
      * Initiates the ServerSocket to work based of the {@link InetSocketAddress} and Creates a Observer Pattern, that waits for new connections and binds them in the {@link ServerConnectionManager}
+     *
+     * @param executorService thread pool with size one for the server to accept neu connections
+     * @param address {@link InetSocketAddress} of the server
+     * @param connectionManager connectionManager of the server
+     * @throws IOException if an {@link IOException} occurres while creating a {@link ServerSocket}
      */
     @Inject
     public ServerNetwork(@Nonnull @FixedThreadPool(size = 1) ExecutorService executorService, @Nonnull InetSocketAddress address, @Nonnull ServerConnectionManager connectionManager) throws IOException {
@@ -67,8 +68,9 @@ public class ServerNetwork implements Network {
 
     /**
      * Accept loop that waits for connections with {@link ServerSocket#accept()} and creates new {@link Connection} on success.
-     * <p></p>
+     * <br>
      * Also it "informs the {@link Observable} about new created Connections to listen to.
+     * @param emitter observable emitter
      */
     private void acceptLoop(ObservableEmitter<Connection> emitter) {
         while (!isClosed()) {
