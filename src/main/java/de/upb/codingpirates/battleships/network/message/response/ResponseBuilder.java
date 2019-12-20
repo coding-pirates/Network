@@ -30,6 +30,11 @@ public final class ResponseBuilder {
     }
 
     @Nonnull
+    public static LobbyResponse lobbyResponse(@Nonnull Collection<Game> games){
+        return new LobbyResponse(games);
+    }
+
+    @Nonnull
     public static PlaceShipsResponse placeShipsResponse(){
         return placeShipsResponse;
     }
