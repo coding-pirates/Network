@@ -27,7 +27,7 @@ public class PlaceShipsRequest extends Message {
     @Nonnull
     private final Map<Integer, PlacementInfo> positions;
 
-    PlaceShipsRequest(@Nonnull Map<Integer, PlacementInfo> positions) {
+    public PlaceShipsRequest(@Nonnull Map<Integer, PlacementInfo> positions) {
         super(MESSAGE_ID);
         this.positions = positions;
     }

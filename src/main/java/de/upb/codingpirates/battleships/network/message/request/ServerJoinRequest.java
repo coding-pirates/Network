@@ -30,7 +30,7 @@ public class ServerJoinRequest extends Message {
     @SerializedName("clientKind")
     private final ClientType clientType;
 
-    ServerJoinRequest(@Nonnull String name, @Nonnull ClientType clientType) {
+    public ServerJoinRequest(@Nonnull String name, @Nonnull ClientType clientType) {
         super(MESSAGE_ID);
         this.name = name;
         this.clientType = clientType;
