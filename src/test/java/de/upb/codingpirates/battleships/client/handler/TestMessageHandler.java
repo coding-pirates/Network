@@ -1,7 +1,6 @@
 package de.upb.codingpirates.battleships.client.handler;
-
+/*
 import com.google.inject.Inject;
-import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.handler.MessageHandler;
@@ -11,10 +10,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-
+/*
 /**
  * @author Paul Becker
  */
+/*
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class TestMessageHandler implements MessageHandler<TestMessage> {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -22,8 +22,8 @@ public class TestMessageHandler implements MessageHandler<TestMessage> {
     private final NetworkTests.ClientConnector connector;
 
     @Inject
-    public TestMessageHandler(ConnectionHandler manager) {
-        this.connector = (NetworkTests.ClientConnector) manager;
+    public TestMessageHandler(NetworkTests.ClientConnector manager) {
+        this.connector = manager;
     }
 
     @Override
@@ -38,3 +38,7 @@ public class TestMessageHandler implements MessageHandler<TestMessage> {
 
 
 }
+
+*/
+
+

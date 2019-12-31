@@ -6,6 +6,10 @@ import de.upb.codingpirates.battleships.network.Connection;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.id.IdManager;
 import de.upb.codingpirates.battleships.network.message.Message;
+import de.upb.codingpirates.battleships.network.message.notification.ErrorNotification;
+import de.upb.codingpirates.battleships.network.util.NetworkMarker;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -19,6 +23,9 @@ import java.util.Map;
  * @author Paul Becker
  */
 public class ServerConnectionManager {
+
+    @Nonnull
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Nonnull
     private final Map<Integer, Connection> connections = Collections.synchronizedMap(Maps.newHashMap());
@@ -39,6 +46,10 @@ public class ServerConnectionManager {
     }
 
     public void send(@Nonnull Id id, @Nonnull Message message) throws IOException {
+        LOGGER.debug(NetworkMarker.MESSAGE, "sending Message {} to client {}", message.getClass(), id);
+        if (message instanceof ErrorNotification) {
+            LOGGER.debug("client {} error: {}, {}, {}", id, ((ErrorNotification) message).getErrorType(), ((ErrorNotification) message).getReferenceMessageId(), ((ErrorNotification) message).getReason());
+        }
         this.connections.get(id.getInt()).send(message);
     }
 }
