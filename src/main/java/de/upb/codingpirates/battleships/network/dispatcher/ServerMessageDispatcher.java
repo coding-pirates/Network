@@ -94,6 +94,8 @@ public class ServerMessageDispatcher implements MessageDispatcher {
             LOGGER.error(NetworkMarker.MESSAGE, "Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             this.scope.exit();
         }

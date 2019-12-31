@@ -10,6 +10,8 @@ import de.upb.codingpirates.battleships.network.message.handler.MessageHandler;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+
 /**
  * Necessary for Guice to get a class depending on distribution.
  *
@@ -18,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 public interface MessageDispatcher {
 
     @SuppressWarnings("unchecked")
-    default void handleMessage(Pair<Connection, Message> request, Dist dist, ConnectionScope scope, Injector injector, Logger LOGGER) throws GameException, ClassNotFoundException {
+    default void handleMessage(Pair<Connection, Message> request, Dist dist, ConnectionScope scope, Injector injector, Logger LOGGER) throws GameException, ClassNotFoundException, IOException {
         String[] namespace = request.getValue().getClass().getName().split("\\.");
         String name = namespace[namespace.length - 1];
         Class<?> type;
