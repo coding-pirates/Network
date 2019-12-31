@@ -1,7 +1,6 @@
 package de.upb.codingpirates.battleships.server.handler;
 
 import com.google.inject.Inject;
-import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 import de.upb.codingpirates.battleships.network.message.handler.MessageHandler;
@@ -21,8 +20,8 @@ public class TestMessageHandler implements MessageHandler<TestMessage> {
     private final NetworkTests.ClientManager manager;
 
     @Inject
-    public TestMessageHandler(ConnectionHandler manager) {
-        this.manager = (NetworkTests.ClientManager) manager;
+    public TestMessageHandler(NetworkTests.ClientManager manager) {
+        this.manager = manager;
     }
 
     @Override

@@ -38,18 +38,18 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     private final Scheduler scheduler;
     private final ConnectionScope scope;
     private final Injector injector;
+    private final ConnectionHandler connectionHandler;
+    private final ClientReaderMethod readLoop;
     private Connection connection;
-    @Inject
-    private ConnectionHandler connectionHandler;
-    @Inject
-    private ClientReaderMethod readLoop;
 
     @Inject
-    public ClientMessageDispatcher(@CachedThreadPool ExecutorService executorService, Injector injector, ConnectionScope scope, ClientNetwork clientNetwork) {
+    public ClientMessageDispatcher(@CachedThreadPool ExecutorService executorService, Injector injector, ConnectionScope scope, ClientNetwork clientNetwork, ConnectionHandler connectionHandler, ClientReaderMethod readLoop) {
         this.scheduler = Schedulers.from(executorService);
         this.scope = scope;
         this.network = clientNetwork;
         this.injector = injector;
+        this.connectionHandler = connectionHandler;
+        this.readLoop = readLoop;
     }
 
     public Connection connect(@Nonnull String host, int port) throws IOException {
