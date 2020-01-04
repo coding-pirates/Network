@@ -38,7 +38,8 @@ public class ServerNetworkModule extends NetworkModule {
     @Provides
     InetSocketAddress provideServerInetSocketAddress() {
         try {
-            return new InetSocketAddress(InetAddress.getLocalHost(), Properties.PORT);
+            System.out.println(InetAddress.getLocalHost());
+            return new InetSocketAddress(InetAddress.getByName("192.168.178.45"), Properties.PORT);
         } catch (UnknownHostException e) {
             LOGGER.info("Could not get InetSocketAddress", e);
         }
