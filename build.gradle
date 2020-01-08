@@ -1,5 +1,7 @@
 apply plugin: "java"
 
+apply from: "${rootProject.rootDir}/gradle/javadoc.gradle"
+
 dependencies {
     implementation project(":logic")
 
