@@ -1,6 +1,6 @@
 package de.upb.codingpirates.battleships.network.message.notification;
 
-import de.upb.codingpirates.battleships.network.message.Message;
+import de.upb.codingpirates.battleships.network.message.*;
 
 /**
  * Is sent from the server to the client to tell the client that now the game

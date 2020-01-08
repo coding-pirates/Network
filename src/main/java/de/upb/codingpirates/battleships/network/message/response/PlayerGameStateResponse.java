@@ -1,9 +1,9 @@
 package de.upb.codingpirates.battleships.network.message.response;
 
 import de.upb.codingpirates.battleships.logic.Client;
-import de.upb.codingpirates.battleships.logic.GameState;
 import de.upb.codingpirates.battleships.logic.PlacementInfo;
 import de.upb.codingpirates.battleships.logic.Shot;
+import de.upb.codingpirates.battleships.logic.GameState;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
