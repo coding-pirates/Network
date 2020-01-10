@@ -1,5 +1,6 @@
 package de.upb.codingpirates.battleships.network.message.notification;
 
+import com.google.gson.annotations.SerializedName;
 import de.upb.codingpirates.battleships.logic.Client;
 import de.upb.codingpirates.battleships.logic.Configuration;
 import de.upb.codingpirates.battleships.network.message.Message;
@@ -32,6 +33,7 @@ public class GameInitNotification extends Message {
      * The selected {@link Configuration} for the game
      */
     @Nonnull
+    @SerializedName("config")
     private final Configuration configuration;
 
 
