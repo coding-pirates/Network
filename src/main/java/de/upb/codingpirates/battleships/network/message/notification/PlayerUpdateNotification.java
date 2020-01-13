@@ -13,7 +13,6 @@ import java.util.Map;
  *
  * @author Interdoc committee, Paul Becker
  */
-@SuppressWarnings("unused")
 public class PlayerUpdateNotification extends Message {
 
     /**
