@@ -27,7 +27,7 @@ public class PlaceShipsRequest extends Message {
     @Nonnull
     private final Map<Integer, PlacementInfo> positions;
 
-    public PlaceShipsRequest(@Nonnull Map<Integer, PlacementInfo> positions) {
+    PlaceShipsRequest(@Nonnull Map<Integer, PlacementInfo> positions) {
         super(MESSAGE_ID);
         this.positions = positions;
     }
@@ -42,10 +42,10 @@ public class PlaceShipsRequest extends Message {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this)
+        if (obj == this)
             return true;
-        if(obj instanceof PlaceShipsRequest){
-            return positions.equals(((PlaceShipsRequest)obj).positions);
+        if (obj instanceof PlaceShipsRequest) {
+            return positions.equals(((PlaceShipsRequest) obj).positions);
         }
         return false;
     }

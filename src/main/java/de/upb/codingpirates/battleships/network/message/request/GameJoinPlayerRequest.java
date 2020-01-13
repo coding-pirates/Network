@@ -21,7 +21,7 @@ public class GameJoinPlayerRequest extends Message {
      */
     private final int gameId;
 
-    public GameJoinPlayerRequest(int gameId) {
+    GameJoinPlayerRequest(int gameId) {
         super(MESSAGE_ID);
         this.gameId = gameId;
     }
