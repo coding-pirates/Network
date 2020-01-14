@@ -1,5 +1,5 @@
 package de.upb.codingpirates.battleships.network.test;
-
+/*
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Map;
@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Paul Becker
  */
+/*
 public class NetworkTests {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -219,3 +220,4 @@ public class NetworkTests {
         }
     }
 }
+*/

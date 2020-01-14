@@ -42,10 +42,10 @@ public class PlaceShipsRequest extends Message {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this)
+        if (obj == this)
             return true;
-        if(obj instanceof PlaceShipsRequest){
-            return positions.equals(((PlaceShipsRequest)obj).positions);
+        if (obj instanceof PlaceShipsRequest) {
+            return positions.equals(((PlaceShipsRequest) obj).positions);
         }
         return false;
     }

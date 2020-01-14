@@ -14,7 +14,7 @@ public class LobbyRequest extends Message {
      */
     public static final int MESSAGE_ID = 201;
 
-    LobbyRequest() {
+    public LobbyRequest() {
         super(MESSAGE_ID);
     }
 
