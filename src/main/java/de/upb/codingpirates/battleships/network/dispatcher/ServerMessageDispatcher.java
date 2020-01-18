@@ -10,8 +10,8 @@ import de.upb.codingpirates.battleships.network.exceptions.BattleshipException;
 import de.upb.codingpirates.battleships.network.exceptions.game.GameException;
 import de.upb.codingpirates.battleships.network.exceptions.parser.ParserException;
 import de.upb.codingpirates.battleships.network.message.Message;
-import de.upb.codingpirates.battleships.network.message.MessageHandler;
-import de.upb.codingpirates.battleships.network.message.report.ConnectionClosedReport;
+import de.upb.codingpirates.battleships.network.message.handler.MessageHandler;
+import de.upb.codingpirates.battleships.network.message.report.ReportBuilder;
 import de.upb.codingpirates.battleships.network.network.ServerNetwork;
 import de.upb.codingpirates.battleships.network.scope.ConnectionScope;
 import de.upb.codingpirates.battleships.network.util.NetworkMarker;
@@ -66,11 +66,11 @@ public class ServerMessageDispatcher implements MessageDispatcher {
             while (!connection.isClosed()) {
                 try {
                     Message message = connection.read();
-                    emitter.onNext(Pair.of(connection, message));
+                    emitter.onNext(new Pair<>(connection, message));
                     break;
                 } catch (SocketException e) {
                     connection.close();
-                    emitter.onNext(Pair.of(connection, new ConnectionClosedReport()));
+                    emitter.onNext(new Pair<>(connection, ReportBuilder.connectionClosedReport()));
                 } catch (IOException | ParserException e) {
                     emitter.onError(e);
                 }
@@ -82,8 +82,7 @@ public class ServerMessageDispatcher implements MessageDispatcher {
 
     /**
      * Called if the {@link Observable} gets a message.
-     * <p></p>
-     * <p>
+     * <br>
      * It tries to get a {@link MessageHandler} based on the name of the message and tries to let the MessageHandler handle the message. Otherwise logs th failure.
      *
      * @param request a {@link Pair} of a Message and its Connection

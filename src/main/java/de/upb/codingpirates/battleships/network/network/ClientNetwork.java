@@ -25,7 +25,9 @@ public class ClientNetwork implements Network {
 
     /**
      * Creates a new Socket with the given parameters.
-     *
+     * @param host host address
+     * @param port battleships port on the server
+     * @throws IOException if an IOException is occurring while connecting
      * @return created Connection
      */
     public Connection connect(@Nonnull String host, int port) throws IOException {

@@ -5,14 +5,16 @@ import de.upb.codingpirates.battleships.network.message.Message;
 /**
  * Sent by the server to the client when ship placement is accepted.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 public class PlaceShipsResponse extends Message {
 
-    @SuppressWarnings("WeakerAccess")
+    /**
+     * Message id of {@link PlaceShipsResponse}
+     */
     public static final int MESSAGE_ID = 351;
 
-    public PlaceShipsResponse() {
+    PlaceShipsResponse() {
         super(MESSAGE_ID);
     }
 
@@ -20,9 +22,6 @@ public class PlaceShipsResponse extends Message {
     public boolean equals(Object obj) {
         if(obj == this)
             return true;
-        if(obj instanceof PlaceShipsResponse){
-            return true;
-        }
-        return false;
+        return obj instanceof PlaceShipsResponse;
     }
 }

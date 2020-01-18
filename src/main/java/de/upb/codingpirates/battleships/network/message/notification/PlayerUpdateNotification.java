@@ -11,11 +11,14 @@ import java.util.Map;
  * It is sent by the server after each round to all active participants to give them the
  * announced shots and new points.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 @SuppressWarnings("unused")
 public class PlayerUpdateNotification extends Message {
 
+    /**
+     * Message id of {@link PlayerUpdateNotification}
+     */
     public static final int MESSAGE_ID = 369;
 
     /**
@@ -41,26 +44,44 @@ public class PlayerUpdateNotification extends Message {
     @Nonnull
     private final Collection<Shot> sunk;
 
-    public PlayerUpdateNotification(@Nonnull Collection<Shot> hits, @Nonnull Map<Integer, Integer> points, @Nonnull Collection<Shot> sunk) {
+    PlayerUpdateNotification(@Nonnull Collection<Shot> hits, @Nonnull Map<Integer, Integer> points, @Nonnull Collection<Shot> sunk) {
         super(MESSAGE_ID);
         this.hits = hits;
         this.points = points;
         this.sunk = sunk;
     }
 
+    /**
+     * @return {@link #hits}
+     */
     @Nonnull
     public Collection<Shot> getHits() {
         return hits;
     }
 
+    /**
+     * @return {@link #points}
+     */
     @Nonnull
     public Map<Integer, Integer> getPoints() {
         return points;
     }
 
+    /**
+     * @return {@link #sunk}
+     */
     @Nonnull
     public Collection<Shot> getSunk() {
         return sunk;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof PlayerUpdateNotification){
+            return hits.equals(((PlayerUpdateNotification)obj).hits) && points.equals(((PlayerUpdateNotification)obj).points) && sunk.equals(((PlayerUpdateNotification)obj).sunk);
+        }
+        return false;
+    }
 }

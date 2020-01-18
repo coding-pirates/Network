@@ -3,14 +3,17 @@ package de.upb.codingpirates.battleships.network.message;
 /**
  * Basic interface for all Messages
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
-public class Message {
+public abstract class Message {
 
-    public final int messageId;
+    private final int messageId;
 
-    protected Message(int messageId) {
+    protected Message(final int messageId) {
         this.messageId = messageId;
     }
 
+    public int getMessageId() {
+        return messageId;
+    }
 }

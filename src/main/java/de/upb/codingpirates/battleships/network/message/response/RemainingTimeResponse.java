@@ -5,11 +5,13 @@ import de.upb.codingpirates.battleships.network.message.Message;
 /**
  * Response to RemainingTimeRequest, which contains the remaining thinking time.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
-@SuppressWarnings("unused")
 public class RemainingTimeResponse extends Message {
 
+    /**
+     * Message id of {@link RemainingTimeResponse}
+     */
     public static final int MESSAGE_ID = 354;
 
     /**
@@ -17,11 +19,14 @@ public class RemainingTimeResponse extends Message {
      */
     private final long time;
 
-    public RemainingTimeResponse(long time) {
+    RemainingTimeResponse(long time) {
         super(MESSAGE_ID);
         this.time = time;
     }
 
+    /**
+     * @return {@link #time}
+     */
     public long getTime() {
         return time;
     }
@@ -35,4 +40,5 @@ public class RemainingTimeResponse extends Message {
         }
         return false;
     }
+
 }

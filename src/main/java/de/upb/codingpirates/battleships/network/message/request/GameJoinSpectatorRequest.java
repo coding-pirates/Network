@@ -5,11 +5,13 @@ import de.upb.codingpirates.battleships.network.message.Message;
 /**
  * Sent from the client to the server to join a game as an observer.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
 public class GameJoinSpectatorRequest extends Message {
 
-    @SuppressWarnings("WeakerAccess")
+    /**
+     * Message id of {@link GameJoinSpectatorRequest}
+     */
     public static final int MESSAGE_ID = 203;
 
     /**
@@ -19,13 +21,26 @@ public class GameJoinSpectatorRequest extends Message {
      */
     private final int gameId;
 
-    public GameJoinSpectatorRequest(int gameId) {
+    GameJoinSpectatorRequest(int gameId) {
         super(MESSAGE_ID);
         this.gameId = gameId;
     }
 
+    /**
+     * @return {@link #gameId}
+     */
     public int getGameId() {
         return gameId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof GameJoinSpectatorRequest){
+            return gameId == ((GameJoinSpectatorRequest)obj).gameId ;
+        }
+        return false;
     }
 
 }

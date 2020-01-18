@@ -6,11 +6,13 @@ import de.upb.codingpirates.battleships.network.message.Message;
  * Sent from the server to the client to allow the client to successfully join as an observer
  * to confirm.
  *
- * @author Interdoc committee & Paul Becker
+ * @author Interdoc committee, Paul Becker
  */
-@SuppressWarnings("unused")
 public class GameJoinSpectatorResponse extends Message {
 
+    /**
+     * Message id of {@link GameJoinSpectatorResponse}
+     */
     public static final int MESSAGE_ID = 253;
 
     /**
@@ -19,11 +21,14 @@ public class GameJoinSpectatorResponse extends Message {
      */
     private final int gameId;
 
-    public GameJoinSpectatorResponse(int gameId) {
+    GameJoinSpectatorResponse(int gameId) {
         super(MESSAGE_ID);
         this.gameId = gameId;
     }
 
+    /**
+     * @return {@linkplain #gameId}
+     */
     public int getGameId() {
         return gameId;
     }
@@ -37,4 +42,5 @@ public class GameJoinSpectatorResponse extends Message {
         }
         return false;
     }
+
 }
