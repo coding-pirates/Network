@@ -28,7 +28,7 @@ public class Connection {
     @Nonnull
     private final BufferedReader reader;
     @Nonnull
-    private final BufferedWriter writer;
+    private final PrintWriter writer;
     @Nonnull
     private Id id;
 
@@ -38,7 +38,7 @@ public class Connection {
 
         this.id = id;
         this.socket = socket;
-        this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
+        this.writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
         this.parser = new Parser();
     }
@@ -77,7 +77,7 @@ public class Connection {
      */
     private void send(String message) throws IOException {
         this.writer.write(message);
-        this.writer.newLine();
+        this.writer.println();
         this.writer.flush();
     }
 
