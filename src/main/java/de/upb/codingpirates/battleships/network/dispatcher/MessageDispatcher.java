@@ -21,6 +21,7 @@ public interface MessageDispatcher {
 
     @SuppressWarnings("unchecked")
     default void handleMessage(Pair<Connection, Message> request, Dist dist, ConnectionScope scope, Injector injector, Logger LOGGER) throws GameException, ClassNotFoundException, IOException {
+        LOGGER.info(request.getValue());
         String[] namespace = request.getValue().getClass().getName().split("\\.");
         String name = namespace[namespace.length - 1];
         Class<?> type;
