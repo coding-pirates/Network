@@ -20,7 +20,7 @@ import java.io.IOException;
 public interface MessageDispatcher {
 
     @SuppressWarnings("unchecked")
-    default void handleMessage(Pair<Connection, Message> request, Dist dist, ConnectionScope scope, Injector injector, Logger LOGGER) throws GameException, ClassNotFoundException, IOException {
+    default <T extends Message> void  handleMessage(Pair<Connection, T> request, Dist dist, ConnectionScope scope, Injector injector, Logger LOGGER) throws GameException, ClassNotFoundException, IOException {
         String[] namespace = request.getValue().getClass().getName().split("\\.");
         String name = namespace[namespace.length - 1];
         Class<?> type;
@@ -28,7 +28,7 @@ public interface MessageDispatcher {
         scope.seed(Connection.class, request.getKey());
         scope.enter(request.getKey().getId());
 
-        MessageHandler handler = (MessageHandler) injector.getInstance(type);
+        MessageHandler<T> handler = (MessageHandler<T>) injector.getInstance(type);
         if (handler == null) {
             LOGGER.info("Can't find MessageHandler {} for Message {}", type, request.getValue().getClass());
         } else {
