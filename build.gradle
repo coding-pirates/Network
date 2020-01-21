@@ -46,15 +46,3 @@ test {
         events "passed", "skipped", "failed"
     }
 }
-
-jar{
-    baseName = "network_${project.server_version}"
-    manifest {
-        attributes 'Implementation-Title': 'Battleships Network',
-                'Implementation-Version': "${project.network_version}"
-    }
-    from ( configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } ) {
-        exclude 'META-INF/**'
-        exclude 'log4j2.xml'
-    }
-}
