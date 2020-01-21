@@ -47,8 +47,8 @@ public class ServerConnectionManager {
 
     public void send(@Nonnull Id id, @Nonnull Message message) throws IOException {
         LOGGER.debug(NetworkMarker.MESSAGE, "sending Message {} to client {}", message.getClass(), id);
-        if(message instanceof ErrorNotification){
-            LOGGER.debug("client {} error: {}, {}, {}", id, ((ErrorNotification)message).getErrorType(), ((ErrorNotification)message).getReferenceMessageId(), ((ErrorNotification)message).getReason());
+        if (message instanceof ErrorNotification) {
+            LOGGER.debug("client {} error: {}, {}, {}", id, ((ErrorNotification) message).getErrorType(), ((ErrorNotification) message).getReferenceMessageId(), ((ErrorNotification) message).getReason());
         }
         this.connections.get(id.getInt()).send(message);
     }

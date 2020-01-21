@@ -1,5 +1,4 @@
 package de.upb.codingpirates.battleships.client.handler;
-
 import com.google.inject.Inject;
 import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
@@ -10,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-
 /**
  * @author Paul Becker
  */
@@ -37,3 +35,5 @@ public class TestMessageHandler implements MessageHandler<TestMessage> {
 
 
 }
+
+

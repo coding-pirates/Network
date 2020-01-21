@@ -35,3 +35,4 @@ public class TestMessageHandler implements MessageHandler<TestMessage> {
         LOGGER.info("message received on server successful");
     }
 }
+
