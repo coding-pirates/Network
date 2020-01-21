@@ -34,7 +34,7 @@ public class ParserTest {
     @Test
     void serverJoinRequestParser() throws ParserException {
         Parser parser = new Parser();
-        ServerJoinRequest message = RequestBuilder.serverJoinRequest("test",ClientType.PLAYER);
+        ServerJoinRequest message = RequestBuilder.serverJoinRequest("test", ClientType.PLAYER);
         assert parser.deserialize(parser.serialize(message)).equals(message);
     }
 
@@ -50,7 +50,7 @@ public class ParserTest {
 
     @Test
     void lobbyResponseParser() throws ParserException {
-        assertMessage(ResponseBuilder.lobbyResponse(Lists.newArrayList(new Game(randomId(),"test1", GameState.IN_PROGRESS, new Configuration.Builder().height(5).build(), true),new Game(randomId(),"test2", GameState.FINISHED, new Configuration.Builder().penaltyKind(PenaltyType.KICK).build(), true))));
+        assertMessage(ResponseBuilder.lobbyResponse(Lists.newArrayList(new Game(randomId(), "test1", GameState.IN_PROGRESS, new Configuration.Builder().height(5).build(), true), new Game(randomId(), "test2", GameState.FINISHED, new Configuration.Builder().penaltyKind(PenaltyType.KICK).build(), true))));
     }
 
     @Test
@@ -75,9 +75,9 @@ public class ParserTest {
 
     @Test
     void placeShipsRequestParser() throws ParserException {
-        assertMessage(RequestBuilder.placeShipsRequest(new HashMap<Integer, PlacementInfo>(){{
-            for (int i = 0;i< 10;i++)
-                put(randomId(),new PlacementInfo(new Point2D(randomId(),randomId()),Rotation.values()[RNG.nextInt(Rotation.values().length)]));
+        assertMessage(RequestBuilder.placeShipsRequest(new HashMap<Integer, PlacementInfo>() {{
+            for (int i = 0; i < 10; i++)
+                put(randomId(), new PlacementInfo(new Point2D(randomId(), randomId()), Rotation.values()[RNG.nextInt(Rotation.values().length)]));
         }}));
     }
 
@@ -88,7 +88,7 @@ public class ParserTest {
 
     @Test
     void shotsRequestParser() throws ParserException {
-        assertMessage(RequestBuilder.shotsRequest(Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId())),new Shot(randomId(),new Point2D(randomId(),randomId())),new Shot(randomId(),new Point2D(randomId(),randomId())),new Shot(randomId(),new Point2D(randomId(),randomId())))));
+        assertMessage(RequestBuilder.shotsRequest(Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId())), new Shot(randomId(), new Point2D(randomId(), randomId())), new Shot(randomId(), new Point2D(randomId(), randomId())), new Shot(randomId(), new Point2D(randomId(), randomId())))));
     }
 
     @Test
@@ -103,9 +103,9 @@ public class ParserTest {
 
     @Test
     void pointsResponseParser() throws ParserException {
-        assertMessage(ResponseBuilder.pointsResponse(new HashMap<Integer, Integer>(){{
-            for (int i = 0;i< 10;i++)
-                put(randomId(),randomId());
+        assertMessage(ResponseBuilder.pointsResponse(new HashMap<Integer, Integer>() {{
+            for (int i = 0; i < 10; i++)
+                put(randomId(), randomId());
         }}));
     }
 
@@ -126,10 +126,10 @@ public class ParserTest {
 
     @Test
     void playerGameStateResponseParser() throws ParserException {
-        assertMessage(ResponseBuilder.playerGameStateResponse(GameState.FINISHED,Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId()))),Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId()))),new HashMap<Integer, PlacementInfo>(){{
-            for (int i = 0;i< 10;i++)
-                put(randomId(),new PlacementInfo(new Point2D(randomId(),randomId()),Rotation.values()[RNG.nextInt(Rotation.values().length)]));
-        }},Lists.newArrayList(new Client(randomId(),"client"+randomId()))));
+        assertMessage(ResponseBuilder.playerGameStateResponse(GameState.FINISHED, Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId()))), Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId()))), new HashMap<Integer, PlacementInfo>() {{
+            for (int i = 0; i < 10; i++)
+                put(randomId(), new PlacementInfo(new Point2D(randomId(), randomId()), Rotation.values()[RNG.nextInt(Rotation.values().length)]));
+        }}, Lists.newArrayList(new Client(randomId(), "client" + randomId()))));
     }
 
     @Test
@@ -139,13 +139,13 @@ public class ParserTest {
 
     @Test
     void spectatorGameStateResponseParser() throws ParserException {
-        assertMessage(ResponseBuilder.spectatorGameStateResponse(Lists.newArrayList(new Client(randomId(),"client"+randomId())),Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId()))),new HashMap<Integer, Map<Integer, PlacementInfo>>(){{
-            for (int i = 0;i< 10;i++)
-                put(randomId(),new HashMap<Integer, PlacementInfo>(){{
-                    for (int i = 0;i< 10;i++)
-                        put(randomId(),new PlacementInfo(new Point2D(randomId(),randomId()),Rotation.values()[RNG.nextInt(Rotation.values().length)]));
+        assertMessage(ResponseBuilder.spectatorGameStateResponse(Lists.newArrayList(new Client(randomId(), "client" + randomId())), Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId()))), new HashMap<Integer, Map<Integer, PlacementInfo>>() {{
+            for (int i = 0; i < 10; i++)
+                put(randomId(), new HashMap<Integer, PlacementInfo>() {{
+                    for (int i = 0; i < 10; i++)
+                        put(randomId(), new PlacementInfo(new Point2D(randomId(), randomId()), Rotation.values()[RNG.nextInt(Rotation.values().length)]));
                 }});
-        }},GameState.PAUSED));
+        }}, GameState.PAUSED));
     }
 
     @Test
@@ -165,10 +165,10 @@ public class ParserTest {
 
     @Test
     void finishNotificationParser() throws ParserException {
-        assertMessage(NotificationBuilder.finishNotification(new HashMap<Integer, Integer>(){{
-            for (int i = 0;i< 10;i++)
-                put(randomId(),randomId());
-        }},Lists.newArrayList(randomId(),randomId())));
+        assertMessage(NotificationBuilder.finishNotification(new HashMap<Integer, Integer>() {{
+            for (int i = 0; i < 10; i++)
+                put(randomId(), randomId());
+        }}, Lists.newArrayList(randomId(), randomId())));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class ParserTest {
 
     @Test
     void gameInitNotificationParser() throws ParserException {
-        assertMessage(NotificationBuilder.gameInitNotification(Lists.newArrayList(new Client(randomId(),"test")),new Configuration.Builder().hitPoints(2).build()));
+        assertMessage(NotificationBuilder.gameInitNotification(Lists.newArrayList(new Client(randomId(), "test")), new Configuration.Builder().hitPoints(2).build()));
     }
 
     @Test
@@ -188,23 +188,23 @@ public class ParserTest {
 
     @Test
     void spectatorUpdateNotificationParser() throws ParserException {
-        assertMessage(NotificationBuilder.spectatorUpdateNotification(Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId()))),new HashMap<Integer, Integer>(){{
-            for (int i = 0;i< 10;i++)
-                put(randomId(),randomId());
-        }},Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId()))),Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId())))));
+        assertMessage(NotificationBuilder.spectatorUpdateNotification(Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId()))), new HashMap<Integer, Integer>() {{
+            for (int i = 0; i < 10; i++)
+                put(randomId(), randomId());
+        }}, Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId()))), Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId())))));
     }
 
     @Test
     void playerUpdateNotificationParser() throws ParserException {
-        assertMessage(NotificationBuilder.playerUpdateNotification(Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId()))),new HashMap<Integer, Integer>(){{
-            for (int i = 0;i< 10;i++)
-                put(randomId(),randomId());
-        }},Lists.newArrayList(new Shot(randomId(),new Point2D(randomId(),randomId())))));
+        assertMessage(NotificationBuilder.playerUpdateNotification(Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId()))), new HashMap<Integer, Integer>() {{
+            for (int i = 0; i < 10; i++)
+                put(randomId(), randomId());
+        }}, Lists.newArrayList(new Shot(randomId(), new Point2D(randomId(), randomId())))));
     }
 
     @Test
     void errorNotificationParser() throws ParserException {
-        assertMessage(NotificationBuilder.errorNotification(ErrorType.BAD_JSON,randomId(),"failed om purpose"));
+        assertMessage(NotificationBuilder.errorNotification(ErrorType.BAD_JSON, randomId(), "failed om purpose"));
     }
 
     private void assertMessage(Message message) throws ParserException {
@@ -212,7 +212,7 @@ public class ParserTest {
         assert parser.deserialize(parser.serialize(message)).equals(message);
     }
 
-    private int randomId(){
+    private int randomId() {
         return RNG.nextInt(Integer.MAX_VALUE);
     }
 }
