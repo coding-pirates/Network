@@ -50,4 +50,10 @@ public class PlaceShipsRequest extends Message {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "PlaceShipsRequest{" +
+                "positions=" + positions +
+                '}';
+    }
 }
