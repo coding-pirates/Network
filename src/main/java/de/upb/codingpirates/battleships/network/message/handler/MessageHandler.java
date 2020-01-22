@@ -5,6 +5,7 @@ import de.upb.codingpirates.battleships.network.id.Id;
 import de.upb.codingpirates.battleships.network.message.Message;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 
 /**
  * Basic Interface for all MessageHandler
@@ -18,12 +19,12 @@ import javax.annotation.Nonnull;
 public interface MessageHandler<T extends Message> {
 
     /**
-     * @param message the message which should be handled
+     * @param message      the message which should be handled
      * @param connectionId own client id on the server
-     * @throws GameException if the handling of the Message throws a {@link GameException} which should be sent to the client
+     * @throws GameException      if the handling of the Message throws a {@link GameException} which should be sent to the client
      * @throws ClassCastException if can {@link #canHandle(Message)} returned true for a class not instance of {@link T}
      */
-    void handle(@Nonnull T message, @Nonnull Id connectionId) throws GameException, ClassCastException;
+    void handle(@Nonnull T message, @Nonnull Id connectionId) throws GameException, ClassCastException, IOException;
 
     /**
      * should check if message is instance of the generic MessageClass {@link T}

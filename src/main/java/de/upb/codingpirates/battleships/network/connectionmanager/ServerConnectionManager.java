@@ -50,6 +50,7 @@ public class ServerConnectionManager {
         if(message instanceof ErrorNotification){
             LOGGER.debug("client {} error: {}, {}, {}", id, ((ErrorNotification)message).getErrorType(), ((ErrorNotification)message).getReferenceMessageId(), ((ErrorNotification)message).getReason());
         }
-        this.connections.get(id.getInt()).send(message);
+        if(this.connections.containsKey(id.getInt()))
+            this.connections.get(id.getInt()).send(message);
     }
 }

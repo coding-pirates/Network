@@ -23,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
@@ -36,8 +37,10 @@ public class ClientMessageDispatcher implements MessageDispatcher {
 
     private final ClientNetwork network;
     private final Scheduler scheduler;
+    private final ExecutorService executorService;
     private final ConnectionScope scope;
     private final Injector injector;
+    @Nullable
     private Connection connection;
     @Inject
     private ConnectionHandler connectionHandler;
@@ -47,19 +50,19 @@ public class ClientMessageDispatcher implements MessageDispatcher {
     @Inject
     public ClientMessageDispatcher(@CachedThreadPool ExecutorService executorService, Injector injector, ConnectionScope scope, ClientNetwork clientNetwork) {
         this.scheduler = Schedulers.from(executorService);
+        this.executorService = executorService;
         this.scope = scope;
         this.network = clientNetwork;
         this.injector = injector;
     }
 
-    public Connection connect(@Nonnull String host, int port) throws IOException {
+    public void connect(@Nonnull String host, int port) throws IOException {
         this.connection = this.network.connect(host, port);
-
         Observable<Connection> observer = Observable.create(this::setConnection);
+
         //noinspection ResultOfMethodCallIgnored
         observer.subscribeOn(this.scheduler).subscribe(this::readLoop);
         this.network.setObserver(observer);
-        return connection;
     }
 
     private void readLoop(Connection connection) {
@@ -81,6 +84,8 @@ public class ClientMessageDispatcher implements MessageDispatcher {
             LOGGER.error(NetworkMarker.MESSAGE, "Can't find MessageHandler for Message", e);
         } catch (GameException e) {
             this.connectionHandler.handleBattleshipException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             this.scope.exit();
         }
@@ -100,5 +105,10 @@ public class ClientMessageDispatcher implements MessageDispatcher {
      */
     private void setConnection(ObservableEmitter<Connection> emitter) {
         emitter.onNext(this.connection);
+    }
+
+    @Nullable
+    public Connection getConnection(){
+        return this.connection;
     }
 }

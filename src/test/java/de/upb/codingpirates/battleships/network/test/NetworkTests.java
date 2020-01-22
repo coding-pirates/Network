@@ -1,19 +1,9 @@
 package de.upb.codingpirates.battleships.network.test;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.Map;
-
 import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import org.junit.jupiter.api.Test;
-
 import de.upb.codingpirates.battleships.network.ConnectionHandler;
 import de.upb.codingpirates.battleships.network.NetworkApplication;
 import de.upb.codingpirates.battleships.network.Properties;
@@ -26,9 +16,14 @@ import de.upb.codingpirates.battleships.network.message.Parser;
 import de.upb.codingpirates.battleships.network.network.module.ClientNetworkModule;
 import de.upb.codingpirates.battleships.network.network.module.ServerNetworkModule;
 import de.upb.codingpirates.battleships.network.util.ClientReaderMethod;
-import de.upb.codingpirates.battleships.network.util.DefaultReaderMethod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.Map;
 
 /**
  * @author Paul Becker
@@ -37,7 +32,7 @@ public class NetworkTests {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Test
-    public void test() throws IllegalAccessException, IOException, InstantiationException {
+    public void networkConnectionTest() throws IllegalAccessException, IOException, InstantiationException {
         Parser.addMessage(0, TestMessage.class);
         LOGGER.info("Setup Server Network");
         NetworkApplication server = Server.main();
@@ -123,7 +118,7 @@ public class NetworkTests {
 
             this.bind(ConnectionHandler.class).to(ClientConnector.class).in(Singleton.class);
             this.bind(de.upb.codingpirates.battleships.client.handler.TestMessageHandler.class);
-            this.bind(ClientReaderMethod.class).to(DefaultReaderMethod.class);
+            this.bind(ClientReaderMethod.class).to(ClientReaderMethod.class);
         }
     }
 

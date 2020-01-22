@@ -13,7 +13,6 @@ import java.util.Map;
  *
  * @author Interdoc committee, Paul Becker
  */
-@SuppressWarnings("unused")
 public class PlayerUpdateNotification extends Message {
 
     /**
@@ -44,7 +43,7 @@ public class PlayerUpdateNotification extends Message {
     @Nonnull
     private final Collection<Shot> sunk;
 
-    PlayerUpdateNotification(@Nonnull Collection<Shot> hits, @Nonnull Map<Integer, Integer> points, @Nonnull Collection<Shot> sunk) {
+    public PlayerUpdateNotification(@Nonnull Collection<Shot> hits, @Nonnull Map<Integer, Integer> points, @Nonnull Collection<Shot> sunk) {
         super(MESSAGE_ID);
         this.hits = hits;
         this.points = points;

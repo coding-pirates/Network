@@ -26,7 +26,7 @@ public class ShotsRequest extends Message {
     @Nonnull
     private final Collection<Shot> shots;
 
-    ShotsRequest(@Nonnull Collection<Shot> shots) {
+    public ShotsRequest(@Nonnull Collection<Shot> shots) {
         super(MESSAGE_ID);
         this.shots = shots;
     }
