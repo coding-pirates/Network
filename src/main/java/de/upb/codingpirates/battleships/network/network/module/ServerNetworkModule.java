@@ -12,9 +12,7 @@ import de.upb.codingpirates.battleships.network.network.ServerNetwork;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 
 /**
  * This Network Module binds classes to their interface, just for the server. Also declares {@link com.google.inject.Provider} for the {@link ServerNetwork} and a {@link InetSocketAddress} for the local ip
@@ -37,12 +35,7 @@ public class ServerNetworkModule extends NetworkModule {
      */
     @Provides
     InetSocketAddress provideServerInetSocketAddress() {
-        try {
-            return new InetSocketAddress(InetAddress.getLocalHost(), Properties.PORT);
-        } catch (UnknownHostException e) {
-            LOGGER.info("Could not get InetSocketAddress", e);
-        }
-        return null;
+        return new InetSocketAddress(Properties.PORT);
     }
 
     /**
