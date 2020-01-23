@@ -54,7 +54,9 @@ public class ConnectionScope implements Scope {
     public <T> void seed(Key<T> key, T value) {
         Map<Key<?>, Object> scopedObjects = getScopedObjectsMap();
         assert scopedObjects != null;
-        scopedObjects.putIfAbsent(key, value);
+        if(!scopedObjects.containsKey(key)){
+            scopedObjects.put(key, value);
+        }
     }
 
     public <T> void seed(Class<T> clazz, T value) {
@@ -70,7 +72,9 @@ public class ConnectionScope implements Scope {
         }
 
         if (currentKey == null && objectsByKey != null) {
-            objectsByKey.putIfAbsent(currentKey, Maps.newHashMap());
+            if(!objectsByKey.containsKey(currentKey)){
+                objectsByKey.put(currentKey, Maps.newHashMap());
+            }
 
             return objectsByKey.get(currentKey);
         }

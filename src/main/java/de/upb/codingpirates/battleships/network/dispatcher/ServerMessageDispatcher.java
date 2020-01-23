@@ -104,8 +104,8 @@ public class ServerMessageDispatcher implements MessageDispatcher {
     private void error(Throwable throwable) {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);
-        else {
+        else if(throwable instanceof NullPointerException) {}
+        else
             LOGGER.error(NetworkMarker.MESSAGE, "Error while reading Messages on Server", throwable);
-        }
     }
 }
