@@ -20,7 +20,7 @@ import java.io.IOException;
 public interface MessageDispatcher {
 
     @SuppressWarnings("unchecked")
-    default <T extends Message> void  handleMessage(Pair<Connection, T> request, Dist dist, ConnectionScope scope, Injector injector, Logger LOGGER) throws GameException, ClassNotFoundException, IOException {
+    default <T extends Message> void handleMessage(Pair<Connection, T> request, Dist dist, ConnectionScope scope, Injector injector, Logger LOGGER) throws GameException, ClassNotFoundException, IOException {
         String[] namespace = request.getValue().getClass().getName().split("\\.");
         String name = namespace[namespace.length - 1];
         Class<?> type;
