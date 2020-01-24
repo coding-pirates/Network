@@ -83,7 +83,8 @@ public class ClientConnectionManager {
                     return;
                 }
                 getConnection().send(message);
-            } catch (IOException e) {
+                LOGGER.debug(NetworkMarker.MESSAGE, "Send message {}", message);
+            } catch (Exception e) {
                 LOGGER.warn(NetworkMarker.NETWORK, "Could not send Message " + message, e);
             }
         });

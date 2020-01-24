@@ -42,7 +42,7 @@ public class FinishNotification extends Message {
      */
     @Nonnull
     public Map<Integer, Integer> getPoints() {
-        return points;
+        return this.points;
     }
 
     /**
@@ -50,7 +50,7 @@ public class FinishNotification extends Message {
      */
     @Nonnull
     public Collection<Integer> getWinner() {
-        return winner;
+        return this.winner;
     }
 
     @Override

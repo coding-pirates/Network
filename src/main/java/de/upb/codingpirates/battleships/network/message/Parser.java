@@ -58,6 +58,9 @@ public final class Parser {
         messageRelations.put(306, SpectatorGameStateRequest.class);
         messageRelations.put(356, SpectatorGameStateResponse.class);
 
+        messageRelations.put(307, GameLeaveRequest.class);
+        messageRelations.put(357, GameLeaveResponse.class);
+
 
         messageRelations.put(361, PauseNotification.class);
 
