@@ -77,6 +77,19 @@ public final class Parser {
 
         messageRelations.put(369, PlayerUpdateNotification.class);
 
+        messageRelations.put(401, TournamentPointsRequest.class);
+        messageRelations.put(451, TournamentPointsResponse.class);
+
+        messageRelations.put(402, TournamentParticipantsRequest.class);
+        messageRelations.put(452, TournamentParticipantsResponse.class);
+
+        messageRelations.put(403, TournamentGamesRequest.class);
+        messageRelations.put(453, TournamentGamesResponse.class);
+
+        messageRelations.put(461, TournamentFinishNotification.class);
+
+        messageRelations.put(307, GameLeaveRequest.class);
+        messageRelations.put(357, GameLeaveResponse.class);
 
         messageRelations.put(999, ErrorNotification.class);
     }
