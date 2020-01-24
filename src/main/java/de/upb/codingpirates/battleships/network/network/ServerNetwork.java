@@ -86,11 +86,17 @@ public class ServerNetwork implements Network {
         }
     }
 
+    /**
+     * @return the {@link Observable} of the connection
+     */
     @Nonnull
     public Observable<Connection> getConnections() {
         return connections;
     }
 
+    /**
+     * @return if the connection is closed
+     */
     public boolean isClosed() {
         return this.socket.isClosed();
     }

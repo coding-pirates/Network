@@ -14,8 +14,20 @@ import java.net.SocketException;
 
 public abstract class ClientReaderMethod {
 
+    /**
+     * creates an observer for a connection and the specified consumer
+     * and applies a Thread scheduler on the observable
+     *
+     * @param connection the connection to be observed
+     * @param dispatch the consumer to consume a message
+     * @param error the consumer to handle if an error occurs
+     */
     abstract public void get(Connection connection, Consumer<Pair<Connection, Message>> dispatch, Consumer<Throwable> error);
 
+    /**
+     * creates an observer for a connection
+     * @param connection the connection to be observed
+     */
     protected Observable<Pair<Connection, Message>> create(Connection connection){
         return Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
             while (connection.isOpen()) {

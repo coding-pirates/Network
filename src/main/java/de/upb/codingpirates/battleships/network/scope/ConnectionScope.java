@@ -10,6 +10,8 @@ import de.upb.codingpirates.battleships.network.id.Id;
 import java.util.Map;
 
 /**
+ * Used to use only one instance of all MessageHandler etc without storing them
+ *
  * @author Paul Becker
  */
 public class ConnectionScope implements Scope {
@@ -38,18 +40,31 @@ public class ConnectionScope implements Scope {
         };
     }
 
+    /**
+     * sets the Scope of the {@link com.google.inject.Injector}
+     *
+     * @param connectionId the id of the connection for the {@link Scope} to be set
+     */
     public void enter(Id connectionId) {
         if (this.current.get() == null) {
             current.set(connectionId);
         }
     }
 
+    /**
+     * resets the {@link com.google.inject.Injector} scope
+     */
     public void exit() {
         if (this.current.get() != null) {
             current.remove();
         }
     }
 
+    /**
+     * seeds the {@link com.google.inject.Injector} to the specific object
+     * @param key {@link Key} of the object
+     * @param value the object to seed
+     */
     @SuppressWarnings("WeakerAccess")
     public <T> void seed(Key<T> key, T value) {
         Map<Key<?>, Object> scopedObjects = getScopedObjectsMap();
@@ -59,10 +74,18 @@ public class ConnectionScope implements Scope {
         }
     }
 
+    /**
+     * seeds the {@link com.google.inject.Injector} to the specific object
+     * @param clazz {@link Class} of the object
+     * @param value the object to seed
+     */
     public <T> void seed(Class<T> clazz, T value) {
         this.seed(Key.get(clazz), value);
     }
 
+    /**
+     * @return all scoped connections
+     */
     private <T> Map<Key<?>, Object> getScopedObjectsMap() {
         Id currentKey = current.get();
         Map<Id, Map<Key<?>, Object>> objectsByKey = objects.get();

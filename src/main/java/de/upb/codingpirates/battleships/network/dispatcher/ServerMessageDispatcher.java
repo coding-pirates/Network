@@ -60,6 +60,14 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         get(connection, this::dispatch, this::error);
     }
 
+    /**
+     * creates an observer for a connection and the specified consumer
+     * and applies a Thread scheduler on the observable
+     *
+     * @param connection the connection to be observed
+     * @param dispatch the consumer to consume a message
+     * @param error the consumer to handle if an error occurs
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void get(Connection connection, Consumer<Pair<Connection, Message>> dispatch, Consumer<Throwable> error) {
         Observable.create((ObservableEmitter<Pair<Connection, Message>> emitter) -> {
@@ -101,6 +109,10 @@ public class ServerMessageDispatcher implements MessageDispatcher {
         }
     }
 
+    /**
+     * handling of an error while observing
+     * @param throwable the error
+     */
     private void error(Throwable throwable) {
         if (throwable instanceof BattleshipException)
             this.connectionHandler.handleBattleshipException((BattleshipException) throwable);

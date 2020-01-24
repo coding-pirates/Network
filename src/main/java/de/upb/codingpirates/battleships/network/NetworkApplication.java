@@ -44,6 +44,9 @@ public class NetworkApplication {
         this.injector.getInstance(MessageDispatcher.class);
     }
 
+    /**
+     * Creates a {@link ConnectionHandler} based on the predefined AbstractModule
+     */
     @Nullable
     public ConnectionHandler getHandler() {
         assert this.injector != null;

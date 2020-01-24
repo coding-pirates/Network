@@ -37,6 +37,10 @@ public class ClientNetwork implements Network {
         return new Connection(new Id(0), new Socket(host, port));
     }
 
+    /**
+     * sets the given observer to an attribute
+     * @param observer the observer to set
+     */
     public void setObserver(Observable<Connection> observer) {
         this.observer = observer;
     }
