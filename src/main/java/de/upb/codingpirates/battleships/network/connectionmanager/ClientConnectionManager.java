@@ -31,10 +31,24 @@ public class ClientConnectionManager {
         this.executorService = executorService;
     }
 
+    /**
+     * connects to the server
+     *
+     * @param host hostname of the server
+     * @param port port of the server
+     */
     public void create(@Nonnull String host, int port) {
         this.create(host, port, null, null);
     }
 
+    /**
+     * connects to the server
+     *
+     * @param host hostname of the server
+     * @param port port of the server
+     * @param onSuccess task to run if the connect is successful
+     * @param onFailure task to run if the connect has failed
+     */
     public void create(@Nonnull String host, int port, @Nullable Runnable onSuccess, @Nullable Runnable onFailure) {
         executorService.submit(() -> {
             try {
@@ -49,11 +63,18 @@ public class ClientConnectionManager {
         });
     }
 
+    /**
+     * @return the {@link Connection} to the server
+     */
     @Nullable
     public Connection getConnection() {
         return this.messageDispatcher.getConnection();
     }
 
+    /**
+     * sends message to the server
+     * @param message {@link Message} to send
+     */
     public void send(Message message) {
         executorService.submit(() ->{
             try {
@@ -68,10 +89,18 @@ public class ClientConnectionManager {
         });
     }
 
+    /**
+     * disconnects the client
+     */
     public void disconnect(){
         this.disconnect(null, null);
     }
 
+    /**
+     * disconnects the client
+     * @param onSuccess task to run if the disconnect is successful
+     * @param onFailure task to run if the disconnect has failed
+     */
     public void disconnect(Runnable onSuccess, Runnable onFailure){
         this.executorService.submit(() -> {
             try {

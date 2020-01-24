@@ -32,8 +32,13 @@ public class ServerConnectionManager {
     @Inject
     private IdManager idManager;
 
-    public @Nonnull
-    Connection create(Socket socket) throws IOException {
+    /**
+     * creates a new connection based on the tcp socket
+     * @param socket socket of the connection
+     * @return the new connection
+     * @throws IOException if an io exception occurs
+     */
+    public @Nonnull Connection create(Socket socket) throws IOException {
         Connection connection = new Connection(this.idManager.generate(), socket);
 
         this.connections.put( connection.getId().getInt(), connection);
@@ -41,10 +46,21 @@ public class ServerConnectionManager {
         return connection;
     }
 
+    /**
+     *
+     * @param id id of the connection
+     * @return the connection associated with the id
+     */
     public Connection getConnection(@Nonnull Id id) {
         return this.connections.get(id.getInt());
     }
 
+    /**
+     * sends a message to a client
+     * @param id id of the client
+     * @param message the message
+     * @throws IOException if an io exception were thrown
+     */
     public void send(@Nonnull Id id, @Nonnull Message message) throws IOException {
         LOGGER.debug(NetworkMarker.MESSAGE, "sending Message {} to client {}", message.getClass(), id);
         if(message instanceof ErrorNotification){
