@@ -1,42 +1,41 @@
-apply plugin: "java"
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
+}
 
-apply from: "${rootProject.rootDir}/gradle/java.gradle"
+repositories {
+    mavenCentral()
+    maven {
+        name = "Coding Pirates Logic"
+        url = "https://maven.pkg.github.com/coding-pirates/logic"
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_PACKAGE_READ_TOKEN")
+        }
+    }
+}
 
 dependencies {
-    implementation project(":logic")
+    implementation group: 'de.upb.codingpirates.battleships', name: 'logic', version: project.logic_version
 
-    implementation group: 'com.google.guava', name: 'guava', version: '28.1-android'
+    implementation group: 'com.google.guava', name: 'guava', version: '28.2-jre'
 
-    implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.1'
+    implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.1'
 
-    implementation group: 'org.roboguice', name: 'roboguice', version: '4.0.0'
+    implementation group: 'com.google.inject', name: 'guice', version: '4.2.1'
 
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
-    runtime group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
-    testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.0'
 
+    testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.0'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.2'
 }
 
-targetCompatibility = '1.8'
-sourceCompatibility = '1.8'
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ["src/main/java"]
-        }
-        resources {
-            srcDirs = ["src/main/resources"]
-        }
-    }
-    test {
-        java {
-            srcDirs = ["src/test/java"]
-        }
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 test {
@@ -44,5 +43,43 @@ test {
     testLogging {
         //noinspection GrUnresolvedAccess
         events "passed", "skipped", "failed"
+    }
+}
+
+task sourceJar(type: Jar){
+    classifier 'sources'
+    from sourceSets.main.allJava
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Battleships Network',
+                'Implementation-Version': "${project.version}"
+    }
+    from ( configurations.compile.collect { it.isDirectory() ? it : zipTree(it) })
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/coding-pirates/network")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_PACKAGE_PUBLISH_TOKEN")
+            }
+        }
+    }
+    publications{
+        gpr(MavenPublication){
+            from(components.java)
+            artifact tasks.sourceJar
+        }
+    }
+}
+
+idea.module {
+    for (String excludeDirName in ["run", "build", "out", "logs", ".gradle", ".github"]) {
+        excludeDirs += new File(project.projectDir, excludeDirName)
     }
 }
