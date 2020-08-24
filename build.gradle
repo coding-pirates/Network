@@ -1,18 +1,13 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'maven-publish'
+    id 'maven'
 }
 
 repositories {
     mavenCentral()
     maven {
-        name = "Coding Pirates Logic"
-        url = "https://maven.pkg.github.com/coding-pirates/logic"
-        credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_PACKAGE_READ_TOKEN")
-        }
+        url = "https://maven.paube.de"
     }
 }
 
@@ -59,22 +54,55 @@ jar {
     from ( configurations.compile.collect { it.isDirectory() ? it : zipTree(it) })
 }
 
-publishing {
+configurations {
+    deployerJars
+}
+
+dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-ftp:2.9"
+}
+
+uploadArchives {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/coding-pirates/network")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_PACKAGE_PUBLISH_TOKEN")
-            }
-        }
+        add getProject().repositories.mavenLocal()
     }
-    publications{
-        gpr(MavenPublication){
-            from(components.java)
-            artifact tasks.sourceJar
+
+    repositories.mavenDeployer {
+        configuration = configurations.deployerJars
+
+        logger.info('Publishing to files server')
+        repository(url: System.getProperty("MAVEN_URL")) {
+            authentication(userName: System.getProperty("MAVEN_USER"), password: System.getProperty("MAVEN_TOKEN"))
+        }
+        pom {
+            groupId = project.group
+            version = project.version
             artifactId = project.artifact
+        }
+        pom.project {
+            name project.archivesBaseName
+            packaging 'jar'
+            description 'network component of battleships'
+            url 'https://github.com/coding-pirates/network'
+
+            scm {
+                url 'https://github.com/coding-pirates/network'
+                connection 'scm:git:git://github.com/coding-pirates/network.git'
+                developerConnection 'scm:git:git@github.com:coding-pirates/network.git'
+            }
+
+            issueManagement {
+                system 'github'
+                url 'https://github.com/coding-pirates/network/issues'
+            }
+
+            developers {
+                developer {
+                    id 'cheaterpaul'
+                    name 'cheaterpaul'
+                    roles { role 'developer' }
+                }
+            }
         }
     }
 }
